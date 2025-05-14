@@ -11,6 +11,14 @@ package com.mycompany.final_project_pbo;
 public class Final_project_pbo {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        Owner owner = new Owner("owner", "password");
+        
+//        owner.accessDashboard();
+        
+        String newUsername = "example";
+        String newPassword = "example";
+        
+        owner.addUser(newUsername, newPassword);
+        owner.getUser(newUsername);
     }
 }
