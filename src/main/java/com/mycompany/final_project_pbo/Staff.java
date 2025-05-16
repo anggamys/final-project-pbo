@@ -11,15 +11,15 @@ import java.util.logging.Level;
  *
  * @author c0delb08
  */
-public class Owner extends User {
+public class Staff extends User {
 
-    public Owner(String username, String password) {
-        super(username, password, "OWNER");
+    public Staff(String username, String password) {
+        super(username, password, "STAFF");
     }
 
     @Override
     protected void accessDashboard() {
-        LOGGER.log(Level.INFO, "Owner {0} accessing dashboard.", username);
+        LOGGER.log(Level.INFO, "Staff {0} accessed staff dashboard.", username);
     }
 
     @Override
@@ -121,5 +121,4 @@ public class Owner extends User {
             return Response.failure("Failed to delete user: " + e.getMessage());
         }
     }
-
 }
