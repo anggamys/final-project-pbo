@@ -5,6 +5,7 @@
 package com.mycompany.final_project_pbo;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.logging.Level;
 
 /**
@@ -108,6 +109,7 @@ public class Owner extends User {
         try {
             String hashedPassword = hashPassword(newPassword);
             String sql = "UPDATE users SET username = ?, password = ? WHERE idUser = ?";
+            
             boolean success = executeUpdate(sql, newUsername, hashedPassword, targetIdUser);
 
             if (success) {
@@ -136,6 +138,32 @@ public class Owner extends User {
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Failed to delete user: " + targetIdUser, e);
             return Response.failure("Failed to delete user: " + e.getMessage());
+        }
+    }
+
+    @Override
+    protected Response<ArrayList<User>> getAllUsers() {
+        String sql = "SELECT * FROM users WHERE role = 'OWNER'";
+        ArrayList<User> users = new ArrayList<>();
+
+        try (ResultSet rs = executeQuery(sql)) {
+            while (rs != null && rs.next()) {
+                User user = new Owner();
+                user.setIdUser(rs.getInt("idUser"));
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                user.setRole(rs.getString("role"));
+                users.add(user);
+            }
+
+            if (users.isEmpty()) {
+                return Response.failure("No users found.");
+            }
+
+            return Response.success("Users retrieved successfully", users);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error retrieving all users", e);
+            return Response.failure("Get all users error: " + e.getMessage());
         }
     }
 }

@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.ArrayList;
 
 /**
  *
@@ -113,12 +114,10 @@ public abstract class User {
     protected abstract void accessDashboard();
 
     protected abstract Response<User> addUser(String newUsername, String newPassword);
-
     protected abstract Response<User> loginUser(String targetUsername, String targetPassword);
-
     protected abstract Response<User> getUser(Integer targetIdUser);
-
     protected abstract Response<User> updateUser(Integer targetIdUser, String newUsername, String newPassword);
-
     protected abstract Response<Boolean> deleteUser(Integer targetIdUser);
+
+    protected abstract Response<ArrayList<User>> getAllUsers();
 }

@@ -4,17 +4,18 @@
  */
 package com.mycompany.final_project_pbo;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
-import java.sql.ResultSet;
 
 /**
  *
  * @author c0delb08
  */
-public class Grosir extends Product {
+public class RetailProduct extends Product {
 
-    public Grosir() {
+    public RetailProduct() {
         super(0, "", "", 0.0, 0);
     }
 
@@ -36,13 +37,13 @@ public class Grosir extends Product {
                         product.setPrice(rs.getDouble("price"));
                         product.setStock(rs.getInt("stock"));
 
-                        LOGGER.info("Product added: " + product);
+                        LOGGER.log(Level.INFO, "Product added: {0}", product);
                         return Response.success("Product added successfully", product);
                     }
                 }
             }
             return Response.failure("Failed to retrieve added product.");
-        } catch (Exception e) {
+        } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Failed to add product: " + newName, e);
             return Response.failure("Add product error: " + e.getMessage());
         }
@@ -68,14 +69,15 @@ public class Grosir extends Product {
                     return Response.failure("Product not found");
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Failed to get product: " + targetIdProduct, e);
             return Response.failure("Get product error: " + e.getMessage());
         }
     }
 
     @Override
-    protected Response<Product> updateProduct(Integer targetIdProduct, String newName, String newCategory, Double newPrice, Integer newStock) {
+    protected Response<Product> updateProduct(Integer targetIdProduct, String newName, String newCategory,
+            Double newPrice, Integer newStock) {
         try {
             String sql = "UPDATE products SET name = ?, category = ?, price = ?, stock = ? WHERE idProduct = ?";
             boolean success = executeUpdate(sql, newName, newCategory, newPrice, newStock, targetIdProduct);
@@ -90,7 +92,7 @@ public class Grosir extends Product {
             return Response.failure("Update product error: " + e.getMessage());
         }
     }
-    
+
     @Override
     protected Response<Boolean> deleteProduct(Integer targetIdProduct) {
         try {
@@ -126,8 +128,8 @@ public class Grosir extends Product {
                 }
             }
             return Response.success("Products retrieved successfully", products);
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Failed to retrieve all products", e);
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Failed to get all products", e);
             return Response.failure("Get all products error: " + e.getMessage());
         }
     }
