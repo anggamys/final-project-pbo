@@ -11,11 +11,14 @@ package com.mycompany.final_project_pbo;
 public class Final_project_pbo {
 
     public static void main(String[] args) {
-        System.out.println("=== STARTING TESTING OWNER ===");
-        testOwner();
+        // System.out.println("=== STARTING TESTING OWNER ===");
+        // testOwner();
 
-        System.out.println("\n=== STARTING TESTING STAFF ===");
-        testStaff();
+        // System.out.println("\n=== STARTING TESTING STAFF ===");
+        // testStaff();
+
+        System.out.println("\n=== STARTING TESTING GROSIR ===");
+        testGrosir();
     }
 
     private static void testOwner() {
@@ -57,5 +60,29 @@ public class Final_project_pbo {
 
         System.out.println("--> Delete Staff User:");
         System.out.println(staff.deleteUser("staff"));
+    }
+
+    private static void testGrosir() {
+        Grosir grosir = new Grosir();
+
+        // Hasil id product yang baru ditambahkan digunakan untuk pengujian
+        System.out.println("--> Add Grosir Product:");
+        Response<Product> addResponse = grosir.addProduct("Grosir Product", "Category", 100.0, 10);
+        System.out.println(addResponse);
+        if (addResponse.isSuccess()) {
+            int newProductId = addResponse.getData().getIdProduct();
+
+            System.out.println("--> Get Grosir Product:");
+            Response<Product> getResponse = grosir.getProduct(newProductId);
+            System.out.println(getResponse);
+
+            System.out.println("--> Update Grosir Product:");
+            Response<Product> updateResponse = grosir.updateProduct(newProductId, "Updated Product", "Updated Category", 150.0, 20);
+            System.out.println(updateResponse);
+
+            System.out.println("--> Delete Grosir Product:");
+            Response<Boolean> deleteResponse = grosir.deleteProduct(newProductId);
+            System.out.println(deleteResponse);
+        }
     }
 }
