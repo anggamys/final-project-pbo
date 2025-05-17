@@ -17,17 +17,27 @@ import java.util.logging.Logger;
  * @author c0delb08
  */
 public abstract class User {
+    protected int idUser;
     protected String username;
     protected String password;
     protected String role;
 
     protected final Logger LOGGER;
 
-    public User(String username, String password, String role) {
+    public User(int idUser, String username, String password, String role) {
+        this.idUser = idUser;
         this.username = username;
         this.password = password;
         this.role = role;
         this.LOGGER = LoggerUtil.getLogger(getClass());
+    }
+
+    public int getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(int idUser) {
+        this.idUser = idUser;
     }
 
     public String getUsername() {
@@ -52,6 +62,11 @@ public abstract class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" + "idUser=" + idUser + ", username=" + username + ", role=" + role + '}';
     }
 
     public String hashPassword(String password) throws Exception {
@@ -97,13 +112,13 @@ public abstract class User {
 
     protected abstract void accessDashboard();
 
-    protected abstract Response<String> addUser(String newUsername, String newPassword);
+    protected abstract Response<User> addUser(String newUsername, String newPassword);
 
-    protected abstract Response<String> loginUser(String targetUsername, String targetPassword);
+    protected abstract Response<User> loginUser(String targetUsername, String targetPassword);
 
-    protected abstract Response<String> getUser(String targetUsername);
+    protected abstract Response<User> getUser(Integer targetIdUser);
 
-    protected abstract Response<String> updateUser(String newUsername, String newPassword);
+    protected abstract Response<User> updateUser(Integer targetIdUser, String newUsername, String newPassword);
 
-    protected abstract Response<String> deleteUser(String targetUsername);
+    protected abstract Response<Boolean> deleteUser(Integer targetIdUser);
 }

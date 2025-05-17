@@ -11,55 +11,68 @@ package com.mycompany.final_project_pbo;
 public class Final_project_pbo {
 
     public static void main(String[] args) {
-        // System.out.println("=== STARTING TESTING OWNER ===");
-        // testOwner();
+        System.out.println("=== STARTING TESTING OWNER ===");
+        testOwner();
 
-        // System.out.println("\n=== STARTING TESTING STAFF ===");
-        // testStaff();
+        System.out.println("\n=== STARTING TESTING STAFF ===");
+        testStaff();
 
         System.out.println("\n=== STARTING TESTING GROSIR ===");
         testGrosir();
     }
 
     private static void testOwner() {
-        Owner owner = new Owner("", "");
-
+        Owner owner = new Owner();
+        
         System.out.println("--> Add Owner User:");
-        System.out.println(owner.addUser("owner", "owner"));
+        Response<User> addResponse = owner.addUser("owner", "owner");
+        System.out.println(addResponse);
+        if (addResponse.isSuccess()) {
+            Integer newUserId = addResponse.getData().getIdUser();
 
-        System.out.println("--> Login with wrong password:");
-        System.out.println(owner.loginUser("owner", "wrongpassword"));
+            System.out.println("--> Login with correct password:");
+            Response<User> loginResponse = owner.loginUser("owner", "owner");
+            System.out.println(loginResponse);
 
-        System.out.println("--> Login with correct password:");
-        System.out.println(owner.loginUser("owner", "owner"));
+            System.out.println("--> Get Owner User:");
+            Response<User> getResponse = owner.getUser(newUserId);
+            System.out.println(getResponse);
 
-        System.out.println("--> Get Owner User:");
-        System.out.println(owner.getUser("owner"));
+            System.out.println("--> Update Owner User Password:");
+            Response<User> updateResponse = owner.updateUser(newUserId, "newownerpassword", "newownerpassword");
+            System.out.println(updateResponse);
 
-        System.out.println("--> Update Owner User Password:");
-        System.out.println(owner.updateUser("owner", "newownerpassword"));
-
-        System.out.println("--> Delete Owner User:");
-        System.out.println(owner.deleteUser("owner"));
+            System.out.println("--> Delete Owner User:");
+            Response<Boolean> deleteResponse = owner.deleteUser(newUserId);
+            System.out.println(deleteResponse);
+        }
     }
 
     private static void testStaff() {
-        Staff staff = new Staff("", "");
+        Staff staff = new Staff();
 
         System.out.println("--> Add Staff User:");
-        System.out.println(staff.addUser("staff", "staff"));
+        Response<User> addResponse = staff.addUser("staff", "staff");
+        System.out.println(addResponse);
+        if (addResponse.isSuccess()) {
+            Integer newUserId = addResponse.getData().getIdUser();
 
-        System.out.println("--> Login with correct password:");
-        System.out.println(staff.loginUser("staff", "staff"));
+            System.out.println("--> Login with correct password:");
+            Response<User> loginResponse = staff.loginUser("staff", "staff");
+            System.out.println(loginResponse);
 
-        System.out.println("--> Get Staff User:");
-        System.out.println(staff.getUser("staff"));
+            System.out.println("--> Get Staff User:");
+            Response<User> getResponse = staff.getUser(newUserId);
+            System.out.println(getResponse);
 
-        System.out.println("--> Update Staff User Password:");
-        System.out.println(staff.updateUser("staff", "newstaffpassword"));
+            System.out.println("--> Update Staff User Password:");
+            Response<User> updateResponse = staff.updateUser(newUserId, "newstaffpassword", "newstaffpassword");
+            System.out.println(updateResponse);
 
-        System.out.println("--> Delete Staff User:");
-        System.out.println(staff.deleteUser("staff"));
+            System.out.println("--> Delete Staff User:");
+            Response<Boolean> deleteResponse = staff.deleteUser(newUserId);
+            System.out.println(deleteResponse);
+        }
     }
 
     private static void testGrosir() {

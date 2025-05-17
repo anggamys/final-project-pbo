@@ -13,8 +13,8 @@ import java.util.logging.Level;
  */
 public class Staff extends User {
 
-    public Staff(String username, String password) {
-        super(username, password, "STAFF");
+    public Staff() {
+        super(0, "", "", "STAFF");
     }
 
     @Override
@@ -23,101 +23,118 @@ public class Staff extends User {
     }
 
     @Override
-    protected Response<String> addUser(String newUsername, String newPassword) {
+    protected Response<User> addUser(String newUsername, String newPassword) {
         try {
             String hashedPassword = hashPassword(newPassword);
             String sql = "INSERT INTO users (username, password, role) VALUES (?, ?, ?)";
-            executeUpdate(sql, newUsername, hashedPassword, getRole());
+            boolean success = executeUpdate(sql, newUsername, hashedPassword, "OWNER");
 
-            LOGGER.log(Level.INFO, "User added: {0} by Owner", newUsername);
-            return Response.success("User added successfully", newUsername);
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Failed to add user: " + newUsername, e);
-            return Response.failure("Failed to add user: " + e.getMessage());
-        }
-    }
+            if (success) {
+                String fetchSql = "SELECT * FROM users WHERE username = ?";
+                try (ResultSet rs = executeQuery(fetchSql, newUsername)) {
+                    if (rs != null && rs.next()) {
+                        User user = new Owner();
 
-    @Override
-    protected Response<String> loginUser(String targetUsername, String targetPassword) {
-        String sql = "SELECT * FROM users WHERE username = ?";
-        try (ResultSet rs = executeQuery(sql, targetUsername)) {
-            // Mengecek apakah user ditemukan
-            if (rs != null && rs.next()) {
-                String storedPassword = rs.getString("password"); // Ambil password yang di-hash dari DB
-                String storedUsername = rs.getString("username");
+                        user.setIdUser(rs.getInt("idUser"));
+                        user.setUsername(rs.getString("username"));
+                        user.setPassword(rs.getString("password"));
+                        user.setRole(rs.getString("role"));
 
-                // Hash password yang diberikan untuk dibandingkan
-                String hashedInputPassword = hashPassword(targetPassword);
-
-                // Memeriksa apakah password yang di-hash cocok dengan password yang ada di
-                // database
-                if (storedPassword.equals(hashedInputPassword)) {
-                    // Jika password cocok, login berhasil
-                    LOGGER.log(Level.INFO, "User {0} logged in successfully.", targetUsername);
-                    return Response.success("Login successful.", storedUsername);
-                } else {
-                    // Jika password tidak cocok
-                    String msg = "Incorrect password for user: " + targetUsername;
-                    LOGGER.warning(msg);
-                    return Response.failure(msg);
+                        LOGGER.log(Level.INFO, "User added: {0}", user);
+                        return Response.success("User added successfully", user);
+                    }
                 }
+                // If success but user not found in fetch, return failure
+                return Response.failure("User added but could not retrieve user details.");
             } else {
-                // Jika username tidak ditemukan di database
-                String msg = "User not found: " + targetUsername;
-                LOGGER.warning(msg);
-                return Response.failure(msg);
+                return Response.failure("Failed to add user.");
             }
         } catch (Exception e) {
-            String err = "Error during login for user: " + targetUsername;
-            LOGGER.log(Level.SEVERE, err, e);
-            return Response.failure("Error during login: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "Failed to add user: " + newUsername, e);
+            return Response.failure("Add user error: " + e.getMessage());
         }
     }
 
     @Override
-    protected Response<String> getUser(String targetUsername) {
-        String sql = "SELECT * FROM users WHERE username = ?";
+    protected Response<User> loginUser(String targetUsername, String targetPassword) {
+        String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
 
-        try (ResultSet rs = executeQuery(sql, targetUsername)) {
+        try (ResultSet rs = executeQuery(sql, targetUsername, hashPassword(targetPassword))) {
             if (rs != null && rs.next()) {
-                String foundUser = rs.getString("username") + " (" + rs.getString("role") + ")";
-                LOGGER.log(Level.INFO, "User retrieved: {0}", foundUser);
-                return Response.success("User found", foundUser);
+                User user = new Owner();
+                user.setIdUser(rs.getInt("idUser"));
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                user.setRole(rs.getString("role"));
+
+                LOGGER.log(Level.INFO, "User logged in: {0}", user);
+                return Response.success("Login successful", user);
             } else {
-                LOGGER.log(Level.WARNING, "User not found: {0}", targetUsername);
+                LOGGER.log(Level.WARNING, "Login failed for user: {0}", targetUsername);
+                return Response.failure("Invalid username or password");
+            }
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Login error for user: " + targetUsername, e);
+            return Response.failure("Login error: " + e.getMessage());
+        }
+    }
+
+    @Override
+    protected Response<User> getUser(Integer targetIdUser) {
+        String sql = "SELECT * FROM users WHERE idUser = ?";
+
+        try (ResultSet rs = executeQuery(sql, targetIdUser)) {
+            if (rs != null && rs.next()) {
+                User user = new Owner();
+                user.setIdUser(rs.getInt("idUser"));
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                user.setRole(rs.getString("role"));
+
+                LOGGER.log(Level.INFO, "User found: {0}", user);
+                return Response.success("User found", user);
+            } else {
+                LOGGER.log(Level.WARNING, "User not found: {0}", targetIdUser);
                 return Response.failure("User not found");
             }
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Error retrieving user: " + targetUsername, e);
-            return Response.failure("Failed to retrieve user: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "Error retrieving user: " + targetIdUser, e);
+            return Response.failure("Get user error: " + e.getMessage());
         }
     }
 
     @Override
-    protected Response<String> updateUser(String newUsername, String newPassword) {
+    protected Response<User> updateUser(Integer targetIdUser, String newUsername, String newPassword) {
         try {
             String hashedPassword = hashPassword(newPassword);
-            String sql = "UPDATE users SET password = ? WHERE username = ?";
-            executeUpdate(sql, hashedPassword, newUsername);
+            String sql = "UPDATE users SET username = ?, password = ? WHERE idUser = ?";
+            boolean success = executeUpdate(sql, newUsername, hashedPassword, targetIdUser);
 
-            LOGGER.log(Level.INFO, "User updated: {0}", newUsername);
-            return Response.success("User updated successfully", newUsername);
+            if (success) {
+                return getUser(targetIdUser);
+            } else {
+                return Response.failure("Failed to update user.");
+            }
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Failed to update user: " + newUsername, e);
-            return Response.failure("Failed to update user: " + e.getMessage());
+            return Response.failure("Update user error: " + e.getMessage());
         }
     }
 
     @Override
-    protected Response<String> deleteUser(String targetUsername) {
+    protected Response<Boolean> deleteUser(Integer targetIdUser) {
         try {
-            String sql = "DELETE FROM users WHERE username = ?";
-            executeUpdate(sql, targetUsername);
+            String sql = "DELETE FROM users WHERE idUser = ?";
+            boolean success = executeUpdate(sql, targetIdUser);
 
-            LOGGER.log(Level.INFO, "User deleted: {0}", targetUsername);
-            return Response.success("User deleted successfully", targetUsername);
+            if (success) {
+                LOGGER.log(Level.INFO, "User deleted: {0}", targetIdUser);
+                return Response.success("User deleted successfully", true);
+            } else {
+                return Response.failure("Failed to delete user.");
+            }
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Failed to delete user: " + targetUsername, e);
+            LOGGER.log(Level.SEVERE, "Failed to delete user: " + targetIdUser, e);
             return Response.failure("Failed to delete user: " + e.getMessage());
         }
     }

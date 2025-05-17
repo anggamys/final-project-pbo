@@ -16,11 +16,12 @@ import java.util.logging.Logger;
  * @author c0delb08
  */
 public abstract class Product {
-    private int idProduct;
-    private String name;
-    private String category;
-    private Double price;
-    private Integer stock;
+    protected int idProduct;
+    protected String name;
+    protected String category;
+    protected Double price;
+    protected Integer stock;
+
     protected final Logger LOGGER;
 
     public Product(int idProduct, String name, String category, Double price, Integer stock) {
@@ -99,7 +100,7 @@ public abstract class Product {
         }
     }
 
-        protected ResultSet executeQuery(String sql, Object... params) throws SQLException {
+    protected ResultSet executeQuery(String sql, Object... params) throws SQLException {
         Connection conn = DatabaseUtil.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql);
         for (int i = 0; i < params.length; i++) {
@@ -109,8 +110,13 @@ public abstract class Product {
     }
 
     // Abstract methods to be implemented
-    protected abstract Response<Product> addProduct(String newName, String newCategory, Double newPrice, Integer newStock);
+    protected abstract Response<Product> addProduct(String newName, String newCategory, Double newPrice,
+            Integer newStock);
+
     protected abstract Response<Product> getProduct(Integer targetIdProduct);
-    protected abstract Response<Product> updateProduct(Integer targetIdProduct, String newName, String newCategory, Double newPrice, Integer newStock);
+
+    protected abstract Response<Product> updateProduct(Integer targetIdProduct, String newName, String newCategory,
+            Double newPrice, Integer newStock);
+
     protected abstract Response<Boolean> deleteProduct(Integer targetIdProduct);
 }
