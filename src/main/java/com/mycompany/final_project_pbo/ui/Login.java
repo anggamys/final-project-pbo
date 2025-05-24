@@ -110,7 +110,7 @@ public class Login extends javax.swing.JFrame {
         );
 
         jPanel1.add(Right);
-        Right.setBounds(0, 0, 450, 600);
+        Right.setBounds(0, 0, 521, 590);
 
         Left.setBackground(new java.awt.Color(93, 173, 226));
         Left.setMinimumSize(new java.awt.Dimension(450, 600));
