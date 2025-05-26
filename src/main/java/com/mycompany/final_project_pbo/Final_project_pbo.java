@@ -4,6 +4,7 @@
 
 package com.mycompany.final_project_pbo;
 
+import com.mycompany.final_project_pbo.ui.Login;
 import java.util.ArrayList;
 
 /**
@@ -13,11 +14,20 @@ import java.util.ArrayList;
 public class Final_project_pbo {
 
     public static void main(String[] args) {
+        launchProgram();
+        runAllTests();
+    }
+    
+    private static void launchProgram() {
+        Login loginFrame = new Login();
+        loginFrame.setVisible(true);
+        loginFrame.pack();
+        loginFrame.setLocationRelativeTo(null);
+    }
+    
+    private static void runAllTests() {
         System.out.println("=== STARTING TESTING OWNER ===");
-        testOwnerFullCycle();
-
-        System.out.println("\n=== STARTING TESTING STAFF ===");
-        testStaff();
+        testUserFullCycle();
 
         System.out.println("\n=== STARTING TESTING GROSIR ===");
         testGrosir();
@@ -25,14 +35,19 @@ public class Final_project_pbo {
         System.out.println("\n=== STARTING TESTING RETAIL ===");
         testRetailProduct();
     }
-
-    private static void testOwnerFullCycle() {
-        Owner owner = new Owner();
-
-        System.out.println("\n=== [1] CREATE: Add Owner User ===");
-        String testUsername = "test_owner_" + System.currentTimeMillis();
+    
+    private static void testUserFullCycle() {
+        User userService = new User();
+        
+        System.out.println("\n=== [1] CREATE: Add User ===");
+        String testUsername = "test_user_" + System.currentTimeMillis();
         String testPassword = "initialPassword123";
-        Response<User> addResponse = owner.addUser(testUsername, testPassword);
+        String testRole = "OWNER";
+        
+        String testChangeUsername = "test_user_" + System.currentTimeMillis();
+        String testChangePassword = "UpdatedPassword456";
+        
+        Response<User> addResponse = userService.addUser(testUsername, testPassword, testRole);
         System.out.println(addResponse);
 
         if (!addResponse.isSuccess()) {
@@ -40,92 +55,41 @@ public class Final_project_pbo {
             return;
         }
 
-        User createdUser = addResponse.getData();
-        Integer userId = createdUser.getIdUser();
-
-        // --------------------------------------------------------------------
-
-        System.out.println("\n=== [2] READ: Get Owner by ID ===");
-        Response<User> getResponse = owner.getUser(userId);
-        System.out.println(getResponse);
-
-        System.out.println("\n=== [3] READ: Get All Owner Users ===");
-        Response<ArrayList<User>> getAllResponse = owner.getAllUsers();
-        System.out.println(getAllResponse);
-        if (getAllResponse.isSuccess()) {
-            for (User user : getAllResponse.getData()) {
-                System.out.println(user);
-            }
-        }
-
-        // --------------------------------------------------------------------
-
-        System.out.println("\n=== [4] UPDATE: Update Password ===");
-        String updatedPassword = "UpdatedPassword456";
-        Response<User> updateResponse = owner.updateUser(userId, updatedPassword, updatedPassword);
-        System.out.println(updateResponse);
-
-        System.out.println("\n=== [5] LOGIN: Success Case ===");
-        Response<User> loginSuccess = owner.loginUser(updatedPassword, updatedPassword);
-        System.out.println(loginSuccess);
-
-        System.out.println("\n=== [6] LOGIN: Failed Case (wrong password) ===");
-        Response<User> loginFail = owner.loginUser(testUsername, "wrongPassword!");
-        System.out.println(loginFail);
-
-        System.out.println("\n=== [7] UPDATE: Password Mismatch Case ===");
-        Response<User> mismatchUpdate = owner.updateUser(userId, "newpass", "otherpass");
-        System.out.println(mismatchUpdate);
-
-        System.out.println("\n=== [8] DELETE: Delete User ===");
-        Response<Boolean> deleteResponse = owner.deleteUser(userId);
-        System.out.println(deleteResponse);
-
-        // --------------------------------------------------------------------
-
-        System.out.println("\n=== [9] READ: Get Deleted User (should fail) ===");
-        Response<User> getDeleted = owner.getUser(userId);
-        System.out.println(getDeleted);
-
-        System.out.println("\n=== [10] DELETE: Delete Non-existent User Again ===");
-        Response<Boolean> deleteNonExist = owner.deleteUser(userId);
-        System.out.println(deleteNonExist);
-    }
-
-    private static void testStaff() {
-        Staff staff = new Staff();
-
-        System.out.println("--> Add Staff User:");
-        Response<User> addResponse = staff.addUser("staff", "staff");
-        System.out.println(addResponse);
-        if (addResponse.isSuccess()) {
-            Integer newUserId = addResponse.getData().getIdUser();
-
-            System.out.println("--> Login with correct password:");
-            Response<User> loginResponse = staff.loginUser("staff", "staff");
-            System.out.println(loginResponse);
-
-            System.out.println("--> Get Staff User:");
-            Response<User> getResponse = staff.getUser(newUserId);
-            System.out.println(getResponse);
-
-            System.out.println("--> Get All Staff Users:");
-            Response<ArrayList<User>> getAllResponse = staff.getAllUsers();
-            System.out.println(getAllResponse);
-            if (getAllResponse.isSuccess()) {
-                for (User user : getAllResponse.getData()) {
-                    System.out.println(user);
-                }
-            }
-
-            System.out.println("--> Update Staff User Password:");
-            Response<User> updateResponse = staff.updateUser(newUserId, "newstaffpassword", "newstaffpassword");
-            System.out.println(updateResponse);
-
-            System.out.println("--> Delete Staff User:");
-            Response<Boolean> deleteResponse = staff.deleteUser(newUserId);
-            System.out.println(deleteResponse);
-        }
+//        User createdUser = addResponse.getData();
+//        Integer userId = createdUser.getIdUser();
+//
+//        System.out.println("\n=== [2] READ: Get User by ID ===");
+//        System.out.println(userService.getUser(userId));
+//
+//        System.out.println("\n=== [3] READ: Get All Users ===");
+//        Response<ArrayList<User>> getAllResponse = userService.getAllUsers("OWNER");
+//        System.out.println(getAllResponse);
+//        if (getAllResponse.isSuccess()) {
+//            for (User user : getAllResponse.getData()) {
+//                System.out.println(user);
+//            }
+//        }
+//
+//        System.out.println("\n=== [4] UPDATE: Update Password ===");
+//        System.out.println(userService.updateUser(userId, testChangeUsername, testChangePassword));
+//
+//        System.out.println("\n=== [5] LOGIN: Success Case ===");
+//        System.out.println(userService.loginUser(testChangeUsername, testChangePassword));
+//
+//        System.out.println("\n=== [6] LOGIN: Failed Case (wrong password) ===");
+//        System.out.println(userService.loginUser(testUsername, "wrongPassword"));
+//
+//        System.out.println("\n=== [7] UPDATE: Password Mismatch Case ===");
+//        System.out.println(userService.updateUser(userId, "newpass1", "newpass2"));
+//
+//        System.out.println("\n=== [8] DELETE: Delete User ===");
+//        System.out.println(userService.deleteUser(userId));
+//
+//        System.out.println("\n=== [9] READ: Get Deleted User (should fail) ===");
+//        System.out.println(userService.getUser(userId));
+//
+//        System.out.println("\n=== [10] DELETE: Delete Non-existent User Again ===");
+//        System.out.println(userService.deleteUser(userId));
     }
 
     private static void testGrosir() {

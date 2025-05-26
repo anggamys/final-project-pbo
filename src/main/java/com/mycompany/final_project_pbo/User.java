@@ -9,21 +9,25 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.ArrayList;
 
 /**
  *
  * @author c0delb08
  */
-public abstract class User {
-    protected int idUser;
-    protected String username;
-    protected String password;
-    protected String role;
+public class User {
+    private int idUser;
+    private String username;
+    private String password;
+    private String role;
 
-    protected final Logger LOGGER;
+    private final Logger LOGGER;
+
+    public User() {
+        this(0, "", "", "STAFF"); // Default to STAFF role
+    }
 
     public User(int idUser, String username, String password, String role) {
         this.idUser = idUser;
@@ -49,14 +53,6 @@ public abstract class User {
         this.username = username;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -65,9 +61,16 @@ public abstract class User {
         this.password = password;
     }
 
-    @Override
-    public String toString() {
-        return "User{" + "idUser=" + idUser + ", username=" + username + ", role=" + role + '}';
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public void accessDashboard() {
+        LOGGER.log(Level.INFO, "{0} {1} accessing dashboard.", new Object[]{role, username});
     }
 
     public String hashPassword(String password) throws Exception {
@@ -81,7 +84,7 @@ public abstract class User {
 
     protected boolean executeUpdate(String sql, Object... params) {
         try (Connection conn = DatabaseUtil.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             for (int i = 0; i < params.length; i++) {
                 ps.setObject(i + 1, params[i]);
@@ -111,13 +114,120 @@ public abstract class User {
         }
     }
 
-    protected abstract void accessDashboard();
+    public Response<User> addUser(String newUsername, String newPassword, String role) {
+        try {
+            String hashedPassword = hashPassword(newPassword);
+            String sql = "INSERT INTO users (username, password, role) VALUES (?, ?, ?)";
+            boolean success = executeUpdate(sql, newUsername, hashedPassword, role);
 
-    protected abstract Response<User> addUser(String newUsername, String newPassword);
-    protected abstract Response<User> loginUser(String targetUsername, String targetPassword);
-    protected abstract Response<User> getUser(Integer targetIdUser);
-    protected abstract Response<User> updateUser(Integer targetIdUser, String newUsername, String newPassword);
-    protected abstract Response<Boolean> deleteUser(Integer targetIdUser);
+            if (success) {
+                String fetchSql = "SELECT * FROM users WHERE username = ?";
+                try (ResultSet rs = executeQuery(fetchSql, newUsername)) {
+                    if (rs != null && rs.next()) {
+                        User user = fromResultSet(rs);
+                        return Response.success("User added successfully", user);
+                    }
+                }
+                return Response.failure("User added but could not retrieve user details.");
+            } else {
+                return Response.failure("Failed to add user.");
+            }
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Failed to add user: " + newUsername, e);
+            return Response.failure("Add user error: " + e.getMessage());
+        }
+    }
 
-    protected abstract Response<ArrayList<User>> getAllUsers();
+    public Response<User> loginUser(String targetUsername, String targetPassword) {
+        String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+
+        try (ResultSet rs = executeQuery(sql, targetUsername, hashPassword(targetPassword))) {
+            if (rs != null && rs.next()) {
+                User user = fromResultSet(rs);
+                return Response.success("Login successful", user);
+            } else {
+                return Response.failure("Invalid username or password");
+            }
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Login error for user: " + targetUsername, e);
+            return Response.failure("Login error: " + e.getMessage());
+        }
+    }
+
+    public Response<User> getUser(Integer targetIdUser) {
+        String sql = "SELECT * FROM users WHERE idUser = ?";
+
+        try (ResultSet rs = executeQuery(sql, targetIdUser)) {
+            if (rs != null && rs.next()) {
+                User user = fromResultSet(rs);
+                return Response.success("User found", user);
+            } else {
+                return Response.failure("User not found");
+            }
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error retrieving user: " + targetIdUser, e);
+            return Response.failure("Get user error: " + e.getMessage());
+        }
+    }
+
+    public Response<User> updateUser(Integer targetIdUser, String newUsername, String newPassword) {
+        try {
+            String hashedPassword = hashPassword(newPassword);
+            String sql = "UPDATE users SET username = ?, password = ? WHERE idUser = ?";
+
+            boolean success = executeUpdate(sql, newUsername, hashedPassword, targetIdUser);
+            return success ? getUser(targetIdUser) : Response.failure("Failed to update user.");
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Failed to update user: " + newUsername, e);
+            return Response.failure("Update user error: " + e.getMessage());
+        }
+    }
+
+    public Response<Boolean> deleteUser(Integer targetIdUser) {
+        try {
+            String sql = "DELETE FROM users WHERE idUser = ?";
+            boolean success = executeUpdate(sql, targetIdUser);
+
+            if (success) {
+                LOGGER.log(Level.INFO, "User deleted: {0}", targetIdUser);
+                return Response.success("User deleted successfully", true);
+            } else {
+                return Response.failure("Failed to delete user.");
+            }
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Failed to delete user: " + targetIdUser, e);
+            return Response.failure("Failed to delete user: " + e.getMessage());
+        }
+    }
+
+    public Response<ArrayList<User>> getAllUsers(String role) {
+        String sql = "SELECT * FROM users WHERE role = ?";
+        ArrayList<User> users = new ArrayList<>();
+
+        try (ResultSet rs = executeQuery(sql, role)) {
+            while (rs != null && rs.next()) {
+                users.add(fromResultSet(rs));
+            }
+
+            return users.isEmpty() ? Response.failure("No users found.") : Response.success("Users retrieved successfully", users);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error retrieving all users", e);
+            return Response.failure("Get all users error: " + e.getMessage());
+        }
+    }
+
+    private User fromResultSet(ResultSet rs) throws SQLException {
+        return new User(
+            rs.getInt("idUser"),
+            rs.getString("username"),
+            rs.getString("password"),
+            rs.getString("role")
+        );
+    }
+
+    @Override
+    public String toString() {
+        return "User{" + "idUser=" + idUser + ", username=" + username + ", role=" + role + '}';
+    }
 }
+
