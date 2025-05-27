@@ -4,7 +4,7 @@
 
 package com.mycompany.final_project_pbo;
 
-import com.mycompany.final_project_pbo.ui.Login;
+import com.mycompany.final_project_pbo.ui.*;
 import java.util.ArrayList;
 
 /**
@@ -15,7 +15,7 @@ public class Final_project_pbo {
 
     public static void main(String[] args) {
         launchProgram();
-        runAllTests();
+//        runAllTests();
     }
     
     private static void launchProgram() {

@@ -1,6 +1,7 @@
 
 package com.mycompany.final_project_pbo.ui;
 
+import com.mycompany.final_project_pbo.ui.Dashboard;
 import com.mycompany.final_project_pbo.Response;
 import com.mycompany.final_project_pbo.User;
 import javax.swing.JOptionPane;
@@ -262,7 +263,12 @@ public class Login extends javax.swing.JFrame {
         Response<User> response = userService.loginUser(username, password);
         if (response.isSuccess()) {
             JOptionPane.showMessageDialog(this, "Login successful. Welcome, " + response.getData().getUsername() + "!", "Success", JOptionPane.INFORMATION_MESSAGE);
-            // TODO: Redirect to dashboard
+            
+            this.setVisible(false); // ✅ Gunakan instance saat ini, bukan new Login()
+
+            Dashboard dashboardFrame = new Dashboard(response.getData().getUsername(), response.getData().getRole());
+            dashboardFrame.setVisible(true);
+            
         } else {
             JOptionPane.showMessageDialog(this, "Login failed: " + response.getMessage(), "Login Failed", JOptionPane.ERROR_MESSAGE);
         }

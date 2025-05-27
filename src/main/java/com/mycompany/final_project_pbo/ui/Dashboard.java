@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.final_project_pbo;
+package com.mycompany.final_project_pbo.ui;
 
 /**
  *
@@ -12,11 +12,18 @@ public class Dashboard extends javax.swing.JFrame {
 
     /**
      * Creates new form Dashboard
+     * @param name
+     * @param role
      */
+    public Dashboard(String name, String role) {
+        initComponents();
+        userName.setText(name);
+        roleUser.setText(role);
+    }
+
     public Dashboard() {
         initComponents();
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,8 +35,8 @@ public class Dashboard extends javax.swing.JFrame {
 
         jPanel3 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        roleUser = new javax.swing.JLabel();
+        userName = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -45,7 +52,6 @@ public class Dashboard extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
-        setPreferredSize(new java.awt.Dimension(1366, 768));
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setPreferredSize(new java.awt.Dimension(150, 1080));
@@ -53,10 +59,20 @@ public class Dashboard extends javax.swing.JFrame {
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
         jPanel6.setPreferredSize(new java.awt.Dimension(150, 1080));
 
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel6.setText("USER");
+        roleUser.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        roleUser.setText("USER");
+        roleUser.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                roleUserPropertyChange(evt);
+            }
+        });
 
-        jLabel7.setText("NAMA USER");
+        userName.setText("NAMA USER");
+        userName.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                userNamePropertyChange(evt);
+            }
+        });
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel8.setText("Toserba Berkah Abadi ");
@@ -115,8 +131,8 @@ public class Dashboard extends javax.swing.JFrame {
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel6)
-                                .addComponent(jLabel7)
+                                .addComponent(roleUser)
+                                .addComponent(userName)
                                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jLabel9)
                                 .addComponent(jLabel8))
@@ -131,9 +147,9 @@ public class Dashboard extends javax.swing.JFrame {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel6)
+                .addComponent(roleUser)
                 .addGap(0, 0, 0)
-                .addComponent(jLabel7)
+                .addComponent(userName)
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(52, 52, 52)
@@ -144,7 +160,7 @@ public class Dashboard extends javax.swing.JFrame {
                 .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1602, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1603, Short.MAX_VALUE)
                 .addComponent(jLabel9)
                 .addGap(0, 0, 0)
                 .addComponent(jLabel8)
@@ -278,6 +294,14 @@ public class Dashboard extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    private void roleUserPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_roleUserPropertyChange
+        // TODO add your handling code here:
+    }//GEN-LAST:event_roleUserPropertyChange
+
+    private void userNamePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_userNamePropertyChange
+        // TODO add your handling code here:
+    }//GEN-LAST:event_userNamePropertyChange
+
     /**
      * @param args the command line arguments
      */
@@ -321,8 +345,6 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel3;
@@ -330,5 +352,7 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JLabel roleUser;
+    private javax.swing.JLabel userName;
     // End of variables declaration//GEN-END:variables
 }
