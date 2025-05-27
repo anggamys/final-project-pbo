@@ -113,7 +113,7 @@ public class Login extends javax.swing.JFrame {
         );
 
         jPanel1.add(Right);
-        Right.setBounds(0, 0, 521, 590);
+        Right.setBounds(0, 0, 450, 600);
 
         Left.setBackground(new java.awt.Color(93, 173, 226));
         Left.setMinimumSize(new java.awt.Dimension(450, 600));
@@ -231,7 +231,7 @@ public class Login extends javax.swing.JFrame {
                 .addGroup(LeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(toSignUpBtn))
-                .addContainerGap(75, Short.MAX_VALUE))
+                .addGap(45, 45, 45))
         );
 
         jPanel1.add(Left);
