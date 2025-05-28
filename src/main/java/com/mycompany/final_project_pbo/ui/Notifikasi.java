@@ -26,19 +26,132 @@ public class Notifikasi extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        TableBarangdanStock = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        TableKeuangan = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        TableAktivitasSistem = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+
+        setPreferredSize(new java.awt.Dimension(1760, 1828));
+
+        TableBarangdanStock.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {"1", "Stok habis : Gula pasir tersisa 0 pcs."},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "No", "Barang & Stock"
+            }
+        ));
+        TableBarangdanStock.setGridColor(new java.awt.Color(204, 204, 204));
+        jScrollPane1.setViewportView(TableBarangdanStock);
+        if (TableBarangdanStock.getColumnModel().getColumnCount() > 0) {
+            TableBarangdanStock.getColumnModel().getColumn(0).setMaxWidth(50);
+        }
+
+        jScrollPane2.setBackground(new java.awt.Color(255, 255, 255));
+
+        TableKeuangan.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {"1", "Piutang jatuh tempo : Rp 500.000 dari pelanggan Andi."},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "No", "Keuangan"
+            }
+        ));
+        TableKeuangan.setGridColor(new java.awt.Color(204, 204, 204));
+        TableKeuangan.setSelectionBackground(new java.awt.Color(204, 204, 204));
+        jScrollPane2.setViewportView(TableKeuangan);
+        if (TableKeuangan.getColumnModel().getColumnCount() > 0) {
+            TableKeuangan.getColumnModel().getColumn(0).setMaxWidth(50);
+        }
+
+        TableAktivitasSistem.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {"1", "Transaksi Baru: Rp 250.000 via QRIS."},
+                {null, ""},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "No", "Aktivitas Sistem"
+            }
+        ));
+        jScrollPane3.setViewportView(TableAktivitasSistem);
+        if (TableAktivitasSistem.getColumnModel().getColumnCount() > 0) {
+            TableAktivitasSistem.getColumnModel().getColumn(0).setMaxWidth(50);
+        }
+
+        jPanel1.setBackground(new java.awt.Color(75, 139, 213));
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Notifikasi");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(jLabel2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addContainerGap(16, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 705, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 705, Short.MAX_VALUE))
+                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(16, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable TableAktivitasSistem;
+    private javax.swing.JTable TableBarangdanStock;
+    private javax.swing.JTable TableKeuangan;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     // End of variables declaration//GEN-END:variables
 }
