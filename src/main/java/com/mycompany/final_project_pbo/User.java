@@ -4,6 +4,8 @@
  */
 package com.mycompany.final_project_pbo;
 
+import com.mycompany.final_project_pbo.Utils.LoggerUtil;
+import com.mycompany.final_project_pbo.Utils.DatabaseUtil;
 import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

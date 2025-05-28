@@ -5,6 +5,7 @@
 package com.mycompany.final_project_pbo;
 
 import com.mycompany.final_project_pbo.ui.*;
+import java.util.ArrayList;
 
 /**
  *
@@ -14,7 +15,7 @@ public class Final_project_pbo {
 
     public static void main(String[] args) {
         launchProgram();
-        runAllTests();
+//        runAllTests();
     }
     
     private static void launchProgram() {
@@ -25,11 +26,14 @@ public class Final_project_pbo {
     }
     
     private static void runAllTests() {
-        System.out.println("=== STARTING TESTING USER ===");
-        testUserFullCycle();
-
+//        System.out.println("=== STARTING TESTING USER ===");
+//        testUserFullCycle();
+//
+//        System.out.println("=== STARTING TESTING PRODUCT ===");
+//        testProductCycle();
+        
         System.out.println("=== STARTING TESTING PRODUCT ===");
-        testProductCycle();
+        testHutangPiutangCycle();
     }
     
     private static void testUserFullCycle() {
@@ -51,8 +55,6 @@ public class Final_project_pbo {
             return;
         }
         
-//        test commit
-
 //        User createdUser = addResponse.getData();
 //        Integer userId = createdUser.getIdUser();
 //
@@ -138,5 +140,53 @@ public class Final_project_pbo {
 //        System.out.println("\n=== [6] READ: Try Get Deleted Product ===");
 //        Response<Product> readAfterDelete = productService.findById(productId);
 //        System.out.println(readAfterDelete);
+    }
+    
+    public static void testHutangPiutangCycle() {
+        System.out.println("\n=== [1] CREATE: Tambah Data Hutang Piutang ===");
+        UtangPiutang utangPiutangService = new UtangPiutang();
+        utangPiutangService.setNamaPihak("PT. Coba Dulu");
+        utangPiutangService.setNominal(5000000.0);
+        utangPiutangService.setJatuhTempo(new java.util.Date()); // Hari ini
+        utangPiutangService.setStatus("Belum Lunas");
+
+        Response<UtangPiutang> saveResponse = utangPiutangService.save();
+        System.out.println(saveResponse);
+
+        if (!saveResponse.isSuccess()) {
+            System.err.println("Gagal menambahkan data hutang piutang. Menghentikan pengujian.");
+            return;
+        }
+
+        UtangPiutang created = saveResponse.getData();
+        int id = created.getIdHutang();
+
+        System.out.println("\n=== [2] READ: Ambil Data Berdasarkan ID ===");
+        Response<UtangPiutang> readResponse = utangPiutangService.findById(id);
+        System.out.println(readResponse);
+
+        System.out.println("\n=== [3] READ: Ambil Semua Data ===");
+        Response<ArrayList<UtangPiutang>> allResponse = utangPiutangService.findAll();
+        if (allResponse.isSuccess()) {
+            for (UtangPiutang u : allResponse.getData()) {
+                System.out.println(u);
+            }
+        } else {
+            System.err.println("Gagal mengambil daftar hutang piutang.");
+        }
+
+        System.out.println("\n=== [4] UPDATE: Perbarui Data ===");
+        created.setNominal(7500000.0);
+        created.setStatus("Lunas");
+        Response<UtangPiutang> updateResponse = created.update();
+        System.out.println(updateResponse);
+
+        System.out.println("\n=== [5] DELETE: Hapus Data Berdasarkan ID ===");
+        Response<Boolean> deleteResponse = created.deleteById(id);
+        System.out.println(deleteResponse);
+
+        System.out.println("\n=== [6] READ: Coba Ambil Data yang Sudah Dihapus ===");
+        Response<UtangPiutang> readAfterDelete = utangPiutangService.findById(id);
+        System.out.println(readAfterDelete);
     }
 }

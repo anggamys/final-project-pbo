@@ -4,6 +4,7 @@
  */
 package com.mycompany.final_project_pbo;
 
+import com.mycompany.final_project_pbo.Utils.DatabaseUtil;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
