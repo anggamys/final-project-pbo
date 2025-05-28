@@ -492,7 +492,7 @@ public class Hutang_Piutang extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ManajemenBarang().setVisible(true);
+                new Hutang_Piutang().setVisible(true);
             }
         });
     }
