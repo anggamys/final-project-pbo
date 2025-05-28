@@ -399,6 +399,10 @@ public class Hutang extends javax.swing.JPanel {
         add(jPanel2, "card2");
     }// </editor-fold>//GEN-END:initComponents
 
+    private void showAllHutang() {
+        
+    }
+    
     private void IDPeminjamanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IDPeminjamanActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_IDPeminjamanActionPerformed
