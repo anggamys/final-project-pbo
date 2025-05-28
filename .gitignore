@@ -1,7 +1,10 @@
 # Compiled files
 classes/
+apidocs/
+javadoc-bundle-options/
 *.class
 *.lst
+*.txt
 
 # Environment variables
 .env
