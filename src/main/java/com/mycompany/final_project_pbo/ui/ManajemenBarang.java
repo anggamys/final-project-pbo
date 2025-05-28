@@ -4,6 +4,12 @@
  */
 package com.mycompany.final_project_pbo.ui;
 
+import com.mycompany.final_project_pbo.Product;
+import com.mycompany.final_project_pbo.Response;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Achmad Fathoni
@@ -13,8 +19,16 @@ public class ManajemenBarang extends javax.swing.JFrame {
     /**
      * Creates new form ManajemenBarang
      */
-    public ManajemenBarang() {
+    public ManajemenBarang(String name, String role) {
         initComponents();
+        showAllProduct();
+        
+        userName.setText(name);
+        userRole.setText(role);
+    }
+    
+    public ManajemenBarang() {
+        
     }
 
     /**
@@ -27,8 +41,8 @@ public class ManajemenBarang extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel3 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        userRole = new javax.swing.JLabel();
+        userName = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -43,7 +57,7 @@ public class ManajemenBarang extends javax.swing.JFrame {
         PanelFitur = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tableBarang = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
@@ -65,10 +79,10 @@ public class ManajemenBarang extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setPreferredSize(new java.awt.Dimension(150, 1080));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel2.setText("USER");
+        userRole.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        userRole.setText("USER");
 
-        jLabel3.setText("NAMA USER");
+        userName.setText("NAMA USER");
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel4.setText("Toserba Berkah Abadi ");
@@ -127,8 +141,8 @@ public class ManajemenBarang extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel2)
-                                .addComponent(jLabel3)
+                                .addComponent(userRole)
+                                .addComponent(userName)
                                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jLabel5)
                                 .addComponent(jLabel4))
@@ -143,9 +157,9 @@ public class ManajemenBarang extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel2)
+                .addComponent(userRole)
                 .addGap(0, 0, 0)
-                .addComponent(jLabel3)
+                .addComponent(userName)
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(52, 52, 52)
@@ -220,7 +234,7 @@ public class ManajemenBarang extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tableBarang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -277,7 +291,7 @@ public class ManajemenBarang extends javax.swing.JFrame {
                 "Id Barang", "Nama Barang", "Kategori", "Harga", "Stock"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tableBarang);
 
         jLabel6.setFont(new java.awt.Font("Tw Cen MT", 1, 14)); // NOI18N
         jLabel6.setText("DATA BARANG");
@@ -462,6 +476,45 @@ public class ManajemenBarang extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    public void showAllProduct() {
+        Product productService = new Product();
+        Response<ArrayList<Product>> allResponse = productService.findAll();
+
+        // Nama kolom untuk tabel
+        String[] kolom = {"id Barang", "Nama Barang", "Kategori", "Harga", "Stock"};
+
+        // Model untuk tabel
+        DefaultTableModel model = new DefaultTableModel(kolom, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Semua kolom tidak bisa diedit
+            }
+        };
+        
+        int i = 0;
+
+        // Cek apakah data produk ditemukan
+        if (allResponse.isSuccess()) {
+            // Iterasi data produk yang didapat
+            for (Product p : allResponse.getData()) {
+                Object[] row = {
+                    i++,
+                    p.getName(),          // Nama Produk
+                    p.getCategory(),      // Kategori Produk
+                    p.getPrice(),
+                    p.getStock()          // Jumlah Produk
+                };
+                model.addRow(row);  // Menambahkan baris ke model
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Gagal memuat data produk: " + allResponse.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        // Set model tabel
+        tableBarang.setModel(model);
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -508,8 +561,6 @@ public class ManajemenBarang extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -522,11 +573,13 @@ public class ManajemenBarang extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
+    private javax.swing.JTable tableBarang;
+    private javax.swing.JLabel userName;
+    private javax.swing.JLabel userRole;
     // End of variables declaration//GEN-END:variables
 }
