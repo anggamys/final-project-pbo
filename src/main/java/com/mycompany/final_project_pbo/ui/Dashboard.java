@@ -111,6 +111,11 @@ public class Dashboard extends javax.swing.JFrame {
         jButton7.setForeground(new java.awt.Color(75, 139, 213));
         jButton7.setText("Utang Piutang");
         jButton7.setBorder(null);
+        jButton7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton7MouseClicked(evt);
+            }
+        });
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton7ActionPerformed(evt);
@@ -274,12 +279,16 @@ public class Dashboard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton9MouseClicked
-        
+
+    }//GEN-LAST:event_jButton9MouseClicked
+
+    private void jButton7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton7MouseClicked
+    
         PanelFitur.removeAll();
         PanelFitur.add(new Hutang());
         PanelFitur.repaint();
         PanelFitur.revalidate();
-    }//GEN-LAST:event_jButton9MouseClicked
+    }//GEN-LAST:event_jButton7MouseClicked
 
     private void NotificationActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_NotificationActionPerformed
         // TODO add your handling code here:
