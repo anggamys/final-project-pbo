@@ -14,7 +14,7 @@ public class Final_project_pbo {
 
     public static void main(String[] args) {
         launchProgram();
-//        runAllTests();
+        runAllTests();
     }
     
     private static void launchProgram() {
