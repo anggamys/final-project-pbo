@@ -101,6 +101,11 @@ public class Dashboard extends javax.swing.JFrame {
         jButton6.setForeground(new java.awt.Color(75, 139, 213));
         jButton6.setText("Laporan Keuangan");
         jButton6.setBorder(null);
+        jButton6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton6MouseClicked(evt);
+            }
+        });
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
@@ -289,6 +294,14 @@ public class Dashboard extends javax.swing.JFrame {
         PanelFitur.repaint();
         PanelFitur.revalidate();
     }//GEN-LAST:event_jButton7MouseClicked
+
+    private void jButton6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton6MouseClicked
+        
+        PanelFitur.removeAll();
+        PanelFitur.add(new Keuangan());
+        PanelFitur.repaint();
+        PanelFitur.revalidate();
+    }//GEN-LAST:event_jButton6MouseClicked
 
     private void NotificationActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_NotificationActionPerformed
         // TODO add your handling code here:

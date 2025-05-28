@@ -1,0 +1,48 @@
+-J-Duser.language=
+-J-Duser.country=
+@options
+@packages
+-classpath
+'C:/Users/muham/.m2/repository/com/mysql/mysql-connector-j/8.3.0/mysql-connector-j-8.3.0.jar;C:/Users/muham/.m2/repository/com/google/protobuf/protobuf-java/3.25.1/protobuf-java-3.25.1.jar'
+-encoding
+'UTF-8'
+-protected
+--release
+21
+-sourcepath
+'G:/Kuliah/Semester 4/Pemrograman Berbasis Objek/FP_PBO/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2025. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'G:/Kuliah/Semester 4/Pemrograman Berbasis Objek/FP_PBO/target/reports/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'final_project_pbo 1.0-SNAPSHOT API'
+-use
+-version
+-windowtitle
+'final_project_pbo 1.0-SNAPSHOT API'
+com.mycompany.final_project_pbo
+com.mycompany.final_project_pbo.ui
+C:\Users\muham\.m2\repository\com\mysql\mysql-connector-j\8.3.0\mysql-connector-j-8.3.0.jar = 1747892397894
+C:\Users\muham\.m2\repository\com\google\protobuf\protobuf-java\3.25.1\protobuf-java-3.25.1.jar = 1747892398261
+G:\Kuliah\Semester 4\Pemrograman Berbasis Objek\FP_PBO\src\main\java = 1748347691173
+G:\Kuliah\Semester 4\Pemrograman Berbasis Objek\FP_PBO\target\reports\apidocs\allclasses-index.html = 1748421265197
+G:\Kuliah\Semester 4\Pemrograman Berbasis Objek\FP_PBO\target\reports\apidocs\allpackages-index.html = 1748421265198
+G:\Kuliah\Semester 4\Pemrograman Berbasis Objek\FP_PBO\target\reports\apidocs\element-list = 1748421265042
+G:\Kuliah\Semester 4\Pemrograman Berbasis Objek\FP_PBO\target\reports\apidocs\help-doc.html = 1748421265227
+G:\Kuliah\Semester 4\Pemrograman Berbasis Objek\FP_PBO\target\reports\apidocs\index-all.html = 1748421265220
+G:\Kuliah\Semester 4\Pemrograman Berbasis Objek\FP_PBO\target\reports\apidocs\index.html = 1748421265182
+G:\Kuliah\Semester 4\Pemrograman Berbasis Objek\FP_PBO\target\reports\apidocs\member-search-index.js = 1748421265201
+G:\Kuliah\Semester 4\Pemrograman Berbasis Objek\FP_PBO\target\reports\apidocs\module-search-index.js = 1748421265199
+G:\Kuliah\Semester 4\Pemrograman Berbasis Objek\FP_PBO\target\reports\apidocs\overview-summary.html = 1748421265224
+G:\Kuliah\Semester 4\Pemrograman Berbasis Objek\FP_PBO\target\reports\apidocs\overview-tree.html = 1748421265178
+G:\Kuliah\Semester 4\Pemrograman Berbasis Objek\FP_PBO\target\reports\apidocs\package-search-index.js = 1748421265200
+G:\Kuliah\Semester 4\Pemrograman Berbasis Objek\FP_PBO\target\reports\apidocs\search.html = 1748421265222
+G:\Kuliah\Semester 4\Pemrograman Berbasis Objek\FP_PBO\target\reports\apidocs\serialized-form.html = 1748421265098
+G:\Kuliah\Semester 4\Pemrograman Berbasis Objek\FP_PBO\target\reports\apidocs\tag-search-index.js = 1748421265201
+G:\Kuliah\Semester 4\Pemrograman Berbasis Objek\FP_PBO\target\reports\apidocs\type-search-index.js = 1748421265200
