@@ -91,6 +91,11 @@ public class Dashboard extends javax.swing.JFrame {
         jButton4.setText("Manajemen Barang");
         jButton4.setBorder(null);
         jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton4MouseClicked(evt);
+            }
+        });
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
@@ -302,6 +307,14 @@ public class Dashboard extends javax.swing.JFrame {
         PanelFitur.repaint();
         PanelFitur.revalidate();
     }//GEN-LAST:event_jButton6MouseClicked
+
+    private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
+        
+        PanelFitur.removeAll();
+        PanelFitur.add(new PanelManajemenBarang());
+        PanelFitur.repaint();
+        PanelFitur.revalidate();
+    }//GEN-LAST:event_jButton4MouseClicked
 
     private void NotificationActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_NotificationActionPerformed
         // TODO add your handling code here:
