@@ -1,7 +1,6 @@
 
 package com.mycompany.final_project_pbo.ui;
 
-import com.mycompany.final_project_pbo.ui.Dashboard;
 import com.mycompany.final_project_pbo.Response;
 import com.mycompany.final_project_pbo.User;
 import javax.swing.JOptionPane;
@@ -266,8 +265,8 @@ public class Login extends javax.swing.JFrame {
             
             this.setVisible(false); // ✅ Gunakan instance saat ini, bukan new Login()
 
-            Dashboard dashboardFrame = new Dashboard(response.getData().getUsername(), response.getData().getRole());
-            dashboardFrame.setVisible(true);
+            ManajemenBarang manajemenBarangFrame = new ManajemenBarang(response.getData().getUsername(), response.getData().getRole());
+            manajemenBarangFrame.setVisible(true);
             
         } else {
             JOptionPane.showMessageDialog(this, "Login failed: " + response.getMessage(), "Login Failed", JOptionPane.ERROR_MESSAGE);

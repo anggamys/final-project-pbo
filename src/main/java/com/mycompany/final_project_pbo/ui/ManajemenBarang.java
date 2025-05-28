@@ -18,10 +18,15 @@ public class ManajemenBarang extends javax.swing.JFrame {
 
     /**
      * Creates new form ManajemenBarang
+     * @param name
+     * @param role
      */
-    public ManajemenBarang() {
+    public ManajemenBarang(String name, String role) {
         initComponents();
         showAllProduct();
+        
+        userName.setText(name);
+        roleUser.setText(role);
     }
 
     /**
@@ -34,8 +39,8 @@ public class ManajemenBarang extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel3 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        roleUser = new javax.swing.JLabel();
+        userName = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -70,10 +75,10 @@ public class ManajemenBarang extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setPreferredSize(new java.awt.Dimension(150, 1080));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel2.setText("USER");
+        roleUser.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        roleUser.setText("USER");
 
-        jLabel3.setText("NAMA USER");
+        userName.setText("NAMA USER");
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel4.setText("Toserba Berkah Abadi ");
@@ -132,8 +137,8 @@ public class ManajemenBarang extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel2)
-                                .addComponent(jLabel3)
+                                .addComponent(roleUser)
+                                .addComponent(userName)
                                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jLabel5)
                                 .addComponent(jLabel4))
@@ -148,9 +153,9 @@ public class ManajemenBarang extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel2)
+                .addComponent(roleUser)
                 .addGap(0, 0, 0)
-                .addComponent(jLabel3)
+                .addComponent(userName)
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(52, 52, 52)
@@ -540,8 +545,6 @@ public class ManajemenBarang extends javax.swing.JFrame {
     private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -558,6 +561,8 @@ public class ManajemenBarang extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
+    private javax.swing.JLabel roleUser;
     private javax.swing.JTable tableBarang;
+    private javax.swing.JLabel userName;
     // End of variables declaration//GEN-END:variables
 }

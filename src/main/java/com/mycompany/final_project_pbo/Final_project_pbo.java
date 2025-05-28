@@ -5,7 +5,6 @@
 package com.mycompany.final_project_pbo;
 
 import com.mycompany.final_project_pbo.ui.*;
-import java.util.ArrayList;
 
 /**
  *
@@ -26,22 +25,19 @@ public class Final_project_pbo {
     }
     
     private static void runAllTests() {
-        System.out.println("=== STARTING TESTING OWNER ===");
+        System.out.println("=== STARTING TESTING USER ===");
         testUserFullCycle();
 
-        System.out.println("\n=== STARTING TESTING GROSIR ===");
-        testGrosir();
-
-        System.out.println("\n=== STARTING TESTING RETAIL ===");
-        testRetailProduct();
+        System.out.println("=== STARTING TESTING PRODUCT ===");
+        testProductCycle();
     }
     
     private static void testUserFullCycle() {
         User userService = new User();
         
         System.out.println("\n=== [1] CREATE: Add User ===");
-        String testUsername = "test_user_" + System.currentTimeMillis();
-        String testPassword = "initialPassword123";
+        String testUsername = "example";
+        String testPassword = "example";
         String testRole = "OWNER";
         
         String testChangeUsername = "test_user_" + System.currentTimeMillis();
@@ -94,100 +90,53 @@ public class Final_project_pbo {
 //        System.out.println(userService.deleteUser(userId));
     }
 
-    private static void testGrosir() {
-        Grosir grosir = new Grosir();
+    private static void testProductCycle() {
+        System.out.println("\n=== [1] CREATE: Add Product ===");
+        Product productService = new Product();
+        productService.setName("Test Product");
+        productService.setCategory("Testing");
+        productService.setPrice(99.99);
+        productService.setStock(10);
 
-        // Hasil id product yang baru ditambahkan digunakan untuk pengujian
-        System.out.println("\n=== [1] CREATE: Add Grosir Product ===");
-        String productName = "test_product_" + System.currentTimeMillis();
-        String productCategory = "Category";
-        Double productPrice = 100.0;
-        Integer productStock = 10;
-        Response<Product> addResponse = grosir.addProduct(productName, productCategory, productPrice, productStock);
-        System.out.println(addResponse);
+        Response<Product> saveResponse = productService.save();
+        System.out.println(saveResponse);
 
-        if (!addResponse.isSuccess()) {
+        if (!saveResponse.isSuccess()) {
             System.err.println("Failed to create test product. Abort test.");
             return;
         }
 
-        Product createdProduct = addResponse.getData();
-        Integer productId = createdProduct.getIdProduct();
-
-        // --------------------------------------------------------------------
-
-        System.out.println("\n=== [2] READ: Get Grosir Product by ID ===");
-        Response<Product> getResponse = grosir.getProduct(productId);
-        System.out.println(getResponse);
-
-        System.out.println("\n=== [3] READ: Get All Grosir Products ===");
-        Response<ArrayList<Product>> getAllResponse = grosir.getAllProducts();
-        System.out.println(getAllResponse);
-        if (getAllResponse.isSuccess()) {
-            for (Product product : getAllResponse.getData()) {
-                System.out.println(product);
-            }
-        }
-
-        // --------------------------------------------------------------------
-
-        System.out.println("\n=== [4] UPDATE: Update Grosir Product ===");
-        String updatedProductName = "Updated Product";
-        String updatedCategory = "Updated Category";
-        Double updatedPrice = 150.0;
-        Integer updatedStock = 20;
-        Response<Product> updateResponse = grosir.updateProduct(productId, updatedProductName, updatedCategory,
-                updatedPrice, updatedStock);
-        System.out.println(updateResponse);
-
-        // --------------------------------------------------------------------
-
-        System.out.println("\n=== [5] DELETE: Delete Grosir Product ===");
-        Response<Boolean> deleteResponse = grosir.deleteProduct(productId);
-        System.out.println(deleteResponse);
-
-        // --------------------------------------------------------------------
-
-        System.out.println("\n=== [6] READ: Get Deleted Product (should fail) ===");
-        Response<Product> getDeleted = grosir.getProduct(productId);
-        System.out.println(getDeleted);
-
-        System.out.println("\n=== [7] DELETE: Delete Non-existent Product Again ===");
-        Response<Boolean> deleteNonExist = grosir.deleteProduct(productId);
-        System.out.println(deleteNonExist);
-    }
-
-    private static void testRetailProduct() {
-        RetailProduct retailProduct = new RetailProduct();
-
-        // Hasil id product yang baru ditambahkan digunakan untuk pengujian
-        System.out.println("--> Add Retail Product:");
-        Response<Product> addResponse = retailProduct.addProduct("Retail Product", "Category", 50.0, 5);
-        System.out.println(addResponse);
-        if (addResponse.isSuccess()) {
-            int newProductId = addResponse.getData().getIdProduct();
-
-            System.out.println("--> Get Retail Product:");
-            Response<Product> getResponse = retailProduct.getProduct(newProductId);
-            System.out.println(getResponse);
-
-            System.out.println("--> Get All Retail Products:");
-            Response<ArrayList<Product>> getAllResponse = retailProduct.getAllProducts();
-            System.out.println(getAllResponse);
-            if (getAllResponse.isSuccess()) {
-                for (Product product : getAllResponse.getData()) {
-                    System.out.println(product);
-                }
-            }
-
-            System.out.println("--> Update Retail Product:");
-            Response<Product> updateResponse = retailProduct.updateProduct(newProductId, "Updated Retail Product",
-                    "Updated Category", 75.0, 10);
-            System.out.println(updateResponse);
-
-            System.out.println("--> Delete Retail Product:");
-            Response<Boolean> deleteResponse = retailProduct.deleteProduct(newProductId);
-            System.out.println(deleteResponse);
-        }
+//        Product createdProduct = saveResponse.getData();
+//        int productId = createdProduct.getIdProduct();
+//
+//        System.out.println("\n=== [2] READ: Get Product by ID ===");
+//        Response<Product> readResponse;
+//        readResponse = productService.findById(productId);
+//        System.out.println(readResponse);
+//
+//        System.out.println("\n=== [3] READ: Get All Products ===");
+//        Response<ArrayList<Product>> allResponse = productService.findAll();
+//        if (allResponse.isSuccess()) {
+//            for (Product p : allResponse.getData()) {
+//                System.out.println(p);
+//            }
+//        } else {
+//            System.err.println("Failed to fetch product list.");
+//        }
+//
+//        System.out.println("\n=== [4] UPDATE: Update Product Info ===");
+//        createdProduct.setName("Updated Product Name");
+//        createdProduct.setPrice(129.99);
+//        createdProduct.setStock(25);
+//        Response<Product> updateResponse = createdProduct.update();
+//        System.out.println(updateResponse);
+//
+//        System.out.println("\n=== [5] DELETE: Delete Product by ID ===");
+//        Response<Boolean> deleteResponse = productService.deleteById(productId);
+//        System.out.println(deleteResponse);
+//
+//        System.out.println("\n=== [6] READ: Try Get Deleted Product ===");
+//        Response<Product> readAfterDelete = productService.findById(productId);
+//        System.out.println(readAfterDelete);
     }
 }
