@@ -4,7 +4,6 @@
  */
 package com.mycompany.final_project_pbo.ui;
 
-
 /**
  *
  * @author Achmad Fathoni
@@ -21,6 +20,11 @@ public class Dashboard extends javax.swing.JFrame {
         initComponents();
         userName.setText(name);
         roleUser.setText(role);
+        
+        PanelFitur.removeAll();
+        PanelFitur.add(new ManajemenBarang());
+        PanelFitur.repaint();
+        PanelFitur.revalidate();    
     }
 
     public Dashboard() {
@@ -44,10 +48,10 @@ public class Dashboard extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JSeparator();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jButton4 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
+        manajemenBarangPage = new javax.swing.JButton();
+        laporanKeuanganPage = new javax.swing.JButton();
+        utangPiutangPage = new javax.swing.JButton();
+        scanBarangPage = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         Notification = new javax.swing.JButton();
@@ -87,64 +91,64 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel9.setText("Sistem POS");
 
-        jButton4.setForeground(new java.awt.Color(75, 139, 213));
-        jButton4.setText("Manajemen Barang");
-        jButton4.setBorder(null);
-        jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
+        manajemenBarangPage.setForeground(new java.awt.Color(75, 139, 213));
+        manajemenBarangPage.setText("Manajemen Barang");
+        manajemenBarangPage.setBorder(null);
+        manajemenBarangPage.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        manajemenBarangPage.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton4MouseClicked(evt);
+                manajemenBarangPageMouseClicked(evt);
             }
         });
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        manajemenBarangPage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                manajemenBarangPageActionPerformed(evt);
             }
         });
 
-        jButton6.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
-        jButton6.setForeground(new java.awt.Color(75, 139, 213));
-        jButton6.setText("Laporan Keuangan");
-        jButton6.setBorder(null);
-        jButton6.addMouseListener(new java.awt.event.MouseAdapter() {
+        laporanKeuanganPage.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
+        laporanKeuanganPage.setForeground(new java.awt.Color(75, 139, 213));
+        laporanKeuanganPage.setText("Laporan Keuangan");
+        laporanKeuanganPage.setBorder(null);
+        laporanKeuanganPage.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton6MouseClicked(evt);
+                laporanKeuanganPageMouseClicked(evt);
             }
         });
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        laporanKeuanganPage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                laporanKeuanganPageActionPerformed(evt);
             }
         });
 
-        jButton7.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
-        jButton7.setForeground(new java.awt.Color(75, 139, 213));
-        jButton7.setText("Utang Piutang");
-        jButton7.setBorder(null);
-        jButton7.addMouseListener(new java.awt.event.MouseAdapter() {
+        utangPiutangPage.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
+        utangPiutangPage.setForeground(new java.awt.Color(75, 139, 213));
+        utangPiutangPage.setText("Utang Piutang");
+        utangPiutangPage.setBorder(null);
+        utangPiutangPage.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton7MouseClicked(evt);
+                utangPiutangPageMouseClicked(evt);
             }
         });
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
+        utangPiutangPage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
+                utangPiutangPageActionPerformed(evt);
             }
         });
 
-        jButton9.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
-        jButton9.setForeground(new java.awt.Color(75, 139, 213));
-        jButton9.setText("Scan Barang");
-        jButton9.setToolTipText("");
-        jButton9.setBorder(null);
-        jButton9.addMouseListener(new java.awt.event.MouseAdapter() {
+        scanBarangPage.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
+        scanBarangPage.setForeground(new java.awt.Color(75, 139, 213));
+        scanBarangPage.setText("Scan Barang");
+        scanBarangPage.setToolTipText("");
+        scanBarangPage.setBorder(null);
+        scanBarangPage.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton9MouseClicked(evt);
+                scanBarangPageMouseClicked(evt);
             }
         });
-        jButton9.addActionListener(new java.awt.event.ActionListener() {
+        scanBarangPage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton9ActionPerformed(evt);
+                scanBarangPageActionPerformed(evt);
             }
         });
 
@@ -158,16 +162,16 @@ public class Dashboard extends javax.swing.JFrame {
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
+                                .addComponent(jSeparator2)
                                 .addComponent(jLabel9)
                                 .addComponent(jLabel8)
                                 .addComponent(roleUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(userName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(laporanKeuanganPage, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(utangPiutangPage, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(scanBarangPage, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(manajemenBarangPage, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
@@ -180,14 +184,14 @@ public class Dashboard extends javax.swing.JFrame {
                 .addGap(2, 2, 2)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(manajemenBarangPage, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(25, 25, 25)
-                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(laporanKeuanganPage, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(25, 25, 25)
-                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(utangPiutangPage, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(25, 25, 25)
-                .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 752, Short.MAX_VALUE)
+                .addComponent(scanBarangPage, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 755, Short.MAX_VALUE)
                 .addComponent(jLabel9)
                 .addGap(0, 0, 0)
                 .addComponent(jLabel8)
@@ -288,57 +292,34 @@ public class Dashboard extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton9MouseClicked
+    private void scanBarangPageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scanBarangPageMouseClicked
 
-    }//GEN-LAST:event_jButton9MouseClicked
+    }//GEN-LAST:event_scanBarangPageMouseClicked
 
-    private void jButton7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton7MouseClicked
-    
+    private void utangPiutangPageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_utangPiutangPageMouseClicked
         PanelFitur.removeAll();
         PanelFitur.add(new Hutang());
         PanelFitur.repaint();
         PanelFitur.revalidate();
-    }//GEN-LAST:event_jButton7MouseClicked
+    }//GEN-LAST:event_utangPiutangPageMouseClicked
 
-    private void jButton6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton6MouseClicked
-        
+    private void laporanKeuanganPageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_laporanKeuanganPageMouseClicked
         PanelFitur.removeAll();
         PanelFitur.add(new Keuangan());
         PanelFitur.repaint();
         PanelFitur.revalidate();
-    }//GEN-LAST:event_jButton6MouseClicked
+    }//GEN-LAST:event_laporanKeuanganPageMouseClicked
 
-    private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
-        
+    private void manajemenBarangPageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_manajemenBarangPageMouseClicked
         PanelFitur.removeAll();
         PanelFitur.add(new ManajemenBarang());
         PanelFitur.repaint();
         PanelFitur.revalidate();
-    }//GEN-LAST:event_jButton4MouseClicked
-
-    private void NotificationActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_NotificationActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_NotificationActionPerformed
+    }//GEN-LAST:event_manajemenBarangPageMouseClicked
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel1MouseClicked
         dispose();
-    }// GEN-LAST:event_jLabel1MouseClicked
-
-    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton9ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton9ActionPerformed
-
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton7ActionPerformed
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton6ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton4ActionPerformed
+    }
 
     private void roleUserPropertyChange(java.beans.PropertyChangeEvent evt) {// GEN-FIRST:event_roleUserPropertyChange
         // TODO add your handling code here:
@@ -368,32 +349,19 @@ public class Dashboard extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Dashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Dashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Dashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Dashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        // </editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Dashboard().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Dashboard().setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Notification;
     private javax.swing.JPanel PanelFitur;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -402,7 +370,11 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JButton laporanKeuanganPage;
+    private javax.swing.JButton manajemenBarangPage;
     private javax.swing.JLabel roleUser;
+    private javax.swing.JButton scanBarangPage;
     private javax.swing.JLabel userName;
+    private javax.swing.JButton utangPiutangPage;
     // End of variables declaration//GEN-END:variables
 }

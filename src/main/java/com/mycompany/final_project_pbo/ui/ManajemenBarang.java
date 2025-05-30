@@ -4,6 +4,15 @@
  */
 package com.mycompany.final_project_pbo.ui;
 
+import com.mycompany.final_project_pbo.Product;
+import com.mycompany.final_project_pbo.Response;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author muham
@@ -15,6 +24,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
      */
     public ManajemenBarang() {
         initComponents();
+        showAllProduct();
     }
 
     /**
@@ -150,6 +160,11 @@ public class ManajemenBarang extends javax.swing.JPanel {
         ButtonTambahBarang.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
         ButtonTambahBarang.setForeground(new java.awt.Color(93, 173, 226));
         ButtonTambahBarang.setText("Tambah Barang");
+        ButtonTambahBarang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonTambahBarangActionPerformed(evt);
+            }
+        });
 
         ButtonEditBarang.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
         ButtonEditBarang.setForeground(new java.awt.Color(93, 173, 226));
@@ -163,6 +178,11 @@ public class ManajemenBarang extends javax.swing.JPanel {
         ButtonHapusBarang.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
         ButtonHapusBarang.setForeground(new java.awt.Color(93, 173, 226));
         ButtonHapusBarang.setText("Hapus Barang");
+        ButtonHapusBarang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonHapusBarangActionPerformed(evt);
+            }
+        });
 
         jLabel8.setFont(new java.awt.Font("Tw Cen MT", 1, 36)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(93, 173, 226));
@@ -278,7 +298,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1507, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 200, Short.MAX_VALUE)
                             .addComponent(SearchBarang)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -319,15 +339,14 @@ public class ManajemenBarang extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel10))
+                .addGap(15, 15, 15)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
                             .addComponent(SortItem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(15, 15, 15))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
                         .addComponent(SearchBarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -367,7 +386,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(15, 15, 15)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         add(jPanel1, "card2");
@@ -394,8 +413,155 @@ public class ManajemenBarang extends javax.swing.JPanel {
     }//GEN-LAST:event_SortRiwayatAktivitasActionPerformed
 
     private void ButtonEditBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonEditBarangActionPerformed
-        // TODO add your handling code here:
+        try {
+            Product p = new Product();
+            p.setIdProduct(Integer.parseInt(IDBarang.getText()));
+            p.setName(NamaBarang.getText());
+            p.setCategory(KategoriBarang.getText());
+            p.setPrice(Double.valueOf(HargaBarang.getText()));
+            p.setStock(Integer.valueOf(StockBarang.getText()));
+
+            Response<Product> response = p.update();
+
+            if (response.isSuccess()) {
+                JOptionPane.showMessageDialog(this, "Produk berhasil diperbarui.");
+                clearForm();
+                showAllProduct();
+            } else {
+                JOptionPane.showMessageDialog(this, "Gagal memperbarui produk: " + response.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Harga dan Stok harus berupa angka valid.",
+                    "Input Error", JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_ButtonEditBarangActionPerformed
+
+    private void ButtonTambahBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonTambahBarangActionPerformed
+        try {
+            Product p = new Product();
+            p.setName(NamaBarang.getText());
+            p.setCategory(KategoriBarang.getText());
+            p.setPrice(Double.valueOf(HargaBarang.getText()));
+            p.setStock(Integer.valueOf(StockBarang.getText()));
+
+            Response<Product> response = p.save();
+
+            if (response.isSuccess()) {
+                JOptionPane.showMessageDialog(this, "Produk berhasil ditambahkan.");
+                clearForm();
+                showAllProduct();
+            } else {
+                JOptionPane.showMessageDialog(this, "Gagal menambahkan produk: " + response.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Harga dan Stok harus berupa angka valid.",
+                    "Input Error", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_ButtonTambahBarangActionPerformed
+
+    private void ButtonHapusBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonHapusBarangActionPerformed
+        int confirm = JOptionPane.showConfirmDialog(this, "Yakin ingin menghapus produk ini?", 
+                        "Konfirmasi Hapus", JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                int id = Integer.parseInt(IDBarang.getText());
+
+                Product p = new Product();
+                p.setIdProduct(id);
+
+                Response<Boolean> response = p.deleteById(id);
+
+                if (response.isSuccess()) {
+                    JOptionPane.showMessageDialog(this, "Produk berhasil dihapus.");
+                    clearForm();
+                    showAllProduct();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Gagal menghapus produk: " + response.getMessage(),
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "ID tidak valid.",
+                        "Input Error", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_ButtonHapusBarangActionPerformed
+
+    private void showAllProduct() {
+        Product productService = new Product();
+        Response<ArrayList<Product>> allResponse = productService.findAll();
+
+        // Nama kolom untuk tabel
+        String[] kolom = {"id Barang", "Nama Barang", "Kategori", "Harga", "Stock"};
+
+        // Model untuk tabel
+        DefaultTableModel model = new DefaultTableModel(kolom, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Semua kolom tidak bisa diedit
+            }
+        };
+
+        // Cek apakah data produk ditemukan
+        if (allResponse.isSuccess()) {
+            for (Product p : allResponse.getData()) {
+                Object[] row = {
+                    p.getIdProduct(),           // id Barang (bukan i++)
+                    p.getName(),
+                    p.getCategory(),
+                    p.getPrice(),
+                    p.getStock()
+                };
+                model.addRow(row);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Gagal memuat data produk: " + allResponse.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        // Set model tabel
+        TabelManajemenBarang.setModel(model);
+
+        // Atur ulang listener agar tidak terduplikasi
+        ListSelectionModel selectionModel = TabelManajemenBarang.getSelectionModel();
+        selectionModel.removeListSelectionListener(tableSelectionListener);
+        selectionModel.addListSelectionListener(tableSelectionListener);
+    }
+
+    // Listener pemilihan baris tabel
+    private final ListSelectionListener tableSelectionListener = new ListSelectionListener() {
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+            if (!e.getValueIsAdjusting()) {
+                int selectedRow = TabelManajemenBarang.getSelectedRow();
+                if (selectedRow != -1) {
+                    // Ambil nilai dari tabel
+                    String id = TabelManajemenBarang.getValueAt(selectedRow, 0).toString();
+                    String nama = TabelManajemenBarang.getValueAt(selectedRow, 1).toString();
+                    String kategori = TabelManajemenBarang.getValueAt(selectedRow, 2).toString();
+                    String harga = TabelManajemenBarang.getValueAt(selectedRow, 3).toString();
+                    String stock = TabelManajemenBarang.getValueAt(selectedRow, 4).toString();
+
+                    // Set nilai ke input field
+                    IDBarang.setText(id);
+                    NamaBarang.setText(nama);
+                    KategoriBarang.setText(kategori);
+                    HargaBarang.setText(harga);
+                    StockBarang.setText(stock);
+                }
+            }
+        }
+    };
+    
+    private void clearForm() {
+        IDBarang.setText("");
+        NamaBarang.setText("");
+        KategoriBarang.setText("");
+        HargaBarang.setText("");
+        StockBarang.setText("");
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
