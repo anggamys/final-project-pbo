@@ -265,8 +265,8 @@ public class Login extends javax.swing.JFrame {
             
             this.setVisible(false); // ✅ Gunakan instance saat ini, bukan new Login()
 
-            ManajemenBarang manajemenBarangFrame = new ManajemenBarang(response.getData().getUsername(), response.getData().getRole());
-            manajemenBarangFrame.setVisible(true);
+            //ManajemenBarang ManajemenBarangFrame = new ManajemenBarang(response.getData().getUsername(), response.getData().getRole());
+            //ManajemenBarangFrame.setVisible(true);
             
         } else {
             JOptionPane.showMessageDialog(this, "Login failed: " + response.getMessage(), "Login Failed", JOptionPane.ERROR_MESSAGE);
