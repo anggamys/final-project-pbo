@@ -65,7 +65,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         roleUser.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         roleUser.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        roleUser.setIcon(new javax.swing.ImageIcon("C:\\Users\\muham\\Downloads\\BerkahAbdiIcon.png")); // NOI18N
+        roleUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/Img/BerkahAbdiIcon.png"))); // NOI18N
         roleUser.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 roleUserPropertyChange(evt);
@@ -207,7 +207,7 @@ public class Dashboard extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 1071, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 11, Short.MAX_VALUE))
+                .addGap(0, 12, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel3, java.awt.BorderLayout.LINE_START);
@@ -278,9 +278,9 @@ public class Dashboard extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(15, 15, 15)
+                .addGap(10, 10, 10)
                 .addComponent(PanelFitur, javax.swing.GroupLayout.PREFERRED_SIZE, 985, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel4, java.awt.BorderLayout.CENTER);
@@ -311,7 +311,7 @@ public class Dashboard extends javax.swing.JFrame {
     private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
         
         PanelFitur.removeAll();
-        PanelFitur.add(new PanelManajemenBarang());
+        PanelFitur.add(new ManajemenBarang());
         PanelFitur.repaint();
         PanelFitur.revalidate();
     }//GEN-LAST:event_jButton4MouseClicked
