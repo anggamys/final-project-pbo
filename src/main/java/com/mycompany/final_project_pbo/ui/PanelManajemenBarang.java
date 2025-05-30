@@ -443,7 +443,8 @@ public class PanelManajemenBarang extends javax.swing.JPanel {
     private void jButton3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseReleased
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton3MouseReleased
-public void showAllProduct() {
+    
+    public void showAllProduct() {
         Product productService = new Product();
         Response<ArrayList<Product>> allResponse = productService.findAll();
 
