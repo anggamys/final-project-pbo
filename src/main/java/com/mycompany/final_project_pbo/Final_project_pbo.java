@@ -26,11 +26,11 @@ public class Final_project_pbo {
     }
     
     private static void runAllTests() {
-//        System.out.println("=== STARTING TESTING USER ===");
-//        testUserFullCycle();
-//
-//        System.out.println("=== STARTING TESTING PRODUCT ===");
-//        testProductCycle();
+        System.out.println("=== STARTING TESTING USER ===");
+        testUserFullCycle();
+
+        System.out.println("=== STARTING TESTING PRODUCT ===");
+        testProductCycle();
         
         System.out.println("=== STARTING TESTING PRODUCT ===");
         testHutangPiutangCycle();
@@ -158,35 +158,36 @@ public class Final_project_pbo {
             return;
         }
 
-        UtangPiutang created = saveResponse.getData();
-        int id = created.getIdHutang();
-
-        System.out.println("\n=== [2] READ: Ambil Data Berdasarkan ID ===");
-        Response<UtangPiutang> readResponse = utangPiutangService.findById(id);
-        System.out.println(readResponse);
-
-        System.out.println("\n=== [3] READ: Ambil Semua Data ===");
-        Response<ArrayList<UtangPiutang>> allResponse = utangPiutangService.findAll();
-        if (allResponse.isSuccess()) {
-            for (UtangPiutang u : allResponse.getData()) {
-                System.out.println(u);
-            }
-        } else {
-            System.err.println("Gagal mengambil daftar hutang piutang.");
-        }
-
-        System.out.println("\n=== [4] UPDATE: Perbarui Data ===");
-        created.setNominal(7500000.0);
-        created.setStatus("Lunas");
-        Response<UtangPiutang> updateResponse = created.update();
-        System.out.println(updateResponse);
-
-        System.out.println("\n=== [5] DELETE: Hapus Data Berdasarkan ID ===");
-        Response<Boolean> deleteResponse = created.deleteById(id);
-        System.out.println(deleteResponse);
-
-        System.out.println("\n=== [6] READ: Coba Ambil Data yang Sudah Dihapus ===");
-        Response<UtangPiutang> readAfterDelete = utangPiutangService.findById(id);
-        System.out.println(readAfterDelete);
+//        UtangPiutang created = saveResponse.getData();
+//        int id;
+//        id = created.getId();
+//
+//        System.out.println("\n=== [2] READ: Ambil Data Berdasarkan ID ===");
+//        Response<UtangPiutang> readResponse = utangPiutangService.findById(id);
+//        System.out.println(readResponse);
+//
+//        System.out.println("\n=== [3] READ: Ambil Semua Data ===");
+//        Response<ArrayList<UtangPiutang>> allResponse = utangPiutangService.findAll();
+//        if (allResponse.isSuccess()) {
+//            for (UtangPiutang u : allResponse.getData()) {
+//                System.out.println(u);
+//            }
+//        } else {
+//            System.err.println("Gagal mengambil daftar hutang piutang.");
+//        }
+//
+//        System.out.println("\n=== [4] UPDATE: Perbarui Data ===");
+//        created.setNominal(7500000.0);
+//        created.setStatus("Lunas");
+//        Response<UtangPiutang> updateResponse = created.update();
+//        System.out.println(updateResponse);
+//
+//        System.out.println("\n=== [5] DELETE: Hapus Data Berdasarkan ID ===");
+//        Response<Boolean> deleteResponse = created.deleteById(id);
+//        System.out.println(deleteResponse);
+//
+//        System.out.println("\n=== [6] READ: Coba Ambil Data yang Sudah Dihapus ===");
+//        Response<UtangPiutang> readAfterDelete = utangPiutangService.findById(id);
+//        System.out.println(readAfterDelete);
     }
 }

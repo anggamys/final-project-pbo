@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  * @author c0delb08
  */
 public class UtangPiutang implements BaseEntity, CrudRepository<UtangPiutang>{
-    private Integer idHutang;
+    private Integer id;
     private String namaPihak;
     private Double nominal;
     private Date jatuhTempo;
@@ -28,20 +28,20 @@ public class UtangPiutang implements BaseEntity, CrudRepository<UtangPiutang>{
     private static final Logger LOGGER = Logger.getLogger(UtangPiutang.class.getName());
     
     public UtangPiutang() {}
-    public UtangPiutang(Integer idHutang, String namaPihak, Double nominal, Date jatuhTempo, String status) {
-        this.idHutang = idHutang;
+    public UtangPiutang(Integer id, String namaPihak, Double nominal, Date jatuhTempo, String status) {
+        this.id = id;
         this.namaPihak = namaPihak;
         this.nominal = nominal;
         this.jatuhTempo = jatuhTempo;
         this.status = status;
     }
     
-    public Integer getIdHutang() {
-        return idHutang;
+    public Integer getId() {
+        return id;
     }
 
-    public void setIdHutang(Integer idHutang) {
-        this.idHutang = idHutang;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getNamaPihak() {
@@ -76,7 +76,6 @@ public class UtangPiutang implements BaseEntity, CrudRepository<UtangPiutang>{
         this.status = status;
     }
 
-
     @Override
     public Response save() {
         String sql = "INSERT INTO UtangPiutang (namaPihak, nominal, jatuhTempo, status) VALUES (?, ?, ?, ?)";
@@ -90,7 +89,7 @@ public class UtangPiutang implements BaseEntity, CrudRepository<UtangPiutang>{
             
             try (ResultSet rs = ps.getGeneratedKeys()){
                 if (rs.next()) {
-                    this.idHutang = rs.getInt(1);
+                    this.id = rs.getInt(1);
                 }
             }
             
@@ -111,7 +110,7 @@ public class UtangPiutang implements BaseEntity, CrudRepository<UtangPiutang>{
             ps.setDouble(2, nominal);
             ps.setDate(3, new java.sql.Date(jatuhTempo.getTime()));
             ps.setString(4, status);
-            ps.setInt(5, idHutang);
+            ps.setInt(5, id);
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
@@ -135,7 +134,7 @@ public class UtangPiutang implements BaseEntity, CrudRepository<UtangPiutang>{
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     UtangPiutang data = new UtangPiutang(
-                            rs.getInt("idHutang"),
+                            rs.getInt("id"),
                             rs.getString("namaPihak"),
                             rs.getDouble("nominal"),
                             rs.getDate("jatuhTempo"),
@@ -154,7 +153,7 @@ public class UtangPiutang implements BaseEntity, CrudRepository<UtangPiutang>{
 
     @Override
     public Response<Boolean> deleteById(int id) {
-        String sql = "DELETE FROM UtangPiutang WHERE idHutang = ?";
+        String sql = "DELETE FROM UtangPiutang WHERE id = ?";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -181,7 +180,7 @@ public class UtangPiutang implements BaseEntity, CrudRepository<UtangPiutang>{
 
             while (rs.next()) {
                 UtangPiutang data = new UtangPiutang(
-                        rs.getInt("idHutang"),
+                        rs.getInt("id"),
                         rs.getString("namaPihak"),
                         rs.getDouble("nominal"),
                         rs.getDate("jatuhTempo"),
@@ -195,5 +194,16 @@ public class UtangPiutang implements BaseEntity, CrudRepository<UtangPiutang>{
             LOGGER.log(Level.SEVERE, "Failed to load data", e);
             return Response.failure("Error loading data: " + e.getMessage());
         }
+    }
+    
+    @Override
+    public String toString() {
+        return "UtangPiutang{" +
+                "id=" + id +
+                ", namaPihak='" + namaPihak + '\'' +
+                ", nominal=" + nominal +
+                ", jatuhTempo=" + jatuhTempo +
+                ", status='" + status + '\'' +
+                '}';
     }
 }

@@ -4,17 +4,30 @@
  */
 package com.mycompany.final_project_pbo.ui;
 
+import com.mycompany.final_project_pbo.Response;
+import com.mycompany.final_project_pbo.UtangPiutang;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author muham
  */
-public class Hutang extends javax.swing.JPanel {
+public final class Hutang extends javax.swing.JPanel {
 
     /**
      * Creates new form HutangPiutang
      */
     public Hutang() {
         initComponents();
+        showAllHutang();
     }
 
     /**
@@ -29,7 +42,7 @@ public class Hutang extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        utangTable = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         IDPeminjaman = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
@@ -64,7 +77,7 @@ public class Hutang extends javax.swing.JPanel {
         jLabel1.setForeground(new java.awt.Color(93, 173, 226));
         jLabel1.setText("Data Hutang Piutang Pelanggan dan Pegawai");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        utangTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null},
@@ -171,7 +184,7 @@ public class Hutang extends javax.swing.JPanel {
                 "ID ", "Nama ", "Status (Pegawai/Pelanggan)", "Alamat Peminjam", "No. Telp Peminjam", "Tanggal Peminjaman", "Tanggal Pelunasan Peminjaman", "Jumlah Peminjaman", "Status Peminjaman"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(utangTable);
 
         jLabel2.setFont(new java.awt.Font("Tw Cen MT", 0, 24)); // NOI18N
         jLabel2.setText("ID Peminjaman:");
@@ -312,35 +325,34 @@ public class Hutang extends javax.swing.JPanel {
                         .addGap(175, 175, 175)
                         .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1722, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                            .addComponent(SimpanPinjaman)
-                            .addGap(136, 136, 136)
-                            .addComponent(EditPinjaman)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(HapusPinjaman))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGap(63, 63, 63)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(IDPeminjaman, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(NamaPeminjam, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(StatusPeminjam, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(AlamatPeminjam, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(NoTelpPeminjam, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(TanggalPeminjaman, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(TanggalPelunasanPeminjaman, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(JumlahPeminjaman, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(StatusPeminjaman, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(SimpanPinjaman)
+                        .addGap(136, 136, 136)
+                        .addComponent(EditPinjaman)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(HapusPinjaman))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(63, 63, 63)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(IDPeminjaman, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(NamaPeminjam, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(StatusPeminjam, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(AlamatPeminjam, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(NoTelpPeminjam, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(TanggalPeminjaman, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(TanggalPelunasanPeminjaman, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(JumlahPeminjaman, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(StatusPeminjaman, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -435,18 +447,166 @@ public class Hutang extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_StatusPeminjamanActionPerformed
 
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    
     private void SimpanPinjamanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SimpanPinjamanActionPerformed
-        // TODO add your handling code here:
+        try {
+            Date jatuhTempo = sdf.parse(TanggalPelunasanPeminjaman.getText());
+
+            UtangPiutang u = new UtangPiutang();
+            u.setNamaPihak(NamaPeminjam.getText());
+            // u.setAlamat(AlamatPeminjam.getText());
+            // u.setNoTelp(NoTelpPeminjam.getText());
+            // u.setTanggalPinjam(sdf.parse(TanggalPeminjaman.getText()));
+            u.setJatuhTempo(jatuhTempo);
+            u.setNominal(Double.valueOf(JumlahPeminjaman.getText()));
+            u.setStatus(StatusPeminjaman.getText());
+
+            Response<UtangPiutang> response = u.save();
+            if (response.isSuccess()) {
+                JOptionPane.showMessageDialog(null, "Data berhasil disimpan.");
+                clearForm();
+                showAllHutang();
+            } else {
+                JOptionPane.showMessageDialog(null, "Gagal menyimpan: " + response.getMessage());
+            }
+        } catch (ParseException e) {
+            JOptionPane.showMessageDialog(null, "Format tanggal salah! Gunakan format yyyy-MM-dd");
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Jumlah Peminjaman harus berupa angka.");
+        }
     }//GEN-LAST:event_SimpanPinjamanActionPerformed
 
     private void EditPinjamanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditPinjamanActionPerformed
-        // TODO add your handling code here:
+        try {
+            Date jatuhTempo = sdf.parse(TanggalPelunasanPeminjaman.getText());
+
+            UtangPiutang u = new UtangPiutang();
+            u.setId(Integer.valueOf(IDPeminjaman.getText())); // Ambil ID dari form
+            u.setNamaPihak(NamaPeminjam.getText());
+            // u.setAlamat(AlamatPeminjam.getText());
+            // u.setNoTelp(NoTelpPeminjam.getText());
+            // u.setTanggalPinjam(sdf.parse(TanggalPeminjaman.getText()));
+            u.setJatuhTempo(jatuhTempo);
+            u.setNominal(Double.valueOf(JumlahPeminjaman.getText()));
+            u.setStatus(StatusPeminjaman.getText());
+
+            Response<UtangPiutang> response = u.update();
+            if (response.isSuccess()) {
+                JOptionPane.showMessageDialog(null, "Data berhasil diperbarui.");
+                clearForm();
+                showAllHutang();
+            } else {
+                JOptionPane.showMessageDialog(null, "Gagal memperbarui: " + response.getMessage());
+            }
+        } catch (ParseException e) {
+            JOptionPane.showMessageDialog(null, "Format tanggal salah! Gunakan format yyyy-MM-dd");
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Jumlah/ID Peminjaman harus berupa angka.");
+        }
     }//GEN-LAST:event_EditPinjamanActionPerformed
 
     private void HapusPinjamanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HapusPinjamanActionPerformed
-        // TODO add your handling code here:
+        try {
+            int id = Integer.parseInt(IDPeminjaman.getText());
+            UtangPiutang u = new UtangPiutang();
+
+            int confirm = JOptionPane.showConfirmDialog(null, "Yakin ingin menghapus data?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                Response<Boolean> response = u.deleteById(id);
+                if (response.isSuccess()) {
+                    JOptionPane.showMessageDialog(null, "Data berhasil dihapus.");
+                    clearForm();
+                    showAllHutang();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Gagal menghapus: " + response.getMessage());
+                }
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "ID tidak valid.");
+        }
     }//GEN-LAST:event_HapusPinjamanActionPerformed
 
+    public void showAllHutang() {
+        UtangPiutang hutangService = new UtangPiutang();
+        Response<ArrayList<UtangPiutang>> allResponse = hutangService.findAll();
+
+        String[] kolom = {"ID", "Nama Pihak", "Tanggal Jatuh Tempo", "Jumlah", "Status"};
+        DefaultTableModel model = new DefaultTableModel(kolom, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        if (allResponse.isSuccess()) {
+            for (UtangPiutang u : allResponse.getData()) {
+                Object[] row = {
+                    u.getId(),
+                    u.getNamaPihak(),
+                    u.getJatuhTempo(),
+                    u.getNominal(),
+                    u.getStatus()
+                };
+                model.addRow(row);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, 
+                "Gagal memuat data Hutang piutang: " + allResponse.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        utangTable.setModel(model);
+
+        // Cegah duplikasi listener jika metode ini dipanggil ulang
+        ListSelectionModel selectionModel = utangTable.getSelectionModel();
+        selectionModel.removeListSelectionListener(tableSelectionListener);
+        selectionModel.addListSelectionListener(tableSelectionListener);
+    }
+
+
+    private final ListSelectionListener tableSelectionListener = new ListSelectionListener() {
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+            if (!e.getValueIsAdjusting()) {
+                int selectedRow = utangTable.getSelectedRow();
+                if (selectedRow != -1) {
+                    IDPeminjaman.setText(utangTable.getValueAt(selectedRow, 0).toString());
+                    NamaPeminjam.setText(utangTable.getValueAt(selectedRow, 1).toString());
+                    TanggalPeminjaman.setText(utangTable.getValueAt(selectedRow, 2).toString());
+                    JumlahPeminjaman.setText(utangTable.getValueAt(selectedRow, 3).toString());
+                    StatusPeminjaman.setText(utangTable.getValueAt(selectedRow, 4).toString());
+
+                    // Placeholder untuk field tambahan yang belum ada di tabel
+                    AlamatPeminjam.setText("");
+                    NoTelpPeminjam.setText("");
+                    TanggalPelunasanPeminjaman.setText("");
+                    StatusPeminjam.setText("");
+                } else {
+                    IDPeminjaman.setText("");
+                    NamaPeminjam.setText("");
+                    TanggalPeminjaman.setText("");
+                    JumlahPeminjaman.setText("");
+                    StatusPeminjaman.setText("");
+                    AlamatPeminjam.setText("");
+                    NoTelpPeminjam.setText("");
+                    TanggalPelunasanPeminjaman.setText("");
+                    StatusPeminjam.setText("");
+                }
+            }
+        }
+    };
+
+    private void clearForm() {
+        IDPeminjaman.setText("");
+        NamaPeminjam.setText("");
+        AlamatPeminjam.setText("");
+        NoTelpPeminjam.setText("");
+        TanggalPeminjaman.setText("");
+        TanggalPelunasanPeminjaman.setText("");
+        JumlahPeminjaman.setText("");
+        StatusPeminjaman.setText("");
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField AlamatPeminjam;
@@ -474,6 +634,6 @@ public class Hutang extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable utangTable;
     // End of variables declaration//GEN-END:variables
 }
