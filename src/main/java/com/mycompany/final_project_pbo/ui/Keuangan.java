@@ -187,7 +187,7 @@ public class Keuangan extends javax.swing.JPanel {
         jLabel9.setFont(new java.awt.Font("Tw Cen MT", 1, 20)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(93, 173, 226));
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/Img/Laporan_Keuangan.png"))); // NOI18N
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Laporan_Keuangan.png"))); // NOI18N
         jLabel9.setText("Menu Laporan Keuangan");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);

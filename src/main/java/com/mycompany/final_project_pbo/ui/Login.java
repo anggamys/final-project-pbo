@@ -48,7 +48,7 @@ public class Login extends javax.swing.JFrame {
 
         Right.setBackground(new java.awt.Color(253, 254, 254));
 
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/Img/Icon.png"))); // NOI18N
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Icon.png"))); // NOI18N
 
         jLabel7.setBackground(new java.awt.Color(93, 173, 226));
         jLabel7.setFont(new java.awt.Font("Tw Cen MT", 1, 19)); // NOI18N

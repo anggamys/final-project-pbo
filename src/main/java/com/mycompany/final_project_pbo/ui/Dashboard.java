@@ -4,6 +4,7 @@
  */
 package com.mycompany.final_project_pbo.ui;
 
+import java.awt.event.MouseEvent;
 
 /**
  *
@@ -21,6 +22,10 @@ public class Dashboard extends javax.swing.JFrame {
         initComponents();
         userName.setText(name);
         roleUser.setText(role);
+
+        PanelFitur.add(new ManajemenBarang());
+        PanelFitur.repaint();
+        PanelFitur.revalidate();
     }
 
     public Dashboard() {
@@ -66,7 +71,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         roleUser.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         roleUser.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        roleUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/Img/BerkahAbdiIcon.png"))); // NOI18N
+        roleUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/BerkahAbdiIcon.png"))); // NOI18N
         roleUser.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 roleUserPropertyChange(evt);
@@ -240,7 +245,7 @@ public class Dashboard extends javax.swing.JFrame {
         Notification.setBackground(new java.awt.Color(75, 139, 213));
         Notification.setFont(new java.awt.Font("Tw Cen MT", 1, 24)); // NOI18N
         Notification.setForeground(new java.awt.Color(255, 255, 255));
-        Notification.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/Img/Icon_Notification.png"))); // NOI18N
+        Notification.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Icon_Notification.png"))); // NOI18N
         Notification.setText("Notifikasi");
         Notification.setBorder(null);
         Notification.addActionListener(new java.awt.event.ActionListener() {
@@ -252,7 +257,7 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/Img/X.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/X.png"))); // NOI18N
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel1MouseClicked(evt);
@@ -308,6 +313,50 @@ public class Dashboard extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+
+    private void manajemenBarangPageMouseClicked(MouseEvent evt) {//GEN-FIRST:event_manajemenBarangPageMouseClicked
+        // TODO add your handling code here:
+        PanelFitur.removeAll();
+        PanelFitur.add(new ManajemenBarang());
+        PanelFitur.repaint();
+        PanelFitur.revalidate();
+    }//GEN-LAST:event_manajemenBarangPageMouseClicked
+
+    private void manajemenBarangPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manajemenBarangPageActionPerformed
+        // TODO add your handling code here:
+        PanelFitur.removeAll();
+    }//GEN-LAST:event_manajemenBarangPageActionPerformed
+
+    private void laporanKeuanganPageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_laporanKeuanganPageMouseClicked
+        // TODO add your handling code here:
+        PanelFitur.removeAll();
+        PanelFitur.add(new Keuangan());
+        PanelFitur.repaint();
+        PanelFitur.revalidate();
+    }//GEN-LAST:event_laporanKeuanganPageMouseClicked
+
+    private void laporanKeuanganPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_laporanKeuanganPageActionPerformed
+    }//GEN-LAST:event_laporanKeuanganPageActionPerformed
+
+    private void utangPiutangPageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_utangPiutangPageMouseClicked
+        // TODO add your handling code here:
+        PanelFitur.removeAll();
+        PanelFitur.add(new Hutang());
+        PanelFitur.repaint();
+        PanelFitur.revalidate();
+    }//GEN-LAST:event_utangPiutangPageMouseClicked
+
+    private void utangPiutangPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_utangPiutangPageActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_utangPiutangPageActionPerformed
+
+    private void scanBarangPageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scanBarangPageMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_scanBarangPageMouseClicked
+
+    private void scanBarangPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scanBarangPageActionPerformed
+    }//GEN-LAST:event_scanBarangPageActionPerformed
 
     private void jButton9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton9MouseClicked
 
