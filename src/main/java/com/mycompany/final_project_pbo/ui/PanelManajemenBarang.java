@@ -4,8 +4,8 @@
  */
 package com.mycompany.final_project_pbo.ui;
 
-import com.mycompany.final_project_pbo.Product;
-import com.mycompany.final_project_pbo.Response;
+import com.mycompany.final_project_pbo.models.Product;
+import com.mycompany.final_project_pbo.utils.Response;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -449,42 +449,6 @@ public class PanelManajemenBarang extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton3MouseReleased
     
     public void showAllProduct() {
-        Product productService = new Product();
-        Response<ArrayList<Product>> allResponse = productService.findAll();
-
-        // Nama kolom untuk tabel
-        String[] kolom = {"id Barang", "Nama Barang", "Kategori", "Harga", "Stock"};
-
-        // Model untuk tabel
-        DefaultTableModel model = new DefaultTableModel(kolom, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false; // Semua kolom tidak bisa diedit
-            }
-        };
-        
-        int i = 0;
-
-        // Cek apakah data produk ditemukan
-        if (allResponse.isSuccess()) {
-            // Iterasi data produk yang didapat
-            for (Product p : allResponse.getData()) {
-                Object[] row = {
-                    i++,
-                    p.getName(),          // Nama Produk
-                    p.getCategory(),      // Kategori Produk
-                    p.getPrice(),
-                    p.getStock()          // Jumlah Produk
-                };
-                model.addRow(row);  // Menambahkan baris ke model
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Gagal memuat data produk: " + allResponse.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-        }
-
-        // Set model tabel
-        tableBarang.setModel(model);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

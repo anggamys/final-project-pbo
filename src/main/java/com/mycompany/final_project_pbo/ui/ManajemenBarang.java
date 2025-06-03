@@ -4,9 +4,14 @@
  */
 package com.mycompany.final_project_pbo.ui;
 
-import com.mycompany.final_project_pbo.Product;
-import com.mycompany.final_project_pbo.Response;
+import com.mycompany.final_project_pbo.models.Category;
+import com.mycompany.final_project_pbo.models.Product;
+import com.mycompany.final_project_pbo.repositories.CategoryRepository;
+import com.mycompany.final_project_pbo.repositories.ProductRepository;
+import com.mycompany.final_project_pbo.utils.Response;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -414,14 +419,17 @@ public class ManajemenBarang extends javax.swing.JPanel {
 
     private void ButtonEditBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonEditBarangActionPerformed
         try {
-            Product p = new Product();
-            p.setIdProduct(Integer.parseInt(IDBarang.getText()));
-            p.setName(NamaBarang.getText());
-            p.setCategory(KategoriBarang.getText());
-            p.setPrice(Double.valueOf(HargaBarang.getText()));
-            p.setStock(Integer.valueOf(StockBarang.getText()));
+            Product product = new Product();
+            ProductRepository productRepository = new ProductRepository();
 
-            Response<Product> response = p.update();
+            product.setId(null);
+            product.setName("");
+            product.setBarcode("");
+            product.setCategoryId(null);
+            product.setPrice(null);
+            product.setStock(null);
+
+            Response<Product> response = productRepository.update(product);
 
             if (response.isSuccess()) {
                 JOptionPane.showMessageDialog(this, "Produk berhasil diperbarui.");
@@ -439,13 +447,16 @@ public class ManajemenBarang extends javax.swing.JPanel {
 
     private void ButtonTambahBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonTambahBarangActionPerformed
         try {
-            Product p = new Product();
-            p.setName(NamaBarang.getText());
-            p.setCategory(KategoriBarang.getText());
-            p.setPrice(Double.valueOf(HargaBarang.getText()));
-            p.setStock(Integer.valueOf(StockBarang.getText()));
+            Product product = new Product();
+            ProductRepository productRepository = new ProductRepository();
 
-            Response<Product> response = p.save();
+            product.setName("");
+            product.setBarcode("");
+            product.setCategoryId(null);
+            product.setPrice(null);
+            product.setStock(null);
+
+            Response<Product> response = productRepository.save(product);
 
             if (response.isSuccess()) {
                 JOptionPane.showMessageDialog(this, "Produk berhasil ditambahkan.");
@@ -459,6 +470,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Harga dan Stok harus berupa angka valid.",
                     "Input Error", JOptionPane.WARNING_MESSAGE);
         }
+        
     }//GEN-LAST:event_ButtonTambahBarangActionPerformed
 
     private void ButtonHapusBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonHapusBarangActionPerformed
@@ -469,11 +481,9 @@ public class ManajemenBarang extends javax.swing.JPanel {
             try {
                 int id = Integer.parseInt(IDBarang.getText());
 
-                Product p = new Product();
-                p.setIdProduct(id);
+                ProductRepository productRepository = new ProductRepository();
 
-                Response<Boolean> response = p.deleteById(id);
-
+                Response<Boolean> response = productRepository.deleteById(id);
                 if (response.isSuccess()) {
                     JOptionPane.showMessageDialog(this, "Produk berhasil dihapus.");
                     clearForm();
@@ -490,27 +500,40 @@ public class ManajemenBarang extends javax.swing.JPanel {
     }//GEN-LAST:event_ButtonHapusBarangActionPerformed
 
     private void showAllProduct() {
-        Product productService = new Product();
-        Response<ArrayList<Product>> allResponse = productService.findAll();
+        ProductRepository productRepository = new ProductRepository();
+        CategoryRepository categoryRepository = new CategoryRepository();
+        Response<ArrayList<Product>> allResponse = productRepository.findAll();
 
-        // Nama kolom untuk tabel
-        String[] kolom = {"id Barang", "Nama Barang", "Kategori", "Harga", "Stock"};
-
-        // Model untuk tabel
+        String[] kolom = {"Id", "Nama Barang", "Barcode", "Kategori", "Harga", "Stock"};
         DefaultTableModel model = new DefaultTableModel(kolom, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Semua kolom tidak bisa diedit
+                return false;
             }
         };
 
-        // Cek apakah data produk ditemukan
         if (allResponse.isSuccess()) {
+            // Cache kategori untuk menghindari query berulang
+            HashMap<Integer, String> categoryCache = new HashMap<>();
+
             for (Product p : allResponse.getData()) {
+                String categoryName;
+
+                if (categoryCache.containsKey(p.getCategoryId())) {
+                    categoryName = categoryCache.get(p.getCategoryId());
+                } else {
+                    Response<Category> categoryResponse = categoryRepository.findById(p.getCategoryId());
+                    categoryName = categoryResponse.isSuccess() && categoryResponse.getData() != null
+                            ? categoryResponse.getData().getName()
+                            : "Kategori Tidak Dikenal";
+                    categoryCache.put(p.getCategoryId(), categoryName);
+                }
+
                 Object[] row = {
-                    p.getIdProduct(),           // id Barang (bukan i++)
+                    p.getId(),
                     p.getName(),
-                    p.getCategory(),
+                    p.getBarcode(),
+                    categoryName,
                     p.getPrice(),
                     p.getStock()
                 };
@@ -521,43 +544,46 @@ public class ManajemenBarang extends javax.swing.JPanel {
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
 
-        // Set model tabel
         TabelManajemenBarang.setModel(model);
 
-        // Atur ulang listener agar tidak terduplikasi
+        // Hindari duplikasi listener
         ListSelectionModel selectionModel = TabelManajemenBarang.getSelectionModel();
         selectionModel.removeListSelectionListener(tableSelectionListener);
         selectionModel.addListSelectionListener(tableSelectionListener);
     }
 
-    // Listener pemilihan baris tabel
     private final ListSelectionListener tableSelectionListener = new ListSelectionListener() {
         @Override
         public void valueChanged(ListSelectionEvent e) {
             if (!e.getValueIsAdjusting()) {
                 int selectedRow = TabelManajemenBarang.getSelectedRow();
                 if (selectedRow != -1) {
-                    // Ambil nilai dari tabel
-                    String id = TabelManajemenBarang.getValueAt(selectedRow, 0).toString();
-                    String nama = TabelManajemenBarang.getValueAt(selectedRow, 1).toString();
-                    String kategori = TabelManajemenBarang.getValueAt(selectedRow, 2).toString();
-                    String harga = TabelManajemenBarang.getValueAt(selectedRow, 3).toString();
-                    String stock = TabelManajemenBarang.getValueAt(selectedRow, 4).toString();
-
-                    // Set nilai ke input field
-                    IDBarang.setText(id);
-                    NamaBarang.setText(nama);
-                    KategoriBarang.setText(kategori);
-                    HargaBarang.setText(harga);
-                    StockBarang.setText(stock);
+                    IDBarang.setText(TabelManajemenBarang.getValueAt(selectedRow, 0).toString());
+                    NamaBarang.setText(TabelManajemenBarang.getValueAt(selectedRow, 1).toString());
+                    // BarcodeBarang.setText(TabelManajemenBarang.getValueAt(selectedRow, 2).toString());
+                    KategoriBarang.setText(TabelManajemenBarang.getValueAt(selectedRow, 3).toString());
+                    HargaBarang.setText(TabelManajemenBarang.getValueAt(selectedRow, 4).toString());
+                    StockBarang.setText(TabelManajemenBarang.getValueAt(selectedRow, 5).toString());
+                } else {
+                    resetProductFormFields();
                 }
             }
+        }
+
+        private void resetProductFormFields() {
+            IDBarang.setText("");
+            NamaBarang.setText("");
+            // BarcodeBarang.setText("");
+            KategoriBarang.setText("");
+            HargaBarang.setText("");
+            StockBarang.setText("");
         }
     };
     
     private void clearForm() {
         IDBarang.setText("");
         NamaBarang.setText("");
+        // BarcodeBarang.setText("");
         KategoriBarang.setText("");
         HargaBarang.setText("");
         StockBarang.setText("");
