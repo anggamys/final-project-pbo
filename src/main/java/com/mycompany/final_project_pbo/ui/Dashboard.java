@@ -4,6 +4,7 @@
  */
 package com.mycompany.final_project_pbo.ui;
 
+
 /**
  *
  * @author Achmad Fathoni
@@ -20,11 +21,6 @@ public class Dashboard extends javax.swing.JFrame {
         initComponents();
         userName.setText(name);
         roleUser.setText(role);
-        
-        PanelFitur.removeAll();
-        PanelFitur.add(new ManajemenBarang());
-        PanelFitur.repaint();
-        PanelFitur.revalidate();    
     }
 
     public Dashboard() {
@@ -52,6 +48,7 @@ public class Dashboard extends javax.swing.JFrame {
         laporanKeuanganPage = new javax.swing.JButton();
         utangPiutangPage = new javax.swing.JButton();
         scanBarangPage = new javax.swing.JButton();
+        ButtonLogOut = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         Notification = new javax.swing.JButton();
@@ -91,6 +88,7 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel9.setText("Sistem POS");
 
+        manajemenBarangPage.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         manajemenBarangPage.setForeground(new java.awt.Color(75, 139, 213));
         manajemenBarangPage.setText("Manajemen Barang");
         manajemenBarangPage.setBorder(null);
@@ -152,6 +150,22 @@ public class Dashboard extends javax.swing.JFrame {
             }
         });
 
+        ButtonLogOut.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
+        ButtonLogOut.setForeground(new java.awt.Color(75, 139, 213));
+        ButtonLogOut.setText("Log Out");
+        ButtonLogOut.setToolTipText("");
+        ButtonLogOut.setBorder(null);
+        ButtonLogOut.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ButtonLogOutMouseClicked(evt);
+            }
+        });
+        ButtonLogOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonLogOutActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -169,7 +183,8 @@ public class Dashboard extends javax.swing.JFrame {
                                 .addComponent(userName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addComponent(laporanKeuanganPage, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(utangPiutangPage, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(scanBarangPage, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(scanBarangPage, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ButtonLogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(manajemenBarangPage, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -191,7 +206,9 @@ public class Dashboard extends javax.swing.JFrame {
                 .addComponent(utangPiutangPage, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(25, 25, 25)
                 .addComponent(scanBarangPage, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 755, Short.MAX_VALUE)
+                .addGap(698, 698, 698)
+                .addComponent(ButtonLogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                 .addComponent(jLabel9)
                 .addGap(0, 0, 0)
                 .addComponent(jLabel8)
@@ -211,7 +228,7 @@ public class Dashboard extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 1071, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 12, Short.MAX_VALUE))
+                .addGap(0, 15, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel3, java.awt.BorderLayout.LINE_START);
@@ -284,7 +301,7 @@ public class Dashboard extends javax.swing.JFrame {
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addComponent(PanelFitur, javax.swing.GroupLayout.PREFERRED_SIZE, 985, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel4, java.awt.BorderLayout.CENTER);
@@ -292,34 +309,65 @@ public class Dashboard extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void scanBarangPageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scanBarangPageMouseClicked
+    private void jButton9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton9MouseClicked
 
-    }//GEN-LAST:event_scanBarangPageMouseClicked
+    }//GEN-LAST:event_jButton9MouseClicked
 
-    private void utangPiutangPageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_utangPiutangPageMouseClicked
+    private void jButton7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton7MouseClicked
+    
         PanelFitur.removeAll();
         PanelFitur.add(new Hutang());
         PanelFitur.repaint();
         PanelFitur.revalidate();
-    }//GEN-LAST:event_utangPiutangPageMouseClicked
+    }//GEN-LAST:event_jButton7MouseClicked
 
-    private void laporanKeuanganPageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_laporanKeuanganPageMouseClicked
+    private void jButton6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton6MouseClicked
+        
         PanelFitur.removeAll();
         PanelFitur.add(new Keuangan());
         PanelFitur.repaint();
         PanelFitur.revalidate();
-    }//GEN-LAST:event_laporanKeuanganPageMouseClicked
+    }//GEN-LAST:event_jButton6MouseClicked
 
-    private void manajemenBarangPageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_manajemenBarangPageMouseClicked
+    private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
+        
         PanelFitur.removeAll();
         PanelFitur.add(new ManajemenBarang());
         PanelFitur.repaint();
         PanelFitur.revalidate();
-    }//GEN-LAST:event_manajemenBarangPageMouseClicked
+    }//GEN-LAST:event_jButton4MouseClicked
+
+    private void ButtonLogOutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonLogOutMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ButtonLogOutMouseClicked
+
+    private void ButtonLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonLogOutActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ButtonLogOutActionPerformed
+
+    private void NotificationActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_NotificationActionPerformed
+        // TODO add your handling code here:
+    }// GEN-LAST:event_NotificationActionPerformed
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel1MouseClicked
         dispose();
-    }
+    }// GEN-LAST:event_jLabel1MouseClicked
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton9ActionPerformed
+        // TODO add your handling code here:
+    }// GEN-LAST:event_jButton9ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+    }// GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+    }// GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+    }// GEN-LAST:event_jButton4ActionPerformed
 
     private void roleUserPropertyChange(java.beans.PropertyChangeEvent evt) {// GEN-FIRST:event_roleUserPropertyChange
         // TODO add your handling code here:
@@ -349,17 +397,27 @@ public class Dashboard extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Dashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Dashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Dashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Dashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        // </editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> {
-            new Dashboard().setVisible(true);
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Dashboard().setVisible(true);
+            }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ButtonLogOut;
     private javax.swing.JButton Notification;
     private javax.swing.JPanel PanelFitur;
     private javax.swing.JLabel jLabel1;

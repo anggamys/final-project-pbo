@@ -70,7 +70,7 @@ public class NotifPopUpUtang extends javax.swing.JPanel {
                         .addGap(136, 136, 136)
                         .addComponent(CloseButton))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
+                        .addGap(15, 15, 15)
                         .addComponent(jLabel1)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
