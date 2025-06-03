@@ -4,8 +4,10 @@
  */
 package com.mycompany.final_project_pbo.ui;
 
-import com.mycompany.final_project_pbo.Response;
-import com.mycompany.final_project_pbo.UtangPiutang;
+import com.mycompany.final_project_pbo.models.DebtTransaction;
+import com.mycompany.final_project_pbo.models.LoanStatus;
+import com.mycompany.final_project_pbo.repositories.DebtTransactionRepository;
+import com.mycompany.final_project_pbo.utils.Response;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -311,7 +313,7 @@ public final class Hutang extends javax.swing.JPanel {
         jLabel11.setFont(new java.awt.Font("Tw Cen MT", 1, 22)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(93, 173, 226));
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/Img/Peminjaman.png"))); // NOI18N
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Peminjaman.png"))); // NOI18N
         jLabel11.setText("Menu Peminjaman");
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -478,16 +480,19 @@ public final class Hutang extends javax.swing.JPanel {
         try {
             Date jatuhTempo = sdf.parse(TanggalPelunasanPeminjaman.getText());
 
-            UtangPiutang u = new UtangPiutang();
-            u.setNamaPihak(NamaPeminjam.getText());
-            // u.setAlamat(AlamatPeminjam.getText());
-            // u.setNoTelp(NoTelpPeminjam.getText());
-            // u.setTanggalPinjam(sdf.parse(TanggalPeminjaman.getText()));
-            u.setJatuhTempo(jatuhTempo);
-            u.setNominal(Double.valueOf(JumlahPeminjaman.getText()));
-            u.setStatus(StatusPeminjaman.getText());
+            DebtTransaction debtTransaction = new DebtTransaction();
+            DebtTransactionRepository debtTransactionRepository = new DebtTransactionRepository();
 
-            Response<UtangPiutang> response = u.save();
+            debtTransaction.setDebtorName("");
+            debtTransaction.setAddress("");
+            debtTransaction.setPhoneNumber("");
+            debtTransaction.setLoanDate("");
+            debtTransaction.setDueDate("");
+            debtTransaction.setAmount(null);
+            debtTransaction.setStatus(LoanStatus.BELUM_LUNAS);
+            debtTransaction.setCreatedBy(null);
+
+            Response<DebtTransaction> response = debtTransactionRepository.save(debtTransaction);
             if (response.isSuccess()) {
                 JOptionPane.showMessageDialog(null, "Data berhasil disimpan.");
                 clearForm();
@@ -506,17 +511,19 @@ public final class Hutang extends javax.swing.JPanel {
         try {
             Date jatuhTempo = sdf.parse(TanggalPelunasanPeminjaman.getText());
 
-            UtangPiutang u = new UtangPiutang();
-            u.setId(Integer.valueOf(IDPeminjaman.getText())); // Ambil ID dari form
-            u.setNamaPihak(NamaPeminjam.getText());
-            // u.setAlamat(AlamatPeminjam.getText());
-            // u.setNoTelp(NoTelpPeminjam.getText());
-            // u.setTanggalPinjam(sdf.parse(TanggalPeminjaman.getText()));
-            u.setJatuhTempo(jatuhTempo);
-            u.setNominal(Double.valueOf(JumlahPeminjaman.getText()));
-            u.setStatus(StatusPeminjaman.getText());
+            DebtTransaction debtTransaction = new DebtTransaction();
+            DebtTransactionRepository debtTransactionRepository = new DebtTransactionRepository();
 
-            Response<UtangPiutang> response = u.update();
+            debtTransaction.setDebtorName("");
+            debtTransaction.setAddress("");
+            debtTransaction.setPhoneNumber("");
+            debtTransaction.setLoanDate("");
+            debtTransaction.setDueDate("");
+            debtTransaction.setAmount(null);
+            debtTransaction.setStatus(LoanStatus.BELUM_LUNAS);
+            debtTransaction.setCreatedBy(null);
+
+            Response<DebtTransaction> response = debtTransactionRepository.update(debtTransaction);
             if (response.isSuccess()) {
                 JOptionPane.showMessageDialog(null, "Data berhasil diperbarui.");
                 clearForm();
@@ -534,11 +541,12 @@ public final class Hutang extends javax.swing.JPanel {
     private void HapusPinjamanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HapusPinjamanActionPerformed
         try {
             int id = Integer.parseInt(IDPeminjaman.getText());
-            UtangPiutang u = new UtangPiutang();
+
+            DebtTransactionRepository debtTransactionRepository = new DebtTransactionRepository();
 
             int confirm = JOptionPane.showConfirmDialog(null, "Yakin ingin menghapus data?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
-                Response<Boolean> response = u.deleteById(id);
+                Response<Boolean> response = debtTransactionRepository.deleteById(id);
                 if (response.isSuccess()) {
                     JOptionPane.showMessageDialog(null, "Data berhasil dihapus.");
                     clearForm();
@@ -553,10 +561,15 @@ public final class Hutang extends javax.swing.JPanel {
     }//GEN-LAST:event_HapusPinjamanActionPerformed
 
     public void showAllHutang() {
-        UtangPiutang hutangService = new UtangPiutang();
-        Response<ArrayList<UtangPiutang>> allResponse = hutangService.findAll();
+        DebtTransactionRepository debtTransactionRepository = new DebtTransactionRepository();
+        Response<ArrayList<DebtTransaction>> allResponse = debtTransactionRepository.findAll();
 
-        String[] kolom = {"ID", "Nama Pihak", "Tanggal Jatuh Tempo", "Jumlah", "Status"};
+        if (!allResponse.isSuccess() || allResponse.getData() == null) {
+            JOptionPane.showMessageDialog(null, "Tidak ada data hutang piutang yang ditemukan.", "Informasi", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        String[] kolom = {"ID", "Nama Pihak", "Alamat", "No Telepon", "Tanggal Peminjaman", "Tanggal Pelunasan", "Jumlah Peminjaman", "Status Peminjaman", "Created By"};
         DefaultTableModel model = new DefaultTableModel(kolom, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -564,31 +577,28 @@ public final class Hutang extends javax.swing.JPanel {
             }
         };
 
-        if (allResponse.isSuccess()) {
-            for (UtangPiutang u : allResponse.getData()) {
-                Object[] row = {
-                    u.getId(),
-                    u.getNamaPihak(),
-                    u.getJatuhTempo(),
-                    u.getNominal(),
-                    u.getStatus()
-                };
-                model.addRow(row);
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, 
-                "Gagal memuat data Hutang piutang: " + allResponse.getMessage(),
-                "Error", JOptionPane.ERROR_MESSAGE);
+        for (DebtTransaction u : allResponse.getData()) {
+            Object[] row = {
+                u.getId(),
+                u.getDebtorName(),
+                u.getAddress(),
+                u.getPhoneNumber(),
+                u.getLoanDate(),
+                u.getDueDate(),
+                u.getAmount(),
+                u.getStatus(),
+                u.getCreatedBy()
+            };
+            model.addRow(row);
         }
 
         utangTable.setModel(model);
 
-        // Cegah duplikasi listener jika metode ini dipanggil ulang
+        // Cegah listener duplikat
         ListSelectionModel selectionModel = utangTable.getSelectionModel();
         selectionModel.removeListSelectionListener(tableSelectionListener);
         selectionModel.addListSelectionListener(tableSelectionListener);
     }
-
 
     private final ListSelectionListener tableSelectionListener = new ListSelectionListener() {
         @Override
@@ -598,27 +608,27 @@ public final class Hutang extends javax.swing.JPanel {
                 if (selectedRow != -1) {
                     IDPeminjaman.setText(utangTable.getValueAt(selectedRow, 0).toString());
                     NamaPeminjam.setText(utangTable.getValueAt(selectedRow, 1).toString());
-                    TanggalPeminjaman.setText(utangTable.getValueAt(selectedRow, 2).toString());
-                    JumlahPeminjaman.setText(utangTable.getValueAt(selectedRow, 3).toString());
-                    StatusPeminjaman.setText(utangTable.getValueAt(selectedRow, 4).toString());
-
-                    // Placeholder untuk field tambahan yang belum ada di tabel
-                    AlamatPeminjam.setText("");
-                    NoTelpPeminjam.setText("");
-                    TanggalPelunasanPeminjaman.setText("");
-                    StatusPeminjam.setText("");
+                    AlamatPeminjam.setText(utangTable.getValueAt(selectedRow, 2).toString());
+                    NoTelpPeminjam.setText(utangTable.getValueAt(selectedRow, 3).toString());
+                    TanggalPeminjaman.setText(utangTable.getValueAt(selectedRow, 4).toString());
+                    TanggalPelunasanPeminjaman.setText(utangTable.getValueAt(selectedRow, 5).toString());
+                    JumlahPeminjaman.setText(utangTable.getValueAt(selectedRow, 6).toString());
+                    StatusPeminjaman.setText(utangTable.getValueAt(selectedRow, 7).toString());
                 } else {
-                    IDPeminjaman.setText("");
-                    NamaPeminjam.setText("");
-                    TanggalPeminjaman.setText("");
-                    JumlahPeminjaman.setText("");
-                    StatusPeminjaman.setText("");
-                    AlamatPeminjam.setText("");
-                    NoTelpPeminjam.setText("");
-                    TanggalPelunasanPeminjaman.setText("");
-                    StatusPeminjam.setText("");
+                    resetFormFields();
                 }
             }
+        }
+
+        private void resetFormFields() {
+            IDPeminjaman.setText("");
+            NamaPeminjam.setText("");
+            AlamatPeminjam.setText("");
+            NoTelpPeminjam.setText("");
+            TanggalPeminjaman.setText("");
+            TanggalPelunasanPeminjaman.setText("");
+            JumlahPeminjaman.setText("");
+            StatusPeminjaman.setText("");
         }
     };
 
