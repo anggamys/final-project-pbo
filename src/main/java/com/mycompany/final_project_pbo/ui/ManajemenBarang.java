@@ -273,7 +273,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
         jLabel10.setFont(new java.awt.Font("Tw Cen MT", 1, 24)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(93, 173, 226));
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Laporan_Keuangan.png"))); // NOI18N
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/Img/Laporan_Keuangan.png"))); // NOI18N
         jLabel10.setText("Menu Barang");
 
         SearchBarang.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
@@ -310,7 +310,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1507, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 200, Short.MAX_VALUE)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
                             .addComponent(SearchBarang)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
