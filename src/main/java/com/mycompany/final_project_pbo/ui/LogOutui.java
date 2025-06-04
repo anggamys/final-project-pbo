@@ -109,6 +109,12 @@ public class LogOutui extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void ButtonLogout1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonLogout1ActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+        Login login = new Login();
+        login.setVisible(true);
+    }//GEN-LAST:event_ButtonLogout1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonCancel;

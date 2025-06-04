@@ -12,13 +12,13 @@ import java.util.ArrayList;
  * @param <T>
  */
 public interface CrudRepository<T> {
-    Response<T> save(T entity);
+    Response<T> save(T entity, Integer userId);
 
-    Response<T> update(T entity);
+    Response<T> update(T entity, Integer userId);
 
-    Response<T> findById(Integer id);
+    Response<T> findById(Integer id, Integer userId);
 
-    Response<Boolean> deleteById(Integer id);
+    Response<Boolean> deleteById(Integer id, Integer userId);
 
-    Response<ArrayList<T>> findAll();
+    Response<ArrayList<T>> findAll(Integer userId);
 }

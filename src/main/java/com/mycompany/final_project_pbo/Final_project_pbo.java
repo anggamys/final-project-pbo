@@ -26,9 +26,9 @@ import java.util.ArrayList;
 public class Final_project_pbo {
 
     public static void main(String[] args) {
-         launchProgram();
+        // launchProgram();
         // runTests();
-//        seedDatabase();
+        seedDatabase();
     }
 
     private static void launchProgram() {
@@ -62,7 +62,7 @@ public class Final_project_pbo {
         user.setEmail("admin@example.com");
         user.setIsOwner(true);
 
-        Response<User> userResponse = userRepository.save(user);
+        Response<User> userResponse = userRepository.save(user, null);
         if (userResponse.isSuccess()) {
             System.out.println("User created: " + userResponse.getData());
         } else {
@@ -77,7 +77,7 @@ public class Final_project_pbo {
         user2.setEmail("user@example.com");
         user2.setIsOwner(false);
 
-        Response<User> user2Response = userRepository.save(user2);
+        Response<User> user2Response = userRepository.save(user2, null);
         if (user2Response.isSuccess()) {
             System.out.println("User created: " + user2Response.getData());
         } else {
@@ -89,7 +89,7 @@ public class Final_project_pbo {
         category.setName("Example Category");
         category.setDescription("This is an example category.");
 
-        Response<Category> categoryResponse = categoryRepository.save(category);
+        Response<Category> categoryResponse = categoryRepository.save(category, null);
         if (categoryResponse.isSuccess()) {
             System.out.println("Category created: " + categoryResponse.getData());
         } else {
@@ -104,7 +104,7 @@ public class Final_project_pbo {
         product.setPrice(100.0);
         product.setStock(50);
 
-        Response<Product> productResponse = productRepository.save(product);
+        Response<Product> productResponse = productRepository.save(product, null);
         if (productResponse.isSuccess()) {
             System.out.println("Product created: " + productResponse.getData());
         } else {
@@ -122,7 +122,7 @@ public class Final_project_pbo {
         debtTransaction.setStatus(LoanStatus.BELUM_LUNAS);
         debtTransaction.setCreatedBy(userResponse.getData().getId());
 
-        Response<DebtTransaction> debtTransactionResponse = debtTransactionRepository.save(debtTransaction);
+        Response<DebtTransaction> debtTransactionResponse = debtTransactionRepository.save(debtTransaction, null);
         if (debtTransactionResponse.isSuccess()) {
             System.out.println("Debt transaction created: " + debtTransactionResponse.getData());
         } else {
@@ -142,7 +142,7 @@ public class Final_project_pbo {
         user.setIsOwner(false);
 
         // Save the user
-        Response<User> saveResponse = userRepository.save(user);
+        Response<User> saveResponse = userRepository.save(user, null);
         if (saveResponse.isSuccess()) {
             System.out.println("User saved successfully: " + saveResponse.getData());
         } else {
@@ -150,7 +150,8 @@ public class Final_project_pbo {
         }
 
         // Retrieve the user by ID
-        Response<User> findByIdResponse = userRepository.findById(saveResponse.getData().getId());
+        Response<User> findByIdResponse = userRepository.findById(saveResponse.getData().getId(),
+                saveResponse.getData().getId());
         if (findByIdResponse.isSuccess()) {
             User foundUser = findByIdResponse.getData();
             System.out.println("User found by ID: " + foundUser);
@@ -159,7 +160,7 @@ public class Final_project_pbo {
         }
 
         // Retrieve the user by username
-        Response<User> findResponse = userRepository.findByUsername("exampleUser");
+        Response<User> findResponse = userRepository.findByUsername("exampleUser", saveResponse.getData().getId());
         if (findResponse.isSuccess()) {
             User foundUser = findResponse.getData();
             System.out.println("User found: " + foundUser);
@@ -178,7 +179,7 @@ public class Final_project_pbo {
 
         // Update the user
         user.setEmail("newemail@example.com");
-        Response<User> updateResponse = userRepository.update(user);
+        Response<User> updateResponse = userRepository.update(user, saveResponse.getData().getId());
         if (updateResponse.isSuccess()) {
             System.out.println("User updated successfully: " + updateResponse.getData());
         } else {
@@ -186,7 +187,7 @@ public class Final_project_pbo {
         }
 
         // Retrieve all users
-        Response<ArrayList<User>> allUsersResponse = userRepository.findAll();
+        Response<ArrayList<User>> allUsersResponse = userRepository.findAll(saveResponse.getData().getId());
         if (allUsersResponse.isSuccess()) {
             ArrayList<User> allUsers = allUsersResponse.getData();
             System.out.println("All users:");
@@ -198,7 +199,8 @@ public class Final_project_pbo {
         }
 
         // Delete the user
-        Response<Boolean> deleteResponse = userRepository.deleteById(saveResponse.getData().getId());
+        Response<Boolean> deleteResponse = userRepository.deleteById(saveResponse.getData().getId(),
+                saveResponse.getData().getId());
         if (deleteResponse.isSuccess()) {
             System.out.println("User deleted successfully");
         } else {
@@ -214,7 +216,7 @@ public class Final_project_pbo {
         category.setDescription("This is an example category.");
 
         // Save the category
-        Response<Category> saveResponse = categoryRepository.save(category);
+        Response<Category> saveResponse = categoryRepository.save(category, null);
         if (saveResponse.isSuccess()) {
             System.out.println("Category saved successfully: " + saveResponse.getData());
         } else {
@@ -222,7 +224,7 @@ public class Final_project_pbo {
         }
 
         // Retrieve the category by ID
-        Response<Category> findByIdResponse = categoryRepository.findById(saveResponse.getData().getId());
+        Response<Category> findByIdResponse = categoryRepository.findById(saveResponse.getData().getId(), null);
         if (findByIdResponse.isSuccess()) {
             Category foundCategory = findByIdResponse.getData();
             System.out.println("Category found by ID: " + foundCategory);
@@ -232,7 +234,7 @@ public class Final_project_pbo {
 
         // Update the category
         category.setDescription("Updated description");
-        Response<Category> updateResponse = categoryRepository.update(category);
+        Response<Category> updateResponse = categoryRepository.update(category, null);
         if (updateResponse.isSuccess()) {
             System.out.println("Category updated successfully: " + updateResponse.getData());
         } else {
@@ -240,7 +242,7 @@ public class Final_project_pbo {
         }
 
         // Retrieve all categories
-        Response<ArrayList<Category>> allCategoriesResponse = categoryRepository.findAll();
+        Response<ArrayList<Category>> allCategoriesResponse = categoryRepository.findAll(null);
         if (allCategoriesResponse.isSuccess()) {
             ArrayList<Category> allCategories = allCategoriesResponse.getData();
             System.out.println("All categories:");
@@ -252,7 +254,7 @@ public class Final_project_pbo {
         }
 
         // Delete the category
-        Response<Boolean> deleteResponse = categoryRepository.deleteById(saveResponse.getData().getId());
+        Response<Boolean> deleteResponse = categoryRepository.deleteById(saveResponse.getData().getId(), null);
         if (deleteResponse.isSuccess()) {
             System.out.println("Category deleted successfully");
         } else {
@@ -270,7 +272,7 @@ public class Final_project_pbo {
         category.setDescription("This is an example category.");
 
         // Save the category
-        Response<Category> saveResponse = categoryRepository.save(category);
+        Response<Category> saveResponse = categoryRepository.save(category, null);
         if (saveResponse.isSuccess()) {
             System.out.println("Category saved successfully: " + saveResponse.getData());
         } else {
@@ -284,7 +286,7 @@ public class Final_project_pbo {
         product.setStock(100);
 
         // Save the product
-        Response<Product> productSaveResponse = productRepository.save(product);
+        Response<Product> productSaveResponse = productRepository.save(product, null);
         if (productSaveResponse.isSuccess()) {
             System.out.println("Product saved successfully: " + productSaveResponse.getData());
         } else {
@@ -292,7 +294,8 @@ public class Final_project_pbo {
         }
 
         // Retrieve the product by ID
-        Response<Product> productFindByIdResponse = productRepository.findById(productSaveResponse.getData().getId());
+        Response<Product> productFindByIdResponse = productRepository.findById(productSaveResponse.getData().getId(),
+                null);
         if (productFindByIdResponse.isSuccess()) {
             Product foundProduct = productFindByIdResponse.getData();
             System.out.println("Product found by ID: " + foundProduct);
@@ -302,7 +305,7 @@ public class Final_project_pbo {
 
         // Update the product
         product.setPrice(89.99);
-        Response<Product> productUpdateResponse = productRepository.update(product);
+        Response<Product> productUpdateResponse = productRepository.update(product, null);
         if (productUpdateResponse.isSuccess()) {
             System.out.println("Product updated successfully: " + productUpdateResponse.getData());
         } else {
@@ -310,7 +313,7 @@ public class Final_project_pbo {
         }
 
         // Retrieve all products
-        Response<ArrayList<Product>> allProductsResponse = productRepository.findAll();
+        Response<ArrayList<Product>> allProductsResponse = productRepository.findAll(null);
         if (allProductsResponse.isSuccess()) {
             ArrayList<Product> allProducts = allProductsResponse.getData();
             System.out.println("All products:");
@@ -322,7 +325,8 @@ public class Final_project_pbo {
         }
 
         // Delete the product
-        Response<Boolean> productDeleteResponse = productRepository.deleteById(productSaveResponse.getData().getId());
+        Response<Boolean> productDeleteResponse = productRepository.deleteById(productSaveResponse.getData().getId(),
+                null);
         if (productDeleteResponse.isSuccess()) {
             System.out.println("Product deleted successfully");
         } else {
@@ -330,7 +334,7 @@ public class Final_project_pbo {
         }
 
         // Delete the category
-        Response<Boolean> categoryDeleteResponse = categoryRepository.deleteById(saveResponse.getData().getId());
+        Response<Boolean> categoryDeleteResponse = categoryRepository.deleteById(saveResponse.getData().getId(), null);
         if (categoryDeleteResponse.isSuccess()) {
             System.out.println("Category deleted successfully");
         } else {
@@ -351,7 +355,7 @@ public class Final_project_pbo {
         user.setIsOwner(false);
 
         // Save the user
-        Response<User> userSaveResponse = userRepository.save(user);
+        Response<User> userSaveResponse = userRepository.save(user, null);
         if (userSaveResponse.isSuccess()) {
             System.out.println("User saved successfully: " + userSaveResponse.getData());
         } else {
@@ -370,7 +374,8 @@ public class Final_project_pbo {
         debtTransaction.setCreatedBy(userSaveResponse.getData().getId());
 
         // Save the debt transaction
-        Response<DebtTransaction> debtTransactionSaveResponse = debtTransactionRepository.save(debtTransaction);
+        Response<DebtTransaction> debtTransactionSaveResponse = debtTransactionRepository.save(debtTransaction,
+                userSaveResponse.getData().getId());
         if (debtTransactionSaveResponse.isSuccess()) {
             System.out.println("Debt transaction saved successfully: " + debtTransactionSaveResponse.getData());
         } else {
@@ -380,7 +385,7 @@ public class Final_project_pbo {
 
         // Retrieve the debt transaction by ID
         Response<DebtTransaction> debtTransactionFindByIdResponse = debtTransactionRepository
-                .findById(debtTransactionSaveResponse.getData().getId());
+                .findById(debtTransactionSaveResponse.getData().getId(), userSaveResponse.getData().getId());
         if (debtTransactionFindByIdResponse.isSuccess()) {
             DebtTransaction foundTransaction = debtTransactionFindByIdResponse.getData();
             System.out.println("Debt transaction found by ID: " + foundTransaction);
@@ -392,8 +397,9 @@ public class Final_project_pbo {
         // Update the debt transaction
         debtTransaction.setAmount(1200.0);
         debtTransaction.setStatus(LoanStatus.TERLAMBAT);
-        
-        Response<DebtTransaction> debtTransactionUpdateResponse = debtTransactionRepository.update(debtTransaction);
+
+        Response<DebtTransaction> debtTransactionUpdateResponse = debtTransactionRepository.update(debtTransaction,
+                userSaveResponse.getData().getId());
         if (debtTransactionUpdateResponse.isSuccess()) {
             System.out.println("Debt transaction updated successfully: " + debtTransactionUpdateResponse.getData());
         } else {
@@ -401,7 +407,8 @@ public class Final_project_pbo {
         }
 
         // Retrieve all debt transactions
-        Response<ArrayList<DebtTransaction>> allDebtTransactionsResponse = debtTransactionRepository.findAll();
+        Response<ArrayList<DebtTransaction>> allDebtTransactionsResponse = debtTransactionRepository
+                .findAll(userSaveResponse.getData().getId());
         if (allDebtTransactionsResponse.isSuccess()) {
             ArrayList<DebtTransaction> allTransactions = allDebtTransactionsResponse.getData();
             System.out.println("All debt transactions:");
@@ -414,7 +421,7 @@ public class Final_project_pbo {
 
         // Delete the debt transaction
         Response<Boolean> debtTransactionDeleteResponse = debtTransactionRepository
-                .deleteById(debtTransactionSaveResponse.getData().getId());
+                .deleteById(debtTransactionSaveResponse.getData().getId(), userSaveResponse.getData().getId());
         if (debtTransactionDeleteResponse.isSuccess()) {
             System.out.println("Debt transaction deleted successfully");
         } else {
@@ -422,7 +429,7 @@ public class Final_project_pbo {
         }
 
         // Delete the user
-        Response<Boolean> userDeleteResponse = userRepository.deleteById(userSaveResponse.getData().getId());
+        Response<Boolean> userDeleteResponse = userRepository.deleteById(userSaveResponse.getData().getId(), null);
         if (userDeleteResponse.isSuccess()) {
             System.out.println("User deleted successfully");
         } else {

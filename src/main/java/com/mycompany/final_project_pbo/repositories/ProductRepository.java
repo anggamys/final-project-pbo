@@ -4,7 +4,9 @@
  */
 package com.mycompany.final_project_pbo.repositories;
 
+import com.mycompany.final_project_pbo.models.LogLevel;
 import com.mycompany.final_project_pbo.models.Product;
+import com.mycompany.final_project_pbo.services.LogActivityService;
 import com.mycompany.final_project_pbo.utils.CrudRepository;
 import com.mycompany.final_project_pbo.utils.DatabaseUtil;
 import com.mycompany.final_project_pbo.utils.Response;
@@ -17,9 +19,11 @@ import java.util.ArrayList;
  * @author c0delb08
  */
 public class ProductRepository implements CrudRepository<Product> {
+    LogActivityService logActivityService = new LogActivityService();
+    private static final String MODULE_NAME = "ProductRepository";
 
     @Override
-    public Response<Product> save(Product entity) {
+    public Response<Product> save(Product entity, Integer userId) {
         String query = "INSERT INTO products (name, barcode, category_id, price, stock) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseUtil.getConnection()) {
@@ -35,11 +39,15 @@ public class ProductRepository implements CrudRepository<Product> {
                 var generatedKeys = preparedStatement.getGeneratedKeys();
                 if (generatedKeys.next()) {
                     entity.setId(generatedKeys.getInt(1));
+
+                    logActivityService.logAction(userId, "Saved product with ID: " + entity.getId(), MODULE_NAME, LogLevel.INFO);
                     return Response.success("Product saved successfully", entity);
                 } else {
+                    logActivityService.logAction(userId, "Failed to retrieve generated ID for product", MODULE_NAME, LogLevel.ERROR);
                     return Response.failure("Failed to retrieve generated key");
                 }
             } else {
+                logActivityService.logAction(userId, "Failed to save product", MODULE_NAME, LogLevel.ERROR);
                 return Response.failure("Failed to save product");
             }
         } catch (Exception e) {
@@ -49,7 +57,7 @@ public class ProductRepository implements CrudRepository<Product> {
     }
 
     @Override
-    public Response<Product> update(Product entity) {
+    public Response<Product> update(Product entity, Integer userId) {
         String query = "UPDATE products SET name = ?, barcode = ?, category_id = ?, price = ?, stock = ? WHERE product_id = ?";
 
         try (Connection conn = DatabaseUtil.getConnection()) {
@@ -63,8 +71,10 @@ public class ProductRepository implements CrudRepository<Product> {
 
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
+                logActivityService.logAction(userId, "Updated product with ID: " + entity.getId(), MODULE_NAME, LogLevel.INFO);
                 return Response.success("Product updated successfully", entity);
             } else {
+                logActivityService.logAction(userId, "Failed to update product", MODULE_NAME, LogLevel.ERROR);
                 return Response.failure("Failed to update product");
             }
         } catch (Exception e) {
@@ -74,7 +84,7 @@ public class ProductRepository implements CrudRepository<Product> {
     }
 
     @Override
-    public Response<Product> findById(Integer id) {
+    public Response<Product> findById(Integer id, Integer userId) {
         String query = "SELECT * FROM products WHERE product_id = ?";
 
         try (Connection conn = DatabaseUtil.getConnection()) {
@@ -91,8 +101,10 @@ public class ProductRepository implements CrudRepository<Product> {
                 product.setPrice(resultSet.getDouble("price"));
                 product.setStock(resultSet.getInt("stock"));
 
+                logActivityService.logAction(userId, "Found product with ID: " + product.getId(), MODULE_NAME, LogLevel.INFO);
                 return Response.success("Product found", product);
             } else {
+                logActivityService.logAction(userId, "Product not found", MODULE_NAME, LogLevel.WARNING);
                 return Response.failure("Product not found");
             }
         } catch (Exception e) {
@@ -102,7 +114,7 @@ public class ProductRepository implements CrudRepository<Product> {
     }
 
     @Override
-    public Response<Boolean> deleteById(Integer id) {
+    public Response<Boolean> deleteById(Integer id, Integer userId) {
         String query = "DELETE FROM products WHERE product_id = ?";
 
         try (Connection conn = DatabaseUtil.getConnection()) {
@@ -111,6 +123,7 @@ public class ProductRepository implements CrudRepository<Product> {
 
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
+                logActivityService.logAction(userId, "Deleted product with ID: " + id, MODULE_NAME, LogLevel.INFO);
                 return Response.success("Product deleted successfully", true);
             } else {
                 return Response.failure("Failed to delete product");
@@ -122,7 +135,7 @@ public class ProductRepository implements CrudRepository<Product> {
     }
 
     @Override
-    public Response<ArrayList<Product>> findAll() {
+    public Response<ArrayList<Product>> findAll(Integer userId) {
         String query = "SELECT * FROM products";
 
         try (Connection conn = DatabaseUtil.getConnection()) {
@@ -141,6 +154,7 @@ public class ProductRepository implements CrudRepository<Product> {
                 products.add(product);
             }
 
+            logActivityService.logAction(userId, "Retrieved all products", MODULE_NAME, LogLevel.INFO);
             return Response.success("Products found", products);
         } catch (Exception e) {
             e.printStackTrace();
