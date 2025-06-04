@@ -41,7 +41,7 @@ public class LogActivityRepository {
     }
 
     public Response<LogActivity> update(LogActivity entity) {
-        String query = "UPDATE log_activities SET user_id = ?, action = ?, module = ?, log_level = ? WHERE id = ?";
+        String query = "UPDATE log_activities SET user_id = ?, action = ?, module = ?, log_level = ? WHERE log_id = ?";
 
         try (Connection conn = DatabaseUtil.getConnection()) {
             var preparedStatement = conn.prepareStatement(query);
@@ -63,7 +63,7 @@ public class LogActivityRepository {
     }
 
     public Response<LogActivity> findById(Integer id) {
-        String query = "SELECT * FROM log_activities WHERE id = ?";
+        String query = "SELECT * FROM log_activities WHERE log_id = ?";
 
         try (Connection conn = DatabaseUtil.getConnection()) {
             var preparedStatement = conn.prepareStatement(query);
@@ -88,7 +88,7 @@ public class LogActivityRepository {
     }
 
     public Response<Boolean> deleteById(Integer id) {
-        String query = "DELETE FROM log_activities WHERE id = ?";
+        String query = "DELETE FROM log_activities WHERE log_id = ?";
 
         try (Connection conn = DatabaseUtil.getConnection()) {
             var preparedStatement = conn.prepareStatement(query);
@@ -115,7 +115,7 @@ public class LogActivityRepository {
             ArrayList<LogActivity> logActivities = new ArrayList<>();
             while (resultSet.next()) {
                 LogActivity logActivity = new LogActivity();
-                logActivity.setId(resultSet.getInt("id"));
+                logActivity.setId(resultSet.getInt("log_id"));
                 logActivity.setUserId(resultSet.getInt("user_id"));
                 logActivity.setAction(resultSet.getString("action"));
                 logActivity.setModule(resultSet.getString("module"));

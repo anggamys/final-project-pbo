@@ -4,6 +4,8 @@
  */
 package com.mycompany.final_project_pbo.ui;
 
+import com.mycompany.final_project_pbo.utils.SessionManager;
+
 /**
  *
  * @author muham
@@ -110,8 +112,11 @@ public class LogOutui extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void ButtonLogout1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonLogout1ActionPerformed
-        // TODO add your handling code here:
-        this.setVisible(false);
+        // Hapus sesi login
+        SessionManager.getInstance().logout();
+
+        // Kembali ke login
+        javax.swing.SwingUtilities.getWindowAncestor(this).dispose(); // tutup frame saat ini
         Login login = new Login();
         login.setVisible(true);
     }//GEN-LAST:event_ButtonLogout1ActionPerformed

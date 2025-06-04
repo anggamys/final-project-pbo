@@ -5,10 +5,13 @@
 package com.mycompany.final_project_pbo.ui;
 
 import com.mycompany.final_project_pbo.models.Category;
+import com.mycompany.final_project_pbo.models.LogActivity;
 import com.mycompany.final_project_pbo.models.Product;
 import com.mycompany.final_project_pbo.models.User;
 import com.mycompany.final_project_pbo.repositories.CategoryRepository;
+import com.mycompany.final_project_pbo.repositories.LogActivityRepository;
 import com.mycompany.final_project_pbo.repositories.ProductRepository;
+import com.mycompany.final_project_pbo.repositories.UserRepository;
 import com.mycompany.final_project_pbo.utils.Response;
 import com.mycompany.final_project_pbo.utils.SessionManager;
 
@@ -33,6 +36,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
     public ManajemenBarang() {
         initComponents();
         showAllProduct();
+        showAllRiwayatAktivitas();
     }
 
     /**
@@ -420,7 +424,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_SortRiwayatAktivitasActionPerformed
 
-    User user = SessionManager.getInstance().getCurrentUser();
+    User currentUser = SessionManager.getInstance().getCurrentUser();
 
     private void ButtonEditBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonEditBarangActionPerformed
         try {
@@ -434,7 +438,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
             product.setPrice(null);
             product.setStock(null);
 
-            Response<Product> response = productRepository.update(product, user.getId());
+            Response<Product> response = productRepository.update(product, currentUser.getId());
 
             if (response.isSuccess()) {
                 JOptionPane.showMessageDialog(this, "Produk berhasil diperbarui.");
@@ -461,7 +465,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
             product.setPrice(null);
             product.setStock(null);
 
-            Response<Product> response = productRepository.save(product, user.getId());
+            Response<Product> response = productRepository.save(product, currentUser.getId());
 
             if (response.isSuccess()) {
                 JOptionPane.showMessageDialog(this, "Produk berhasil ditambahkan.");
@@ -488,7 +492,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
 
                 ProductRepository productRepository = new ProductRepository();
 
-                Response<Boolean> response = productRepository.deleteById(id, user.getId());
+                Response<Boolean> response = productRepository.deleteById(id, currentUser.getId());
                 if (response.isSuccess()) {
                     JOptionPane.showMessageDialog(this, "Produk berhasil dihapus.");
                     clearForm();
@@ -507,7 +511,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
     private void showAllProduct() {
         ProductRepository productRepository = new ProductRepository();
         CategoryRepository categoryRepository = new CategoryRepository();
-        Response<ArrayList<Product>> allResponse = productRepository.findAll(user.getId());
+        Response<ArrayList<Product>> allResponse = productRepository.findAll(currentUser.getId());
 
         String[] kolom = {"Id", "Nama Barang", "Barcode", "Kategori", "Harga", "Stock"};
         DefaultTableModel model = new DefaultTableModel(kolom, 0) {
@@ -527,7 +531,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
                 if (categoryCache.containsKey(p.getCategoryId())) {
                     categoryName = categoryCache.get(p.getCategoryId());
                 } else {
-                    Response<Category> categoryResponse = categoryRepository.findById(p.getCategoryId(), user.getId());
+                    Response<Category> categoryResponse = categoryRepository.findById(p.getCategoryId(), currentUser.getId());
                     categoryName = categoryResponse.isSuccess() && categoryResponse.getData() != null
                             ? categoryResponse.getData().getName()
                             : "Kategori Tidak Dikenal";
@@ -594,6 +598,45 @@ public class ManajemenBarang extends javax.swing.JPanel {
         StockBarang.setText("");
     }
 
+    private void showAllRiwayatAktivitas() {
+        LogActivityRepository logActivityRepository = new LogActivityRepository();
+        Response<ArrayList<LogActivity>> allResponse = logActivityRepository.findAll();
+
+        UserRepository userRepository = new UserRepository();
+
+        String[] kolom = {"Tanggal & Waktu", "Nama", "Tambah/Hapus/Edit"};
+        DefaultTableModel model = new DefaultTableModel(kolom, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        if (allResponse.isSuccess()) {
+            for (LogActivity log : allResponse.getData()) {
+                // === FILTER BERDASARKAN MODULE ===
+                if (!"ProductRepository".equalsIgnoreCase(log.getModule())) {
+                    continue; // skip jika bukan dari ProductRepository
+                }
+
+                Response<User> userResponse = userRepository.findById(log.getUserId(), currentUser.getId());
+
+                Object[] row = {
+                    log.getCreatedAt(),
+                    userResponse.isSuccess() && userResponse.getData() != null
+                        ? userResponse.getData().getUsername()
+                        : "Unknown",
+                    log.getAction()
+                };
+                model.addRow(row);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Gagal memuat riwayat aktivitas: " + allResponse.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        TabelRiwayatAktivitas.setModel(model);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonEditBarang;
