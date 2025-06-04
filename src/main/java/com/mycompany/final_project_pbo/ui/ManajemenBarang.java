@@ -6,9 +6,12 @@ package com.mycompany.final_project_pbo.ui;
 
 import com.mycompany.final_project_pbo.models.Category;
 import com.mycompany.final_project_pbo.models.Product;
+import com.mycompany.final_project_pbo.models.User;
 import com.mycompany.final_project_pbo.repositories.CategoryRepository;
 import com.mycompany.final_project_pbo.repositories.ProductRepository;
 import com.mycompany.final_project_pbo.utils.Response;
+import com.mycompany.final_project_pbo.utils.SessionManager;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -417,6 +420,8 @@ public class ManajemenBarang extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_SortRiwayatAktivitasActionPerformed
 
+    User user = SessionManager.getInstance().getCurrentUser();
+
     private void ButtonEditBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonEditBarangActionPerformed
         try {
             Product product = new Product();
@@ -429,7 +434,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
             product.setPrice(null);
             product.setStock(null);
 
-            Response<Product> response = productRepository.update(product);
+            Response<Product> response = productRepository.update(product, user.getId());
 
             if (response.isSuccess()) {
                 JOptionPane.showMessageDialog(this, "Produk berhasil diperbarui.");
@@ -456,7 +461,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
             product.setPrice(null);
             product.setStock(null);
 
-            Response<Product> response = productRepository.save(product);
+            Response<Product> response = productRepository.save(product, user.getId());
 
             if (response.isSuccess()) {
                 JOptionPane.showMessageDialog(this, "Produk berhasil ditambahkan.");
@@ -483,7 +488,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
 
                 ProductRepository productRepository = new ProductRepository();
 
-                Response<Boolean> response = productRepository.deleteById(id);
+                Response<Boolean> response = productRepository.deleteById(id, user.getId());
                 if (response.isSuccess()) {
                     JOptionPane.showMessageDialog(this, "Produk berhasil dihapus.");
                     clearForm();
@@ -502,7 +507,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
     private void showAllProduct() {
         ProductRepository productRepository = new ProductRepository();
         CategoryRepository categoryRepository = new CategoryRepository();
-        Response<ArrayList<Product>> allResponse = productRepository.findAll();
+        Response<ArrayList<Product>> allResponse = productRepository.findAll(user.getId());
 
         String[] kolom = {"Id", "Nama Barang", "Barcode", "Kategori", "Harga", "Stock"};
         DefaultTableModel model = new DefaultTableModel(kolom, 0) {
@@ -522,7 +527,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
                 if (categoryCache.containsKey(p.getCategoryId())) {
                     categoryName = categoryCache.get(p.getCategoryId());
                 } else {
-                    Response<Category> categoryResponse = categoryRepository.findById(p.getCategoryId());
+                    Response<Category> categoryResponse = categoryRepository.findById(p.getCategoryId(), user.getId());
                     categoryName = categoryResponse.isSuccess() && categoryResponse.getData() != null
                             ? categoryResponse.getData().getName()
                             : "Kategori Tidak Dikenal";

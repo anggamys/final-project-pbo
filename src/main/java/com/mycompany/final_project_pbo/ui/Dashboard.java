@@ -6,6 +6,9 @@ package com.mycompany.final_project_pbo.ui;
 
 import java.awt.event.MouseEvent;
 
+import com.mycompany.final_project_pbo.models.User;
+import com.mycompany.final_project_pbo.utils.SessionManager;
+
 /**
  *
  * @author Achmad Fathoni
@@ -18,18 +21,15 @@ public class Dashboard extends javax.swing.JFrame {
      * @param name
      * @param role
      */
-    public Dashboard(String name, String role) {
+    public Dashboard() {
         initComponents();
-        userName.setText(name);
-        roleUser.setText(role);
+        User user = SessionManager.getInstance().getCurrentUser();
+        userName.setText(user.getUsername());
+        roleUser.setText(user.getIsOwner() ? "Owner" : "Kasir");
 
         PanelFitur.add(new ManajemenBarang());
         PanelFitur.repaint();
         PanelFitur.revalidate();
-    }
-
-    public Dashboard() {
-        initComponents();
     }
 
     /**

@@ -6,8 +6,11 @@ package com.mycompany.final_project_pbo.ui;
 
 import com.mycompany.final_project_pbo.models.DebtTransaction;
 import com.mycompany.final_project_pbo.models.LoanStatus;
+import com.mycompany.final_project_pbo.models.User;
 import com.mycompany.final_project_pbo.repositories.DebtTransactionRepository;
 import com.mycompany.final_project_pbo.utils.Response;
+import com.mycompany.final_project_pbo.utils.SessionManager;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -475,6 +478,7 @@ public final class Hutang extends javax.swing.JPanel {
     }//GEN-LAST:event_StatusPeminjamanActionPerformed
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    User user = SessionManager.getInstance().getCurrentUser();
     
     private void SimpanPinjamanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SimpanPinjamanActionPerformed
         try {
@@ -492,7 +496,7 @@ public final class Hutang extends javax.swing.JPanel {
             debtTransaction.setStatus(LoanStatus.BELUM_LUNAS);
             debtTransaction.setCreatedBy(null);
 
-            Response<DebtTransaction> response = debtTransactionRepository.save(debtTransaction);
+            Response<DebtTransaction> response = debtTransactionRepository.save(debtTransaction, user.getId());
             if (response.isSuccess()) {
                 JOptionPane.showMessageDialog(null, "Data berhasil disimpan.");
                 clearForm();
@@ -523,7 +527,7 @@ public final class Hutang extends javax.swing.JPanel {
             debtTransaction.setStatus(LoanStatus.BELUM_LUNAS);
             debtTransaction.setCreatedBy(null);
 
-            Response<DebtTransaction> response = debtTransactionRepository.update(debtTransaction);
+            Response<DebtTransaction> response = debtTransactionRepository.update(debtTransaction, user.getId());
             if (response.isSuccess()) {
                 JOptionPane.showMessageDialog(null, "Data berhasil diperbarui.");
                 clearForm();
@@ -546,7 +550,7 @@ public final class Hutang extends javax.swing.JPanel {
 
             int confirm = JOptionPane.showConfirmDialog(null, "Yakin ingin menghapus data?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
-                Response<Boolean> response = debtTransactionRepository.deleteById(id);
+                Response<Boolean> response = debtTransactionRepository.deleteById(id, user.getId());
                 if (response.isSuccess()) {
                     JOptionPane.showMessageDialog(null, "Data berhasil dihapus.");
                     clearForm();
@@ -562,7 +566,7 @@ public final class Hutang extends javax.swing.JPanel {
 
     public void showAllHutang() {
         DebtTransactionRepository debtTransactionRepository = new DebtTransactionRepository();
-        Response<ArrayList<DebtTransaction>> allResponse = debtTransactionRepository.findAll();
+        Response<ArrayList<DebtTransaction>> allResponse = debtTransactionRepository.findAll(user.getId());
 
         if (!allResponse.isSuccess() || allResponse.getData() == null) {
             JOptionPane.showMessageDialog(null, "Tidak ada data hutang piutang yang ditemukan.", "Informasi", JOptionPane.INFORMATION_MESSAGE);

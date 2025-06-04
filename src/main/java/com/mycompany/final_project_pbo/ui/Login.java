@@ -2,6 +2,7 @@
 package com.mycompany.final_project_pbo.ui;
 
 import com.mycompany.final_project_pbo.utils.Response;
+import com.mycompany.final_project_pbo.utils.SessionManager;
 import com.mycompany.final_project_pbo.models.User;
 import com.mycompany.final_project_pbo.services.AuthenticationService;
 
@@ -236,13 +237,17 @@ public class Login extends javax.swing.JFrame {
         AuthenticationService authService = new AuthenticationService();
         Response<User> response = authService.authenticate(username, password);
         if (response.isSuccess()) {
-            JOptionPane.showMessageDialog(this, "Login successful. Welcome, " + response.getData().getUsername() + "!", "Success", JOptionPane.INFORMATION_MESSAGE);
-
-            String role = (response.getData().getIsOwner()) ? "Owner" : "Staff";
-
-            this.setVisible(false);
+            User user = response.getData();
             
-            Dashboard dashboardFrame = new Dashboard(response.getData().getUsername(), role);
+            // Simpan session user
+            SessionManager.getInstance().login(user);
+
+            // Tampilkan pesan selamat datang
+            JOptionPane.showMessageDialog(this, "Login successful. Welcome, " + user.getUsername() + "!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+            // Pindah ke dashboard
+            this.setVisible(false);
+            Dashboard dashboardFrame = new Dashboard();
             dashboardFrame.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "Login failed: " + response.getMessage(), "Login Failed", JOptionPane.ERROR_MESSAGE);
