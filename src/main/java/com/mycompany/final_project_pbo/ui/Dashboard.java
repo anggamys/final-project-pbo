@@ -6,6 +6,9 @@ package com.mycompany.final_project_pbo.ui;
 
 import java.awt.event.MouseEvent;
 
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
 import com.mycompany.final_project_pbo.models.User;
 import com.mycompany.final_project_pbo.utils.SessionManager;
 
@@ -18,8 +21,6 @@ public class Dashboard extends javax.swing.JFrame {
     /**
      * Creates new form Dashboard
      * 
-     * @param name
-     * @param role
      */
     public Dashboard() {
         initComponents();
@@ -39,7 +40,8 @@ public class Dashboard extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel3 = new javax.swing.JPanel();
@@ -174,67 +176,93 @@ public class Dashboard extends javax.swing.JFrame {
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jSeparator2)
-                                .addComponent(jLabel9)
-                                .addComponent(jLabel8)
-                                .addComponent(roleUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(userName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(laporanKeuanganPage, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(utangPiutangPage, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(scanBarangPage, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ButtonLogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(manajemenBarangPage, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
+                jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel6Layout.createSequentialGroup()
+                                                .addGroup(jPanel6Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                        .addGroup(jPanel6Layout
+                                                                .createParallelGroup(
+                                                                        javax.swing.GroupLayout.Alignment.LEADING,
+                                                                        false)
+                                                                .addComponent(jSeparator2)
+                                                                .addComponent(jLabel9)
+                                                                .addComponent(jLabel8)
+                                                                .addComponent(roleUser,
+                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                        Short.MAX_VALUE)
+                                                                .addComponent(userName,
+                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                        Short.MAX_VALUE))
+                                                        .addComponent(laporanKeuanganPage,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 139,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(utangPiutangPage,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 139,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(scanBarangPage,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 139,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(ButtonLogOut,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 139,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(0, 0, Short.MAX_VALUE))
+                                        .addComponent(manajemenBarangPage, javax.swing.GroupLayout.Alignment.TRAILING,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addContainerGap()));
         jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(roleUser, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(userName)
-                .addGap(2, 2, 2)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(manajemenBarangPage, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25)
-                .addComponent(laporanKeuanganPage, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25)
-                .addComponent(utangPiutangPage, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25)
-                .addComponent(scanBarangPage, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(698, 698, 698)
-                .addComponent(ButtonLogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
-                .addComponent(jLabel9)
-                .addGap(0, 0, 0)
-                .addComponent(jLabel8)
-                .addContainerGap())
-        );
+                jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(roleUser, javax.swing.GroupLayout.PREFERRED_SIZE, 44,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(userName)
+                                .addGap(2, 2, 2)
+                                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(manajemenBarangPage, javax.swing.GroupLayout.PREFERRED_SIZE, 29,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(25, 25, 25)
+                                .addComponent(laporanKeuanganPage, javax.swing.GroupLayout.PREFERRED_SIZE, 29,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(25, 25, 25)
+                                .addComponent(utangPiutangPage, javax.swing.GroupLayout.PREFERRED_SIZE, 29,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(25, 25, 25)
+                                .addComponent(scanBarangPage, javax.swing.GroupLayout.PREFERRED_SIZE, 29,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(698, 698, 698)
+                                .addComponent(ButtonLogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 29,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25,
+                                        Short.MAX_VALUE)
+                                .addComponent(jLabel9)
+                                .addGap(0, 0, 0)
+                                .addComponent(jLabel8)
+                                .addContainerGap()));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
+                jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)));
         jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 1071, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 15, Short.MAX_VALUE))
-        );
+                jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 1071,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 15, Short.MAX_VALUE)));
 
         getContentPane().add(jPanel3, java.awt.BorderLayout.LINE_START);
 
@@ -267,23 +295,25 @@ public class Dashboard extends javax.swing.JFrame {
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Notification, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(122, 122, 122)
-                .addComponent(jLabel1)
-                .addGap(19, 19, 19))
-        );
+                jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(Notification, javax.swing.GroupLayout.PREFERRED_SIZE, 193,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(122, 122, 122)
+                                .addComponent(jLabel1)
+                                .addGap(19, 19, 19)));
         jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(10, Short.MAX_VALUE)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(Notification, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(10, 10, 10))
-        );
+                jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                                .addContainerGap(10, Short.MAX_VALUE)
+                                .addGroup(jPanel5Layout
+                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(Notification, javax.swing.GroupLayout.DEFAULT_SIZE, 56,
+                                                Short.MAX_VALUE)
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(10, 10, 10)));
 
         PanelFitur.setBackground(new java.awt.Color(255, 255, 255));
         PanelFitur.setForeground(new java.awt.Color(75, 139, 213));
@@ -293,106 +323,118 @@ public class Dashboard extends javax.swing.JFrame {
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(PanelFitur, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
-        );
+                jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                Short.MAX_VALUE)
+                        .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGap(15, 15, 15)
+                                .addComponent(PanelFitur, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(23, Short.MAX_VALUE)));
         jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addComponent(PanelFitur, javax.swing.GroupLayout.PREFERRED_SIZE, 985, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
-        );
+                jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
+                                .addComponent(PanelFitur, javax.swing.GroupLayout.PREFERRED_SIZE, 985,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(15, Short.MAX_VALUE)));
 
         getContentPane().add(jPanel4, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-
-    private void manajemenBarangPageMouseClicked(MouseEvent evt) {//GEN-FIRST:event_manajemenBarangPageMouseClicked
+    private void manajemenBarangPageMouseClicked(MouseEvent evt) {// GEN-FIRST:event_manajemenBarangPageMouseClicked
         // TODO add your handling code here:
         PanelFitur.removeAll();
         PanelFitur.add(new ManajemenBarang());
         PanelFitur.repaint();
         PanelFitur.revalidate();
-    }//GEN-LAST:event_manajemenBarangPageMouseClicked
+    }// GEN-LAST:event_manajemenBarangPageMouseClicked
 
-    private void manajemenBarangPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manajemenBarangPageActionPerformed
+    private void manajemenBarangPageActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_manajemenBarangPageActionPerformed
         // TODO add your handling code here:
         PanelFitur.removeAll();
-    }//GEN-LAST:event_manajemenBarangPageActionPerformed
+    }// GEN-LAST:event_manajemenBarangPageActionPerformed
 
-    private void laporanKeuanganPageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_laporanKeuanganPageMouseClicked
+    private void laporanKeuanganPageMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_laporanKeuanganPageMouseClicked
         // TODO add your handling code here:
         PanelFitur.removeAll();
         PanelFitur.add(new Keuangan());
         PanelFitur.repaint();
         PanelFitur.revalidate();
-    }//GEN-LAST:event_laporanKeuanganPageMouseClicked
+    }// GEN-LAST:event_laporanKeuanganPageMouseClicked
 
-    private void laporanKeuanganPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_laporanKeuanganPageActionPerformed
-    }//GEN-LAST:event_laporanKeuanganPageActionPerformed
+    private void laporanKeuanganPageActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_laporanKeuanganPageActionPerformed
+    }// GEN-LAST:event_laporanKeuanganPageActionPerformed
 
-    private void utangPiutangPageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_utangPiutangPageMouseClicked
+    private void utangPiutangPageMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_utangPiutangPageMouseClicked
         // TODO add your handling code here:
         PanelFitur.removeAll();
         PanelFitur.add(new Hutang());
         PanelFitur.repaint();
         PanelFitur.revalidate();
-    }//GEN-LAST:event_utangPiutangPageMouseClicked
+    }// GEN-LAST:event_utangPiutangPageMouseClicked
 
-    private void utangPiutangPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_utangPiutangPageActionPerformed
+    private void utangPiutangPageActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_utangPiutangPageActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_utangPiutangPageActionPerformed
+    }// GEN-LAST:event_utangPiutangPageActionPerformed
 
-    private void scanBarangPageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scanBarangPageMouseClicked
+    private void scanBarangPageMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_scanBarangPageMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_scanBarangPageMouseClicked
+    }// GEN-LAST:event_scanBarangPageMouseClicked
 
-    private void scanBarangPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scanBarangPageActionPerformed
-    }//GEN-LAST:event_scanBarangPageActionPerformed
+    private void scanBarangPageActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_scanBarangPageActionPerformed
+    }// GEN-LAST:event_scanBarangPageActionPerformed
 
-    private void jButton9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton9MouseClicked
+    private void jButton9MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jButton9MouseClicked
 
-    }//GEN-LAST:event_jButton9MouseClicked
+    }// GEN-LAST:event_jButton9MouseClicked
 
-    private void jButton7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton7MouseClicked
-    
+    private void jButton7MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jButton7MouseClicked
+
         PanelFitur.removeAll();
         PanelFitur.add(new Hutang());
         PanelFitur.repaint();
         PanelFitur.revalidate();
-    }//GEN-LAST:event_jButton7MouseClicked
+    }// GEN-LAST:event_jButton7MouseClicked
 
-    private void jButton6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton6MouseClicked
-        
+    private void jButton6MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jButton6MouseClicked
+
         PanelFitur.removeAll();
         PanelFitur.add(new Keuangan());
         PanelFitur.repaint();
         PanelFitur.revalidate();
-    }//GEN-LAST:event_jButton6MouseClicked
+    }// GEN-LAST:event_jButton6MouseClicked
 
-    private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
-        
+    private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jButton4MouseClicked
+
         PanelFitur.removeAll();
         PanelFitur.add(new ManajemenBarang());
         PanelFitur.repaint();
         PanelFitur.revalidate();
-    }//GEN-LAST:event_jButton4MouseClicked
+    }// GEN-LAST:event_jButton4MouseClicked
 
-    private void ButtonLogOutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonLogOutMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ButtonLogOutMouseClicked
+    private void ButtonLogOutMouseClicked(java.awt.event.MouseEvent evt) {
+        int confirm = JOptionPane.showConfirmDialog(rootPane,
+                "Are you sure you want to logout?",
+                "Confirm Logout",
+                JOptionPane.YES_NO_OPTION);
 
-    private void ButtonLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonLogOutActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ButtonLogOutActionPerformed
+        if (confirm == JOptionPane.YES_OPTION) {
+            this.dispose();
+            Login loginframe = new Login();
+            loginframe.setVisible(true);
+        }
+    }
+
+    private void ButtonLogOutActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_ButtonLogOutActionPerformed
+        LogOutui logOut = new LogOutui();
+        logOut.setVisible(true);
+    }// GEN-LAST:event_ButtonLogOutActionPerformed
 
     private void NotificationActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_NotificationActionPerformed
         // TODO add your handling code here:
