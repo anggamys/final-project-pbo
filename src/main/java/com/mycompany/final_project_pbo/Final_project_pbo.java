@@ -116,8 +116,6 @@ public class Final_project_pbo {
         debtTransaction.setDebtorName("John Doe");
         debtTransaction.setAddress("123 Main St");
         debtTransaction.setPhoneNumber("555-1234");
-        debtTransaction.setLoanDate("2023-10-01");
-        debtTransaction.setDueDate("2023-11-01");
         debtTransaction.setAmount(1000.0);
         debtTransaction.setStatus(LoanStatus.BELUM_LUNAS);
         debtTransaction.setCreatedBy(userResponse.getData().getId());
@@ -367,8 +365,6 @@ public class Final_project_pbo {
         debtTransaction.setDebtorName("John Doe");
         debtTransaction.setAddress("123 Main St");
         debtTransaction.setPhoneNumber("555-1234");
-        debtTransaction.setLoanDate("2023-10-01");
-        debtTransaction.setDueDate("2023-11-01");
         debtTransaction.setAmount(1000.0);
         debtTransaction.setStatus(LoanStatus.BELUM_LUNAS);
         debtTransaction.setCreatedBy(userSaveResponse.getData().getId());

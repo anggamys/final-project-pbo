@@ -36,10 +36,12 @@ public class CategoryRepository implements CrudRepository<Category> {
                 var generatedKeys = preparedStatement.getGeneratedKeys();
                 if (generatedKeys.next()) {
                     entity.setId(generatedKeys.getInt(1));
-                    logActivityService.logAction(userId, "Saved category with ID: " + entity.getId(), MODULE_NAME, LogLevel.INFO);
+                    logActivityService.logAction(userId, "Saved category with ID: " + entity.getId(), MODULE_NAME,
+                            LogLevel.INFO);
                     return Response.success("Category saved successfully", entity);
                 } else {
-                    logActivityService.logAction(userId, "Failed to retrieve generated key for category", MODULE_NAME, LogLevel.ERROR);
+                    logActivityService.logAction(userId, "Failed to retrieve generated key for category", MODULE_NAME,
+                            LogLevel.ERROR);
                     return Response.failure("Failed to retrieve generated key");
                 }
             } else {
@@ -47,7 +49,8 @@ public class CategoryRepository implements CrudRepository<Category> {
                 return Response.failure("Failed to save category");
             }
         } catch (Exception e) {
-            logActivityService.logAction(userId, "Error occurred while saving category: " + e.getMessage(), MODULE_NAME, LogLevel.ERROR);
+            logActivityService.logAction(userId, "Error occurred while saving category: " + e.getMessage(), MODULE_NAME,
+                    LogLevel.ERROR);
             return Response.failure("Error occurred while saving category: " + e.getMessage());
         }
     }
@@ -64,7 +67,8 @@ public class CategoryRepository implements CrudRepository<Category> {
 
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
-                logActivityService.logAction(userId, "Updated category with ID: " + entity.getId(), MODULE_NAME, LogLevel.INFO);
+                logActivityService.logAction(userId, "Updated category with ID: " + entity.getId(), MODULE_NAME,
+                        LogLevel.INFO);
                 return Response.success("Category updated successfully", entity);
             } else {
                 logActivityService.logAction(userId, "Failed to update category", MODULE_NAME, LogLevel.ERROR);
@@ -72,7 +76,8 @@ public class CategoryRepository implements CrudRepository<Category> {
             }
 
         } catch (Exception e) {
-            logActivityService.logAction(userId, "Error occurred while updating category: " + e.getMessage(), MODULE_NAME, LogLevel.ERROR);
+            logActivityService.logAction(userId, "Error occurred while updating category: " + e.getMessage(),
+                    MODULE_NAME, LogLevel.ERROR);
             return Response.failure("Error occurred while updating category: " + e.getMessage());
         }
     }
@@ -100,7 +105,8 @@ public class CategoryRepository implements CrudRepository<Category> {
             }
 
         } catch (Exception e) {
-            logActivityService.logAction(userId, "Error occurred while finding category: " + e.getMessage(), MODULE_NAME, LogLevel.ERROR);
+            logActivityService.logAction(userId, "Error occurred while finding category: " + e.getMessage(),
+                    MODULE_NAME, LogLevel.ERROR);
             return Response.failure("Error occurred while finding category: " + e.getMessage());
         }
     }
@@ -122,7 +128,8 @@ public class CategoryRepository implements CrudRepository<Category> {
             }
 
         } catch (Exception e) {
-            logActivityService.logAction(userId, "Error occurred while deleting category: " + e.getMessage(), MODULE_NAME, LogLevel.ERROR);
+            logActivityService.logAction(userId, "Error occurred while deleting category: " + e.getMessage(),
+                    MODULE_NAME, LogLevel.ERROR);
             return Response.failure("Error occurred while deleting category: " + e.getMessage());
         }
     }
@@ -144,11 +151,40 @@ public class CategoryRepository implements CrudRepository<Category> {
                 categories.add(category);
             }
 
-            logActivityService.logAction(userId, "Found " + categories.size() + " categories", MODULE_NAME, LogLevel.INFO);
+            logActivityService.logAction(userId, "Found " + categories.size() + " categories", MODULE_NAME,
+                    LogLevel.INFO);
             return Response.success("Categories found", categories);
         } catch (Exception e) {
-            logActivityService.logAction(userId, "Error occurred while finding categories: " + e.getMessage(), MODULE_NAME, LogLevel.ERROR);
+            logActivityService.logAction(userId, "Error occurred while finding categories: " + e.getMessage(),
+                    MODULE_NAME, LogLevel.ERROR);
             return Response.failure("Error occurred while finding categories: " + e.getMessage());
+        }
+    }
+
+    public Response<ArrayList<Category>> findByName(String name, Integer userId) {
+        String query = "SELECT * FROM categories WHERE category_name LIKE ?";
+
+        try (Connection conn = DatabaseUtil.getConnection()) {
+            var preparedStatement = conn.prepareStatement(query);
+            preparedStatement.setString(1, "%" + name + "%");
+
+            var resultSet = preparedStatement.executeQuery();
+            ArrayList<Category> categories = new ArrayList<>();
+            while (resultSet.next()) {
+                var category = new Category();
+                category.setId(resultSet.getInt("category_id"));
+                category.setName(resultSet.getString("category_name"));
+                category.setDescription(resultSet.getString("description"));
+                categories.add(category);
+            }
+
+            logActivityService.logAction(userId, "Found " + categories.size() + " categories by name: " + name,
+                    MODULE_NAME, LogLevel.INFO);
+            return Response.success("Categories found", categories);
+        } catch (Exception e) {
+            logActivityService.logAction(userId, "Error occurred while finding categories by name: " + e.getMessage(),
+                    MODULE_NAME, LogLevel.ERROR);
+            return Response.failure("Error occurred while finding categories by name: " + e.getMessage());
         }
     }
 }

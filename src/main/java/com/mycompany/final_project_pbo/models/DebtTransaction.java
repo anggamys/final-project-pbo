@@ -4,6 +4,8 @@
  */
 package com.mycompany.final_project_pbo.models;
 
+import java.util.Date;
+
 /**
  *
  * @author c0delb08
@@ -12,8 +14,8 @@ public class DebtTransaction extends BaseEntity {
     private String debtorName;
     private String address;
     private String phoneNumber;
-    private String loanDate;
-    private String dueDate;
+    private Date loanDate;
+    private Date dueDate;
     private Double amount;
     private LoanStatus status;
     private Integer createdBy;
@@ -22,7 +24,7 @@ public class DebtTransaction extends BaseEntity {
         super();
     }
 
-    public DebtTransaction(String debtorName, String address, String phoneNumber, String loanDate, String dueDate,
+    public DebtTransaction(String debtorName, String address, String phoneNumber, Date loanDate, Date dueDate,
             Double amount, LoanStatus status, Integer createdBy) {
         this.debtorName = debtorName;
         this.address = address;
@@ -59,19 +61,19 @@ public class DebtTransaction extends BaseEntity {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getLoanDate() {
+    public Date getLoanDate() {
         return loanDate;
     }
 
-    public void setLoanDate(String loanDate) {
+    public void setLoanDate(Date loanDate) {
         this.loanDate = loanDate;
     }
 
-    public String getDueDate() {
+    public Date getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(String dueDate) {
+    public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -102,6 +104,7 @@ public class DebtTransaction extends BaseEntity {
     @Override
     public String toString() {
         return "DebtTransaction{" + "debtorName=" + debtorName + ", address=" + address + ", phoneNumber=" + phoneNumber
-                + ", loanDate=" + loanDate + ", dueDate=" + dueDate + ", amount=" + amount + ", status=" + status + ", createdBy=" + createdBy + '}';
+                + ", loanDate=" + loanDate + ", dueDate=" + dueDate + ", amount=" + amount + ", status=" + status
+                + ", createdBy=" + createdBy + '}';
     }
 }

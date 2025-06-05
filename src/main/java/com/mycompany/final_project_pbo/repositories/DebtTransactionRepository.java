@@ -13,6 +13,7 @@ import com.mycompany.final_project_pbo.utils.DatabaseUtil;
 import com.mycompany.final_project_pbo.utils.Response;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.util.ArrayList;
 
 /**
@@ -33,8 +34,8 @@ public class DebtTransactionRepository implements CrudRepository<DebtTransaction
             preparedStatement.setString(1, entity.getDebtorName());
             preparedStatement.setString(2, entity.getAddress());
             preparedStatement.setString(3, entity.getPhoneNumber());
-            preparedStatement.setString(4, entity.getLoanDate());
-            preparedStatement.setString(5, entity.getDueDate());
+            preparedStatement.setDate(4, new Date(entity.getLoanDate().getTime()));
+            preparedStatement.setDate(5, new Date(entity.getDueDate().getTime()));
             preparedStatement.setDouble(6, entity.getAmount());
             preparedStatement.setString(7, entity.getStatus().name());
             preparedStatement.setInt(8, entity.getCreatedBy());
@@ -72,8 +73,8 @@ public class DebtTransactionRepository implements CrudRepository<DebtTransaction
             preparedStatement.setString(1, entity.getDebtorName());
             preparedStatement.setString(2, entity.getAddress());
             preparedStatement.setString(3, entity.getPhoneNumber());
-            preparedStatement.setString(4, entity.getLoanDate());
-            preparedStatement.setString(5, entity.getDueDate());
+            preparedStatement.setDate(4, new Date(entity.getLoanDate().getTime()));
+            preparedStatement.setDate(5, new Date(entity.getDueDate().getTime()));
             preparedStatement.setDouble(6, entity.getAmount());
             preparedStatement.setString(7, entity.getStatus().name());
             preparedStatement.setInt(8, entity.getCreatedBy());
@@ -163,8 +164,8 @@ public class DebtTransactionRepository implements CrudRepository<DebtTransaction
         transaction.setDebtorName(resultSet.getString("debtor_name"));
         transaction.setAddress(resultSet.getString("address"));
         transaction.setPhoneNumber(resultSet.getString("phone_number"));
-        transaction.setLoanDate(resultSet.getString("loan_date"));
-        transaction.setDueDate(resultSet.getString("due_date"));
+        transaction.setLoanDate(resultSet.getDate("loan_date"));
+        transaction.setDueDate(resultSet.getDate("due_date"));
         transaction.setAmount(resultSet.getDouble("amount"));
 
         String statusStr = resultSet.getString("status");
