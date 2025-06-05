@@ -53,7 +53,6 @@ public final class Hutang extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         NamaPeminjam = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        StatusPeminjam = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         AlamatPeminjam = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
@@ -71,6 +70,7 @@ public final class Hutang extends javax.swing.JPanel {
         HapusPinjaman = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
+        jComboBox1 = new javax.swing.JComboBox<>();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setPreferredSize(new java.awt.Dimension(1742, 1815));
@@ -215,13 +215,6 @@ public final class Hutang extends javax.swing.JPanel {
         jLabel4.setFont(new java.awt.Font("Tw Cen MT", 0, 24)); // NOI18N
         jLabel4.setText("Status Peminjam :");
 
-        StatusPeminjam.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
-        StatusPeminjam.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                StatusPeminjamActionPerformed(evt);
-            }
-        });
-
         jLabel5.setFont(new java.awt.Font("Tw Cen MT", 0, 24)); // NOI18N
         jLabel5.setText("Alamat Peminjam :");
 
@@ -316,7 +309,7 @@ public final class Hutang extends javax.swing.JPanel {
         jLabel11.setFont(new java.awt.Font("Tw Cen MT", 1, 22)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(93, 173, 226));
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Peminjaman.png"))); // NOI18N
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/Img/Peminjaman.png"))); // NOI18N
         jLabel11.setText("Menu Peminjaman");
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -331,6 +324,9 @@ public final class Hutang extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
+
+        jComboBox1.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Lunas", "Belum Lunas" }));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -352,7 +348,7 @@ public final class Hutang extends javax.swing.JPanel {
                                 .addComponent(SimpanPinjaman)
                                 .addGap(136, 136, 136)
                                 .addComponent(EditPinjaman)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 136, Short.MAX_VALUE)
                                 .addComponent(HapusPinjaman))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -366,16 +362,16 @@ public final class Hutang extends javax.swing.JPanel {
                                     .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(63, 63, 63)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(IDPeminjaman, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(NamaPeminjam, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(StatusPeminjam, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(AlamatPeminjam, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(NoTelpPeminjam, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(TanggalPeminjaman, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(TanggalPelunasanPeminjaman, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(JumlahPeminjaman, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(StatusPeminjaman, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(IDPeminjaman, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+                                    .addComponent(NamaPeminjam, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+                                    .addComponent(AlamatPeminjam, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+                                    .addComponent(NoTelpPeminjam, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+                                    .addComponent(TanggalPeminjaman, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+                                    .addComponent(TanggalPelunasanPeminjaman, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+                                    .addComponent(JumlahPeminjaman, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+                                    .addComponent(StatusPeminjaman, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+                                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -401,9 +397,9 @@ public final class Hutang extends javax.swing.JPanel {
                             .addComponent(jLabel3))
                         .addGap(15, 15, 15)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(StatusPeminjam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))
-                        .addGap(15, 15, 15)
+                            .addComponent(jLabel4)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(17, 17, 17)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(AlamatPeminjam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5))
@@ -432,7 +428,7 @@ public final class Hutang extends javax.swing.JPanel {
                             .addComponent(SimpanPinjaman)
                             .addComponent(EditPinjaman)
                             .addComponent(HapusPinjaman))
-                        .addGap(0, 21, Short.MAX_VALUE))
+                        .addGap(0, 19, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())))
@@ -448,10 +444,6 @@ public final class Hutang extends javax.swing.JPanel {
     private void NamaPeminjamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NamaPeminjamActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_NamaPeminjamActionPerformed
-
-    private void StatusPeminjamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StatusPeminjamActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_StatusPeminjamActionPerformed
 
     private void AlamatPeminjamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AlamatPeminjamActionPerformed
         // TODO add your handling code here:
@@ -656,10 +648,10 @@ public final class Hutang extends javax.swing.JPanel {
     private javax.swing.JTextField NamaPeminjam;
     private javax.swing.JTextField NoTelpPeminjam;
     private javax.swing.JButton SimpanPinjaman;
-    private javax.swing.JTextField StatusPeminjam;
     private javax.swing.JTextField StatusPeminjaman;
     private javax.swing.JTextField TanggalPelunasanPeminjaman;
     private javax.swing.JTextField TanggalPeminjaman;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
