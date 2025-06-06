@@ -72,26 +72,22 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
+                  <Component id="manajemenBarangPage" alignment="0" max="32767" attributes="0"/>
+                  <Component id="laporanKeuanganPage" alignment="0" max="32767" attributes="0"/>
+                  <Component id="utangPiutangPage" alignment="0" max="32767" attributes="0"/>
+                  <Component id="scanBarangPage" alignment="0" max="32767" attributes="0"/>
+                  <Component id="userName" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jSeparator2" alignment="0" max="32767" attributes="0"/>
+                  <Component id="ButtonLogOut" alignment="0" max="32767" attributes="0"/>
+                  <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Group type="103" alignment="1" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="jSeparator2" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="jLabel9" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel8" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="roleUser" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="userName" alignment="0" max="32767" attributes="0"/>
-                                  </Group>
-                                  <Component id="laporanKeuanganPage" alignment="1" min="-2" pref="139" max="-2" attributes="0"/>
-                                  <Component id="utangPiutangPage" alignment="1" min="-2" pref="139" max="-2" attributes="0"/>
-                                  <Component id="scanBarangPage" alignment="1" min="-2" pref="139" max="-2" attributes="0"/>
-                                  <Component id="ButtonLogOut" alignment="1" min="-2" pref="139" max="-2" attributes="0"/>
-                              </Group>
+                          <Component id="Logo" alignment="0" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="manajemenBarangPage" alignment="1" max="32767" attributes="0"/>
+                          <Component id="jLabel8" pref="139" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -101,12 +97,12 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="roleUser" min="-2" pref="44" max="-2" attributes="0"/>
+                      <Component id="Logo" min="-2" pref="44" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="userName" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       <Component id="jSeparator2" min="-2" pref="10" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                       <Component id="manajemenBarangPage" min="-2" pref="29" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                       <Component id="laporanKeuanganPage" min="-2" pref="29" max="-2" attributes="0"/>
@@ -114,11 +110,11 @@
                       <Component id="utangPiutangPage" min="-2" pref="29" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                       <Component id="scanBarangPage" min="-2" pref="29" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="698" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="695" max="-2" attributes="0"/>
                       <Component id="ButtonLogOut" min="-2" pref="29" max="-2" attributes="0"/>
-                      <EmptySpace pref="25" max="32767" attributes="0"/>
+                      <EmptySpace pref="27" max="32767" attributes="0"/>
                       <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -126,24 +122,18 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="roleUser">
+            <Component class="javax.swing.JLabel" name="Logo">
               <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Segoe UI" size="12" style="1"/>
-                </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/com/mycompany/Img/BerkahAbdiIcon.png"/>
+                  <Image iconType="3" name="/images/BerkahAbdiIcon.png"/>
                 </Property>
               </Properties>
-              <Events>
-                <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="roleUserPropertyChange"/>
-              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="userName">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Segoe UI" size="12" style="1"/>
+                  <Font name="Tw Cen MT" size="18" style="1"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="text" type="java.lang.String" value="BERKAH ABADI"/>

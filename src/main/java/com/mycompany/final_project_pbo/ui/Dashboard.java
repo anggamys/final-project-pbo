@@ -25,8 +25,6 @@ public class Dashboard extends javax.swing.JFrame {
     public Dashboard() {
         initComponents();
         User user = SessionManager.getInstance().getCurrentUser();
-        userName.setText(user.getUsername());
-        roleUser.setText(user.getIsOwner() ? "Owner" : "Kasir");
 
         PanelFitur.add(new ManajemenBarang());
         PanelFitur.repaint();
@@ -41,12 +39,14 @@ public class Dashboard extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel3 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
-        roleUser = new javax.swing.JLabel();
+        Logo = new javax.swing.JLabel();
         userName = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel8 = new javax.swing.JLabel();
@@ -71,16 +71,10 @@ public class Dashboard extends javax.swing.JFrame {
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
         jPanel6.setPreferredSize(new java.awt.Dimension(150, 1080));
 
-        roleUser.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        roleUser.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        roleUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/BerkahAbdiIcon.png"))); // NOI18N
-        roleUser.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                roleUserPropertyChange(evt);
-            }
-        });
+        Logo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/BerkahAbdiIcon.png"))); // NOI18N
 
-        userName.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        userName.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
         userName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         userName.setText("BERKAH ABADI");
         userName.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
@@ -177,56 +171,42 @@ public class Dashboard extends javax.swing.JFrame {
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
                 jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(manajemenBarangPage, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(laporanKeuanganPage, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(utangPiutangPage, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(scanBarangPage, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(userName, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jSeparator2)
+                        .addComponent(ButtonLogOut, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel6Layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(Logo, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGroup(jPanel6Layout.createSequentialGroup()
-                                                .addGroup(jPanel6Layout
-                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                        .addGroup(jPanel6Layout
-                                                                .createParallelGroup(
-                                                                        javax.swing.GroupLayout.Alignment.LEADING,
-                                                                        false)
-                                                                .addComponent(jSeparator2)
-                                                                .addComponent(jLabel9)
-                                                                .addComponent(jLabel8)
-                                                                .addComponent(roleUser,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        Short.MAX_VALUE)
-                                                                .addComponent(userName,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        Short.MAX_VALUE))
-                                                        .addComponent(laporanKeuanganPage,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 139,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(utangPiutangPage,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 139,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(scanBarangPage,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 139,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(ButtonLogOut,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 139,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(jLabel9)
                                                 .addGap(0, 0, Short.MAX_VALUE))
-                                        .addComponent(manajemenBarangPage, javax.swing.GroupLayout.Alignment.TRAILING,
-                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 139,
+                                                Short.MAX_VALUE))
                                 .addContainerGap()));
         jPanel6Layout.setVerticalGroup(
                 jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel6Layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(roleUser, javax.swing.GroupLayout.PREFERRED_SIZE, 44,
+                                .addComponent(Logo, javax.swing.GroupLayout.PREFERRED_SIZE, 44,
                                         javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(userName)
-                                .addGap(2, 2, 2)
+                                .addGap(5, 5, 5)
                                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10,
                                         javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGap(2, 2, 2)
                                 .addComponent(manajemenBarangPage, javax.swing.GroupLayout.PREFERRED_SIZE, 29,
                                         javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(25, 25, 25)
@@ -238,13 +218,13 @@ public class Dashboard extends javax.swing.JFrame {
                                 .addGap(25, 25, 25)
                                 .addComponent(scanBarangPage, javax.swing.GroupLayout.PREFERRED_SIZE, 29,
                                         javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(698, 698, 698)
+                                .addGap(695, 695, 695)
                                 .addComponent(ButtonLogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 29,
                                         javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25,
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27,
                                         Short.MAX_VALUE)
                                 .addComponent(jLabel9)
-                                .addGap(0, 0, 0)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel8)
                                 .addContainerGap()));
 
@@ -509,6 +489,7 @@ public class Dashboard extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonLogOut;
+    private javax.swing.JLabel Logo;
     private javax.swing.JButton Notification;
     private javax.swing.JPanel PanelFitur;
     private javax.swing.JLabel jLabel1;
@@ -521,7 +502,6 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JButton laporanKeuanganPage;
     private javax.swing.JButton manajemenBarangPage;
-    private javax.swing.JLabel roleUser;
     private javax.swing.JButton scanBarangPage;
     private javax.swing.JLabel userName;
     private javax.swing.JButton utangPiutangPage;
