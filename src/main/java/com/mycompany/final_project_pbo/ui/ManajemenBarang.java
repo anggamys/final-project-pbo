@@ -676,6 +676,40 @@ public class ManajemenBarang extends javax.swing.JPanel {
         }
     }
 
+    private void searchBarang() {
+        String searchText = SearchBarang.getText().trim();
+        ProductRepository productRepository = new ProductRepository();
+        CategoryRepository categoryRepository = new CategoryRepository();
+        Response<ArrayList<Product>> searchResponse = productRepository.searchByName(searchText, currentUser.getId());
+
+        String[] kolom = { "Id", "Nama Barang", "Barcode", "Kategori", "Harga", "Stock" };
+        DefaultTableModel model = new DefaultTableModel(kolom, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        if (searchResponse.isSuccess()) {
+            for (Product p : searchResponse.getData()) {
+                Object[] row = {
+                        p.getId(),
+                        p.getName(),
+                        p.getBarcode(),
+                        categoryRepository.findById(p.getCategoryId(), currentUser.getId()).getData().getName(),
+                        p.getPrice(),
+                        p.getStock()
+                };
+                model.addRow(row);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Gagal mencari produk: " + searchResponse.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        TabelManajemenBarang.setModel(model);
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonEditBarang;
     private javax.swing.JButton ButtonHapusBarang;

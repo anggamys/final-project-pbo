@@ -161,4 +161,60 @@ public class ProductRepository implements CrudRepository<Product> {
             return Response.failure("Error finding products: " + e.getMessage());
         }
     }
+
+    public Response<ArrayList<Product>> findByBarcode(String barcode, Integer userId) {
+        String query = "SELECT * FROM products WHERE barcode = ?";
+
+        try (Connection conn = DatabaseUtil.getConnection()) {
+            var preparedStatement = conn.prepareStatement(query);
+            preparedStatement.setString(1, barcode);
+            var resultSet = preparedStatement.executeQuery();
+
+            ArrayList<Product> products = new ArrayList<>();
+            while (resultSet.next()) {
+                Product product = new Product();
+                product.setId(resultSet.getInt("product_id"));
+                product.setName(resultSet.getString("name"));
+                product.setBarcode(resultSet.getString("barcode"));
+                product.setCategoryId(resultSet.getInt("category_id"));
+                product.setPrice(resultSet.getDouble("price"));
+                product.setStock(resultSet.getInt("stock"));
+                products.add(product);
+            }
+
+            logActivityService.logAction(userId, "Found products with barcode: " + barcode, MODULE_NAME, LogLevel.INFO);
+            return Response.success("Products found", products);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.failure("Error finding products by barcode: " + e.getMessage());
+        }
+    }
+
+    public Response<ArrayList<Product>> searchByName(String name, Integer userId) {
+        String query = "SELECT * FROM products WHERE name LIKE ?";
+
+        try (Connection conn = DatabaseUtil.getConnection()) {
+            var preparedStatement = conn.prepareStatement(query);
+            preparedStatement.setString(1, "%" + name + "%");
+            var resultSet = preparedStatement.executeQuery();
+
+            ArrayList<Product> products = new ArrayList<>();
+            while (resultSet.next()) {
+                Product product = new Product();
+                product.setId(resultSet.getInt("product_id"));
+                product.setName(resultSet.getString("name"));
+                product.setBarcode(resultSet.getString("barcode"));
+                product.setCategoryId(resultSet.getInt("category_id"));
+                product.setPrice(resultSet.getDouble("price"));
+                product.setStock(resultSet.getInt("stock"));
+                products.add(product);
+            }
+
+            logActivityService.logAction(userId, "Searched products by name: " + name, MODULE_NAME, LogLevel.INFO);
+            return Response.success("Products found", products);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.failure("Error searching products by name: " + e.getMessage());
+        }
+    }
 }

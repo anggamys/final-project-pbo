@@ -426,6 +426,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         if (confirm == JOptionPane.YES_OPTION) {
             this.dispose();
+            SessionManager.getInstance().logout();
             Login loginframe = new Login();
             loginframe.setVisible(true);
         }
