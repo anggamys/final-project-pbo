@@ -91,4 +91,13 @@ public class ProductService {
             return Response.failure("Failed to remove stock: " + response.getMessage());
         }
     }
+
+    public Response<ArrayList<Product>> sortBy(String sortBy, Integer userId) {
+        if (sortBy == null || sortBy.isEmpty()) {
+            logActivityService.logAction(userId, "Sort by parameter is null or empty", MODULE_NAME, LogLevel.ERROR);
+            return Response.failure("Sort by parameter cannot be null or empty");
+        }
+
+        return null; // Implement sorting logic here
+    }
 }

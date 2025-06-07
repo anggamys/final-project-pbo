@@ -16,8 +16,12 @@ import com.mycompany.final_project_pbo.utils.Response;
 import com.mycompany.final_project_pbo.utils.SessionManager;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.Comparator;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -37,7 +41,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
         initComponents();
         showAllProduct();
         showAllRiwayatAktivitas();
-        showAllCategory();
+        initializeComponents();
     }
 
     /**
@@ -50,7 +54,9 @@ public class ManajemenBarang extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -80,7 +86,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
         SearchBarang = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         KategoriBarang = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
+        clearForm = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
         HargaJualBarang = new javax.swing.JTextField();
         ButtonScanBarang = new javax.swing.JButton();
@@ -97,40 +103,38 @@ public class ManajemenBarang extends javax.swing.JPanel {
         jLabel2.setText("Urutkan Berdasarkan: ");
 
         SortItem.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        SortItem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "IDBarang", "Nama", "Kategori", "Harga", "Stock" }));
 
         TabelManajemenBarang.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "IDBarang", "Nama", "Kategori", "Harga", "Stock"
-            }
-        ));
+                new Object[][] {
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null }
+                },
+                new String[] {
+                        "IDBarang", "Nama", "Kategori", "Harga", "Stock"
+                }));
         jScrollPane1.setViewportView(TabelManajemenBarang);
 
         jLabel3.setFont(new java.awt.Font("Tw Cen MT", 0, 24)); // NOI18N
@@ -207,7 +211,8 @@ public class ManajemenBarang extends javax.swing.JPanel {
         jLabel9.setText("Urutkan Berdasarkan: ");
 
         SortRiwayatAktivitas.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
-        SortRiwayatAktivitas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tanggal&Waktu", "Nama", "Tambah/Edit/Hapus", "Jumlah" }));
+        SortRiwayatAktivitas.setModel(new javax.swing.DefaultComboBoxModel<>(
+                new String[] { "Tanggal&Waktu", "Nama", "Tambah/Edit/Hapus", "Jumlah" }));
         SortRiwayatAktivitas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SortRiwayatAktivitasActionPerformed(evt);
@@ -215,91 +220,92 @@ public class ManajemenBarang extends javax.swing.JPanel {
         });
 
         TabelRiwayatAktivitas.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Tanggal&Waktu", "Nama", "Tambah/Hapus/Edit", "Jumlah"
-            }
-        ));
+                new Object[][] {
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null }
+                },
+                new String[] {
+                        "Tanggal&Waktu", "Nama", "Tambah/Hapus/Edit", "Jumlah"
+                }));
         jScrollPane2.setViewportView(TabelRiwayatAktivitas);
 
         jLabel10.setFont(new java.awt.Font("Tw Cen MT", 1, 24)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(93, 173, 226));
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/Img/Laporan_Keuangan.png"))); // NOI18N
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Laporan_Keuangan.png"))); // NOI18N
         jLabel10.setText("Menu Barang");
 
         SearchBarang.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
-        SearchBarang.setText("Search Barang");
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 497, Short.MAX_VALUE)
-        );
+                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 497, Short.MAX_VALUE));
         jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 290, Short.MAX_VALUE)
-        );
+                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 290, Short.MAX_VALUE));
 
         KategoriBarang.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
 
-        jButton1.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(93, 173, 226));
-        jButton1.setText("Bersihkan Kolom");
+        clearForm.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        clearForm.setForeground(new java.awt.Color(93, 173, 226));
+        clearForm.setText("Bersihkan Kolom");
+        clearForm.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                clearFormMouseClicked(evt);
+            }
+        });
 
         jLabel11.setFont(new java.awt.Font("Tw Cen MT", 0, 24)); // NOI18N
         jLabel11.setText("Harga Jual Barang:");
@@ -317,133 +323,250 @@ public class ManajemenBarang extends javax.swing.JPanel {
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jScrollPane2)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1507, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(159, 159, 159)
-                                .addComponent(SortItem, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(ButtonScanBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(42, 42, 42)))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                            .addComponent(SearchBarang)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel8)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                                .addComponent(jLabel9)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(SortRiwayatAktivitas, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(jLabel3)
-                                                    .addComponent(jLabel5)
-                                                    .addComponent(jLabel6))
-                                                .addGap(175, 175, 175)
-                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                    .addComponent(HargaBeliBarang)
-                                                    .addComponent(IDBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(KategoriBarang, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addComponent(ButtonTambahBarang)
-                                                .addGap(10, 10, 10)
-                                                .addComponent(ButtonEditBarang)
-                                                .addGap(10, 10, 10)
-                                                .addComponent(ButtonHapusBarang)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(jButton1)))
-                                        .addGap(18, 18, 18)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel4)
-                                            .addComponent(jLabel11)
-                                            .addComponent(jLabel7))))
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(264, 264, 264)
-                                        .addComponent(NamaBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(StockBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addComponent(HargaJualBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(15, 15, 15)
+                                .addGroup(jPanel1Layout
+                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jScrollPane1)
+                                        .addComponent(jScrollPane2)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGroup(jPanel1Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                                .addComponent(jLabel1,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 1507,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(
+                                                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                        Short.MAX_VALUE))
+                                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                                .addComponent(jLabel2)
+                                                                .addGap(159, 159, 159)
+                                                                .addComponent(SortItem,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 200,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(
+                                                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                        Short.MAX_VALUE)
+                                                                .addComponent(ButtonScanBarang,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 160,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addGap(42, 42, 42)))
+                                                .addGroup(jPanel1Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING,
+                                                                false)
+                                                        .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                200, Short.MAX_VALUE)
+                                                        .addComponent(SearchBarang)))
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGroup(jPanel1Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                                .addGroup(jPanel1Layout.createParallelGroup(
+                                                                        javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(jLabel8)
+                                                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                                                .addGroup(jPanel1Layout
+                                                                                        .createParallelGroup(
+                                                                                                javax.swing.GroupLayout.Alignment.TRAILING,
+                                                                                                false)
+                                                                                        .addGroup(
+                                                                                                javax.swing.GroupLayout.Alignment.LEADING,
+                                                                                                jPanel1Layout
+                                                                                                        .createSequentialGroup()
+                                                                                                        .addComponent(
+                                                                                                                jLabel9)
+                                                                                                        .addPreferredGap(
+                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                Short.MAX_VALUE)
+                                                                                                        .addComponent(
+                                                                                                                SortRiwayatAktivitas,
+                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                                210,
+                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                                        .addGroup(jPanel1Layout
+                                                                                                .createSequentialGroup()
+                                                                                                .addGroup(jPanel1Layout
+                                                                                                        .createParallelGroup(
+                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                                        .addComponent(
+                                                                                                                jLabel3)
+                                                                                                        .addComponent(
+                                                                                                                jLabel5)
+                                                                                                        .addComponent(
+                                                                                                                jLabel6))
+                                                                                                .addGap(175, 175, 175)
+                                                                                                .addGroup(jPanel1Layout
+                                                                                                        .createParallelGroup(
+                                                                                                                javax.swing.GroupLayout.Alignment.LEADING,
+                                                                                                                false)
+                                                                                                        .addComponent(
+                                                                                                                HargaBeliBarang)
+                                                                                                        .addComponent(
+                                                                                                                IDBarang,
+                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                                207,
+                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                                        .addComponent(
+                                                                                                                KategoriBarang,
+                                                                                                                0,
+                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                Short.MAX_VALUE)))
+                                                                                        .addGroup(jPanel1Layout
+                                                                                                .createSequentialGroup()
+                                                                                                .addComponent(
+                                                                                                        ButtonTambahBarang)
+                                                                                                .addGap(10, 10, 10)
+                                                                                                .addComponent(
+                                                                                                        ButtonEditBarang)
+                                                                                                .addGap(10, 10, 10)
+                                                                                                .addComponent(
+                                                                                                        ButtonHapusBarang)
+                                                                                                .addPreferredGap(
+                                                                                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                                                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                        Short.MAX_VALUE)
+                                                                                                .addComponent(
+                                                                                                        clearForm)))
+                                                                                .addGap(18, 18, 18)
+                                                                                .addGroup(jPanel1Layout
+                                                                                        .createParallelGroup(
+                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                        .addComponent(jLabel4)
+                                                                                        .addComponent(jLabel11)
+                                                                                        .addComponent(jLabel7))))
+                                                                .addGroup(jPanel1Layout.createParallelGroup(
+                                                                        javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                                                .addGap(264, 264, 264)
+                                                                                .addComponent(NamaBarang,
+                                                                                        javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                        207,
+                                                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                        .addGroup(
+                                                                                javax.swing.GroupLayout.Alignment.TRAILING,
+                                                                                jPanel1Layout.createSequentialGroup()
+                                                                                        .addPreferredGap(
+                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                        .addComponent(StockBarang,
+                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                207,
+                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                                        .addComponent(HargaJualBarang,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 207,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
         jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel10))
-                .addGap(15, 15, 15)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(SortItem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(15, 15, 15))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(ButtonScanBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(SearchBarang, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(15, 15, 15)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(IDBarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4)
-                            .addComponent(NamaBarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(15, 15, 15)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(HargaJualBarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel11)
-                            .addComponent(jLabel5)
-                            .addComponent(KategoriBarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(15, 15, 15)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6)
-                            .addComponent(HargaBeliBarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7)
-                            .addComponent(StockBarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(25, 25, 25)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(ButtonTambahBarang)
-                            .addComponent(ButtonEditBarang)
-                            .addComponent(ButtonHapusBarang)
-                            .addComponent(jButton1))
-                        .addGap(25, 25, 25)
-                        .addComponent(jLabel8)
-                        .addGap(25, 25, 25)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel9)
-                            .addComponent(SortRiwayatAktivitas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
-        );
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(15, 15, 15)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel1)
+                                        .addComponent(jLabel10))
+                                .addGap(15, 15, 15)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGroup(jPanel1Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jLabel2)
+                                                        .addComponent(SortItem, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(15, 15, 15))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout
+                                                .createSequentialGroup()
+                                                .addGroup(jPanel1Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(ButtonScanBarang,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 26,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(SearchBarang,
+                                                                javax.swing.GroupLayout.Alignment.TRAILING,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(15, 15, 15)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGroup(jPanel1Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jLabel3)
+                                                        .addComponent(IDBarang, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jLabel4)
+                                                        .addComponent(NamaBarang,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(15, 15, 15)
+                                                .addGroup(jPanel1Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(HargaJualBarang,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jLabel11)
+                                                        .addComponent(jLabel5)
+                                                        .addComponent(KategoriBarang,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(15, 15, 15)
+                                                .addGroup(jPanel1Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jLabel6)
+                                                        .addComponent(HargaBeliBarang,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jLabel7)
+                                                        .addComponent(StockBarang,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(25, 25, 25)
+                                                .addGroup(jPanel1Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(ButtonTambahBarang)
+                                                        .addComponent(ButtonEditBarang)
+                                                        .addComponent(ButtonHapusBarang)
+                                                        .addComponent(clearForm))
+                                                .addGap(25, 25, 25)
+                                                .addComponent(jLabel8)
+                                                .addGap(25, 25, 25)
+                                                .addGroup(jPanel1Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jLabel9)
+                                                        .addComponent(SortRiwayatAktivitas,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(25, 25, 25)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 265,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         add(jPanel1, "card2");
     }// </editor-fold>//GEN-END:initComponents
+
+    private void clearFormMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_clearFormMouseClicked
+        clearForm();
+    }// GEN-LAST:event_clearFormMouseClicked
 
     private void HargaJualBarangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_HargaJualBarangActionPerformed
         // TODO add your handling code here:
@@ -452,6 +575,10 @@ public class ManajemenBarang extends javax.swing.JPanel {
     private void NamaBarangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_NamaBarangActionPerformed
         // TODO add your handling code here:
     }// GEN-LAST:event_NamaBarangActionPerformed
+
+    private void HargaBeliBarangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_HargaBeliBarangActionPerformed
+        // TODO add your handling code here:
+    }// GEN-LAST:event_HargaBeliBarangActionPerformed
 
     private void KategoriBarangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_KategoriBarangActionPerformed
         // TODO add your handling code here:
@@ -575,142 +702,85 @@ public class ManajemenBarang extends javax.swing.JPanel {
     }// GEN-LAST:event_ButtonHapusBarangActionPerformed
 
     private void showAllProduct() {
+        // Inisialisasi repository yang dibutuhkan
         ProductRepository productRepository = new ProductRepository();
         CategoryRepository categoryRepository = new CategoryRepository();
-        Response<ArrayList<Product>> allResponse = productRepository.findAll(currentUser.getId());
 
+        // Ambil query pencarian
+        String searchQuery = SearchBarang.getText().trim();
+        Response<ArrayList<Product>> response = searchQuery.isEmpty()
+                ? productRepository.findAll(currentUser.getId())
+                : productRepository.searchByName(searchQuery, currentUser.getId());
+
+        if (!response.isSuccess()) {
+            JOptionPane.showMessageDialog(null, "Gagal memuat data produk: " + response.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        List<Product> products = response.getData();
+
+        // Optimisasi: Ambil semua kategori sekaligus & buat map id -> name
+        Map<Integer, String> categoryMap = categoryRepository
+                .findAll(currentUser.getId())
+                .getData()
+                .stream()
+                .collect(Collectors.toMap(Category::getId, Category::getName));
+
+        // Atur sorting (bisa juga dilakukan di repository jika SQL mendukung ORDER BY)
+        String selectedSort = SortItem.getSelectedItem() != null
+                ? SortItem.getSelectedItem().toString()
+                : "Nama";
+
+        switch (selectedSort) {
+            case "Harga" -> products.sort(Comparator.comparing(Product::getPrice));
+            case "Stock" -> products.sort(Comparator.comparing(Product::getStock));
+            default -> products.sort(Comparator.comparing(Product::getName));
+        }
+
+        // Buat model tabel baru
         String[] kolom = { "Id", "Nama Barang", "Barcode", "Kategori", "Harga", "Stock" };
         DefaultTableModel model = new DefaultTableModel(kolom, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false;
+                return false; // non-editable
             }
         };
 
-        if (allResponse.isSuccess()) {
-            // Cache kategori untuk menghindari query berulang
-            HashMap<Integer, String> categoryCache = new HashMap<>();
-
-            for (Product p : allResponse.getData()) {
-                String categoryName;
-
-                if (categoryCache.containsKey(p.getCategoryId())) {
-                    categoryName = categoryCache.get(p.getCategoryId());
-                } else {
-                    Response<Category> categoryResponse = categoryRepository
-                            .findById(p.getCategoryId(), currentUser.getId());
-                    categoryName = categoryResponse.isSuccess()
-                            && categoryResponse.getData() != null
-                                    ? categoryResponse.getData().getName()
-                                    : "Kategori Tidak Dikenal";
-                    categoryCache.put(p.getCategoryId(), categoryName);
-                }
-
-                Object[] row = {
-                        p.getId(),
-                        p.getName(),
-                        p.getBarcode(),
-                        categoryName,
-                        p.getPrice(),
-                        p.getStock()
-                };
-                model.addRow(row);
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Gagal memuat data produk: " + allResponse.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
+        // Tambahkan baris produk ke model
+        for (Product p : products) {
+            model.addRow(new Object[] {
+                    p.getId(),
+                    p.getName(),
+                    p.getBarcode(),
+                    categoryMap.getOrDefault(p.getCategoryId(), "Kategori Tidak Dikenal"),
+                    p.getPrice(),
+                    p.getStock()
+            });
         }
 
+        // Set model ke tabel
         TabelManajemenBarang.setModel(model);
 
         // Hindari duplikasi listener
         ListSelectionModel selectionModel = TabelManajemenBarang.getSelectionModel();
-        selectionModel.removeListSelectionListener(tableSelectionListener);
+        selectionModel.removeListSelectionListener(tableSelectionListener); // aman kalau tidak ada
         selectionModel.addListSelectionListener(tableSelectionListener);
     }
 
-    private final ListSelectionListener tableSelectionListener = new ListSelectionListener() {
-        @Override
-        public void valueChanged(ListSelectionEvent e) {
-            if (!e.getValueIsAdjusting()) {
-                int selectedRow = TabelManajemenBarang.getSelectedRow();
-                if (selectedRow != -1) {
-                    IDBarang.setText(TabelManajemenBarang.getValueAt(selectedRow, 0).toString());
-                    NamaBarang.setText(TabelManajemenBarang.getValueAt(selectedRow, 1).toString());
-                    // BarcodeBarang.setText(TabelManajemenBarang.getValueAt(selectedRow,
-                    // 2).toString());
-                    // KategoriBarang.setText(
-                    // TabelManajemenBarang.getValueAt(selectedRow, 3).toString());
-                    HargaBeliBarang.setText(TabelManajemenBarang.getValueAt(selectedRow, 4).toString());
-                    StockBarang.setText(TabelManajemenBarang.getValueAt(selectedRow, 5).toString());
-                } else {
-                    resetProductFormFields();
-                }
-            }
-        }
+    private void initializeComponents() {
+        // Initialisasi combo box untuk pengurutan
+        String[] sortByOptions = { "", "Nama", "Harga", "Stock" };
+        SortItem.setModel(new DefaultComboBoxModel<>(sortByOptions));
+        SortItem.setSelectedItem("");
 
-        private void resetProductFormFields() {
-            IDBarang.setText("");
-            NamaBarang.setText("");
-            // BarcodeBarang.setText("");
-            // KategoriBarang.setText("");
-            HargaBeliBarang.setText("");
-            StockBarang.setText("");
-        }
-    };
+        // Reset form query
+        clearForm();
 
-    private void clearForm() {
-        IDBarang.setText("");
-        NamaBarang.setText("");
-        // BarcodeBarang.setText("");
-        // KategoriBarang.setText("");
-        HargaBeliBarang.setText("");
-        StockBarang.setText("");
-    }
+        // Category options
+        KategoriBarang.setModel(new DefaultComboBoxModel<>(new String[] { "Pilih Kategori" }));
+        KategoriBarang.setSelectedIndex(-1);
 
-    private void showAllRiwayatAktivitas() {
-        LogActivityRepository logActivityRepository = new LogActivityRepository();
-        Response<ArrayList<LogActivity>> allResponse = logActivityRepository.findAll();
-
-        UserRepository userRepository = new UserRepository();
-
-        String[] kolom = { "Tanggal & Waktu", "Nama", "Tambah/Hapus/Edit" };
-        DefaultTableModel model = new DefaultTableModel(kolom, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-
-        if (allResponse.isSuccess()) {
-            for (LogActivity log : allResponse.getData()) {
-                // === FILTER BERDASARKAN MODULE ===
-                if (!"ProductRepository".equalsIgnoreCase(log.getModule())) {
-                    continue; // skip jika bukan dari ProductRepository
-                }
-
-                Response<User> userResponse = userRepository.findById(log.getUserId(),
-                        currentUser.getId());
-
-                Object[] row = {
-                        log.getCreatedAt(),
-                        userResponse.isSuccess() && userResponse.getData() != null
-                                ? userResponse.getData().getUsername()
-                                : "Unknown",
-                        log.getAction()
-                };
-                model.addRow(row);
-            }
-        } else {
-            JOptionPane.showMessageDialog(null,
-                    "Gagal memuat riwayat aktivitas: " + allResponse.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-        }
-
-        TabelRiwayatAktivitas.setModel(model);
-    }
-
-    private void showAllCategory() {
         CategoryRepository categoryRepository = new CategoryRepository();
         Response<ArrayList<Category>> allResponse = categoryRepository.findAll(currentUser.getId());
 
@@ -724,13 +794,71 @@ public class ManajemenBarang extends javax.swing.JPanel {
         }
     }
 
-    private void searchBarang() {
-        String searchText = SearchBarang.getText().trim();
-        ProductRepository productRepository = new ProductRepository();
-        CategoryRepository categoryRepository = new CategoryRepository();
-        Response<ArrayList<Product>> searchResponse = productRepository.searchByName(searchText, currentUser.getId());
+    private final ListSelectionListener tableSelectionListener = new ListSelectionListener() {
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+            if (!e.getValueIsAdjusting()) {
+                int selectedRow = TabelManajemenBarang.getSelectedRow();
+                if (selectedRow != -1) {
+                    IDBarang.setText(TabelManajemenBarang.getValueAt(selectedRow, 0).toString());
+                    NamaBarang.setText(TabelManajemenBarang.getValueAt(selectedRow, 1).toString());
+                    // BarcodeBarang.setText(TabelManajemenBarang.getValueAt(selectedRow,
+                    // 2).toString());
+                    KategoriBarang.setSelectedItem(
+                            TabelManajemenBarang.getValueAt(selectedRow, 3).toString());
+                    HargaBeliBarang.setText(TabelManajemenBarang.getValueAt(selectedRow, 4).toString());
+                    StockBarang.setText(TabelManajemenBarang.getValueAt(selectedRow, 5).toString());
+                } else {
+                    resetProductFormFields();
+                }
+            }
+        }
 
-        String[] kolom = { "Id", "Nama Barang", "Barcode", "Kategori", "Harga", "Stock" };
+        private void resetProductFormFields() {
+            IDBarang.setText("");
+            NamaBarang.setText("");
+            // BarcodeBarang.setText("");
+            KategoriBarang.setSelectedIndex(-1);
+            HargaBeliBarang.setText("");
+            StockBarang.setText("");
+        }
+    };
+
+    private void clearForm() {
+        IDBarang.setText("");
+        NamaBarang.setText("");
+        // BarcodeBarang.setText("");
+        KategoriBarang.setSelectedIndex(-1);
+        HargaBeliBarang.setText("");
+        HargaJualBarang.setText("");
+        StockBarang.setText("");
+    }
+
+    private void showAllRiwayatAktivitas() {
+        LogActivityRepository logActivityRepository = new LogActivityRepository();
+        UserRepository userRepository = new UserRepository();
+
+        Response<ArrayList<LogActivity>> allResponse = logActivityRepository.findAll(); // sebaiknya instance di field
+
+        if (!allResponse.isSuccess()) {
+            JOptionPane.showMessageDialog(null,
+                    "Gagal memuat riwayat aktivitas: " + allResponse.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        List<LogActivity> allLogs = allResponse.getData()
+                .stream()
+                .filter(log -> "ProductRepository".equalsIgnoreCase(log.getModule())) // filter module di awal
+                .toList();
+
+        // Optimisasi: Ambil semua user dan buat map userId -> username
+        Map<Integer, String> userMap = userRepository.findAll(currentUser.getId())
+                .getData()
+                .stream()
+                .collect(Collectors.toMap(User::getId, User::getUsername));
+
+        String[] kolom = { "Tanggal & Waktu", "Nama", "Tambah/Hapus/Edit" };
         DefaultTableModel model = new DefaultTableModel(kolom, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -738,24 +866,16 @@ public class ManajemenBarang extends javax.swing.JPanel {
             }
         };
 
-        if (searchResponse.isSuccess()) {
-            for (Product p : searchResponse.getData()) {
-                Object[] row = {
-                        p.getId(),
-                        p.getName(),
-                        p.getBarcode(),
-                        categoryRepository.findById(p.getCategoryId(), currentUser.getId()).getData().getName(),
-                        p.getPrice(),
-                        p.getStock()
-                };
-                model.addRow(row);
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Gagal mencari produk: " + searchResponse.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
+        for (LogActivity log : allLogs) {
+            String username = userMap.getOrDefault(log.getUserId(), "Unknown");
+            model.addRow(new Object[] {
+                    log.getCreatedAt(),
+                    username,
+                    log.getAction()
+            });
         }
 
-        TabelManajemenBarang.setModel(model);
+        TabelRiwayatAktivitas.setModel(model);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -774,7 +894,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
     private javax.swing.JTextField StockBarang;
     private javax.swing.JTable TabelManajemenBarang;
     private javax.swing.JTable TabelRiwayatAktivitas;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton clearForm;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
