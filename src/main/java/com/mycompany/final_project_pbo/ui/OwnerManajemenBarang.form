@@ -127,16 +127,6 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="18" style="0"/>
             </Property>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="6">
-                <StringItem index="0" value="IDBarang"/>
-                <StringItem index="1" value="Nama"/>
-                <StringItem index="2" value="Kategori"/>
-                <StringItem index="3" value="HargaBeli"/>
-                <StringItem index="4" value="HargaJual"/>
-                <StringItem index="5" value="Stock"/>
-              </StringArray>
-            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SortItemActionPerformed"/>
@@ -168,14 +158,6 @@
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tw Cen MT" size="18" style="0"/>
-            </Property>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="4">
-                <StringItem index="0" value="Tanggal&amp;Waktu"/>
-                <StringItem index="1" value="Nama"/>
-                <StringItem index="2" value="Tambah/Edit/Hapus"/>
-                <StringItem index="3" value="Jumlah"/>
-              </StringArray>
             </Property>
           </Properties>
           <Events>
@@ -226,7 +208,6 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tw Cen MT" size="18" style="0"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Search Barang"/>
           </Properties>
         </Component>
         <Container class="javax.swing.JScrollPane" name="jScrollPane3">

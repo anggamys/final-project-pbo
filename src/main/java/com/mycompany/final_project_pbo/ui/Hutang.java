@@ -12,7 +12,6 @@ import com.mycompany.final_project_pbo.services.DebtTransactionService;
 import com.mycompany.final_project_pbo.utils.Response;
 import com.mycompany.final_project_pbo.utils.SessionManager;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -575,7 +574,6 @@ public final class Hutang extends javax.swing.JPanel {
         // TODO add your handling code here:
     }// GEN-LAST:event_StatusPeminjamanActionPerformed
 
-    private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     private final User user = SessionManager.getInstance().getCurrentUser();
 
     private void SimpanPinjamanActionPerformed(java.awt.event.ActionEvent evt) {

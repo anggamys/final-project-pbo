@@ -14,6 +14,9 @@ import com.mycompany.final_project_pbo.utils.Response;
 
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -46,10 +49,12 @@ public class DebtTransactionRepository implements CrudRepository<DebtTransaction
                 if (generatedKeys.next()) {
                     entity.setId(generatedKeys.getInt(1));
 
-                    logActivityService.logAction(userId, "Saved debt transaction with ID: " + entity.getId(), MODULE_NAME, LogLevel.INFO);
+                    logActivityService.logAction(userId, "Saved debt transaction with ID: " + entity.getId(),
+                            MODULE_NAME, LogLevel.INFO);
                     return Response.success("Debt transaction saved successfully", entity);
                 } else {
-                    logActivityService.logAction(userId, "Failed to retrieve generated ID for debt transaction", MODULE_NAME, LogLevel.ERROR);
+                    logActivityService.logAction(userId, "Failed to retrieve generated ID for debt transaction",
+                            MODULE_NAME, LogLevel.ERROR);
                     return Response.failure("Failed to retrieve generated ID");
                 }
             } else {
@@ -58,7 +63,8 @@ public class DebtTransactionRepository implements CrudRepository<DebtTransaction
             }
 
         } catch (Exception e) {
-            logActivityService.logAction(userId, "Error occurred while saving debt transaction: " + e.getMessage(), MODULE_NAME, LogLevel.ERROR);
+            logActivityService.logAction(userId, "Error occurred while saving debt transaction: " + e.getMessage(),
+                    MODULE_NAME, LogLevel.ERROR);
             return Response.failure("Error occurred while saving debt transaction: " + e.getMessage());
         }
     }
@@ -82,7 +88,8 @@ public class DebtTransactionRepository implements CrudRepository<DebtTransaction
 
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
-                logActivityService.logAction(userId, "Updated debt transaction with ID: " + entity.getId(), MODULE_NAME, LogLevel.INFO);
+                logActivityService.logAction(userId, "Updated debt transaction with ID: " + entity.getId(), MODULE_NAME,
+                        LogLevel.INFO);
                 return Response.success("Debt transaction updated successfully", entity);
             } else {
                 logActivityService.logAction(userId, "Failed to update debt transaction", MODULE_NAME, LogLevel.ERROR);
@@ -90,7 +97,8 @@ public class DebtTransactionRepository implements CrudRepository<DebtTransaction
             }
 
         } catch (Exception e) {
-            logActivityService.logAction(userId, "Error occurred while updating debt transaction: " + e.getMessage(), MODULE_NAME, LogLevel.ERROR);
+            logActivityService.logAction(userId, "Error occurred while updating debt transaction: " + e.getMessage(),
+                    MODULE_NAME, LogLevel.ERROR);
             return Response.failure("Error occurred while updating debt transaction: " + e.getMessage());
         }
     }
@@ -111,7 +119,8 @@ public class DebtTransactionRepository implements CrudRepository<DebtTransaction
                 return Response.failure("Debt transaction not found");
             }
         } catch (Exception e) {
-            logActivityService.logAction(userId, "Error occurred while finding debt transaction: " + e.getMessage(), MODULE_NAME, LogLevel.ERROR);
+            logActivityService.logAction(userId, "Error occurred while finding debt transaction: " + e.getMessage(),
+                    MODULE_NAME, LogLevel.ERROR);
             return Response.failure("Error occurred while finding debt transaction: " + e.getMessage());
         }
     }
@@ -126,13 +135,15 @@ public class DebtTransactionRepository implements CrudRepository<DebtTransaction
 
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
-                logActivityService.logAction(userId, "Deleted debt transaction with ID: " + id, MODULE_NAME, LogLevel.INFO);
+                logActivityService.logAction(userId, "Deleted debt transaction with ID: " + id, MODULE_NAME,
+                        LogLevel.INFO);
                 return Response.success("Debt transaction deleted successfully", true);
             } else {
                 return Response.failure("Failed to delete debt transaction");
             }
         } catch (Exception e) {
-            logActivityService.logAction(userId, "Error occurred while deleting debt transaction: " + e.getMessage(), MODULE_NAME, LogLevel.ERROR);
+            logActivityService.logAction(userId, "Error occurred while deleting debt transaction: " + e.getMessage(),
+                    MODULE_NAME, LogLevel.ERROR);
             return Response.failure("Error occurred while deleting debt transaction: " + e.getMessage());
         }
     }
@@ -153,7 +164,9 @@ public class DebtTransactionRepository implements CrudRepository<DebtTransaction
             logActivityService.logAction(userId, "Retrieved all debt transactions", MODULE_NAME, LogLevel.INFO);
             return Response.success("All debt transactions retrieved successfully", transactions);
         } catch (Exception e) {
-            logActivityService.logAction(userId, "Error occurred while retrieving all debt transactions: " + e.getMessage(), MODULE_NAME, LogLevel.ERROR);
+            logActivityService.logAction(userId,
+                    "Error occurred while retrieving all debt transactions: " + e.getMessage(), MODULE_NAME,
+                    LogLevel.ERROR);
             return Response.failure("Error occurred while retrieving all debt transactions: " + e.getMessage());
         }
     }

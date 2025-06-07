@@ -60,7 +60,8 @@ public class DebtTransactionService {
 
         // Logging aktivitas jika perlu
         if (response.isSuccess()) {
-            logActivityService.logAction(userId, "Update debt transaction with ID: " + entity.getId(), MODULE_NAME, LogLevel.INFO);
+            logActivityService.logAction(userId, "Update debt transaction with ID: " + entity.getId(), MODULE_NAME,
+                    LogLevel.INFO);
         }
 
         return response;

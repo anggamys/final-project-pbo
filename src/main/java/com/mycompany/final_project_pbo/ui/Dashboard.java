@@ -7,9 +7,7 @@ package com.mycompany.final_project_pbo.ui;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 
-import com.mycompany.final_project_pbo.models.User;
 import com.mycompany.final_project_pbo.utils.SessionManager;
 
 /**
@@ -24,7 +22,6 @@ public class Dashboard extends javax.swing.JFrame {
      */
     public Dashboard() {
         initComponents();
-        User user = SessionManager.getInstance().getCurrentUser();
 
         PanelFitur.add(new ManajemenBarang());
         PanelFitur.repaint();
