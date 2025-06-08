@@ -24,15 +24,16 @@ public class ProductRepository implements CrudRepository<Product> {
 
     @Override
     public Response<Product> save(Product entity, Integer userId) {
-        String query = "INSERT INTO products (name, barcode, category_id, price, stock) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO products (name, barcode, category_id, purchase_price, selling_price, stock) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseUtil.getConnection()) {
             var preparedStatement = conn.prepareStatement(query, java.sql.Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, entity.getName());
             preparedStatement.setString(2, entity.getBarcode());
             preparedStatement.setInt(3, entity.getCategoryId());
-            preparedStatement.setDouble(4, entity.getPrice());
-            preparedStatement.setInt(5, entity.getStock());
+            preparedStatement.setDouble(4, entity.getPurchasePrice());
+            preparedStatement.setDouble(5, entity.getSellingPrice());
+            preparedStatement.setInt(6, entity.getStock());
 
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
@@ -40,10 +41,12 @@ public class ProductRepository implements CrudRepository<Product> {
                 if (generatedKeys.next()) {
                     entity.setId(generatedKeys.getInt(1));
 
-                    logActivityService.logAction(userId, "Saved product with ID: " + entity.getId(), MODULE_NAME, LogLevel.INFO);
+                    logActivityService.logAction(userId, "Saved product with ID: " + entity.getId(), MODULE_NAME,
+                            LogLevel.INFO);
                     return Response.success("Product saved successfully", entity);
                 } else {
-                    logActivityService.logAction(userId, "Failed to retrieve generated ID for product", MODULE_NAME, LogLevel.ERROR);
+                    logActivityService.logAction(userId, "Failed to retrieve generated ID for product", MODULE_NAME,
+                            LogLevel.ERROR);
                     return Response.failure("Failed to retrieve generated key");
                 }
             } else {
@@ -58,20 +61,22 @@ public class ProductRepository implements CrudRepository<Product> {
 
     @Override
     public Response<Product> update(Product entity, Integer userId) {
-        String query = "UPDATE products SET name = ?, barcode = ?, category_id = ?, price = ?, stock = ? WHERE product_id = ?";
+        String query = "UPDATE products SET name = ?, barcode = ?, category_id = ?, purchase_price = ?, selling_price = ?, stock = ? WHERE product_id = ?";
 
         try (Connection conn = DatabaseUtil.getConnection()) {
             var preparedStatement = conn.prepareStatement(query);
             preparedStatement.setString(1, entity.getName());
             preparedStatement.setString(2, entity.getBarcode());
             preparedStatement.setInt(3, entity.getCategoryId());
-            preparedStatement.setDouble(4, entity.getPrice());
-            preparedStatement.setInt(5, entity.getStock());
-            preparedStatement.setInt(6, entity.getId());
+            preparedStatement.setDouble(4, entity.getPurchasePrice());
+            preparedStatement.setDouble(5, entity.getSellingPrice());
+            preparedStatement.setInt(6, entity.getStock());
+            preparedStatement.setInt(7, entity.getId());
 
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
-                logActivityService.logAction(userId, "Updated product with ID: " + entity.getId(), MODULE_NAME, LogLevel.INFO);
+                logActivityService.logAction(userId, "Updated product with ID: " + entity.getId(), MODULE_NAME,
+                        LogLevel.INFO);
                 return Response.success("Product updated successfully", entity);
             } else {
                 logActivityService.logAction(userId, "Failed to update product", MODULE_NAME, LogLevel.ERROR);
@@ -98,10 +103,12 @@ public class ProductRepository implements CrudRepository<Product> {
                 product.setName(resultSet.getString("name"));
                 product.setBarcode(resultSet.getString("barcode"));
                 product.setCategoryId(resultSet.getInt("category_id"));
-                product.setPrice(resultSet.getDouble("price"));
+                product.setPurchasePrice(resultSet.getDouble("purchase_price"));
+                product.setSellingPrice(resultSet.getDouble("selling_price"));
                 product.setStock(resultSet.getInt("stock"));
 
-                logActivityService.logAction(userId, "Found product with ID: " + product.getId(), MODULE_NAME, LogLevel.INFO);
+                logActivityService.logAction(userId, "Found product with ID: " + product.getId(), MODULE_NAME,
+                        LogLevel.INFO);
                 return Response.success("Product found", product);
             } else {
                 logActivityService.logAction(userId, "Product not found", MODULE_NAME, LogLevel.WARNING);
@@ -149,7 +156,8 @@ public class ProductRepository implements CrudRepository<Product> {
                 product.setName(resultSet.getString("name"));
                 product.setBarcode(resultSet.getString("barcode"));
                 product.setCategoryId(resultSet.getInt("category_id"));
-                product.setPrice(resultSet.getDouble("price"));
+                product.setPurchasePrice(resultSet.getDouble("purchase_price"));
+                product.setSellingPrice(resultSet.getDouble("selling_price"));
                 product.setStock(resultSet.getInt("stock"));
                 products.add(product);
             }
@@ -177,7 +185,8 @@ public class ProductRepository implements CrudRepository<Product> {
                 product.setName(resultSet.getString("name"));
                 product.setBarcode(resultSet.getString("barcode"));
                 product.setCategoryId(resultSet.getInt("category_id"));
-                product.setPrice(resultSet.getDouble("price"));
+                product.setPurchasePrice(resultSet.getDouble("purchase_price"));
+                product.setSellingPrice(resultSet.getDouble("selling_price"));
                 product.setStock(resultSet.getInt("stock"));
                 products.add(product);
             }
@@ -205,7 +214,8 @@ public class ProductRepository implements CrudRepository<Product> {
                 product.setName(resultSet.getString("name"));
                 product.setBarcode(resultSet.getString("barcode"));
                 product.setCategoryId(resultSet.getInt("category_id"));
-                product.setPrice(resultSet.getDouble("price"));
+                product.setPurchasePrice(resultSet.getDouble("purchase_price"));
+                product.setSellingPrice(resultSet.getDouble("selling_price"));
                 product.setStock(resultSet.getInt("stock"));
                 products.add(product);
             }

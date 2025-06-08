@@ -670,7 +670,8 @@ public class ManajemenBarang extends javax.swing.JPanel {
                         product.setName(NamaBarang.getText());
                         // product.setBarcode(BarcodeBarang.getText());
                         product.setCategoryId(categoryResponse.getData().get(0).getId());
-                        product.setPrice(Double.parseDouble(HargaBeliBarang.getText()));
+                        product.setPurchasePrice(Double.parseDouble(HargaBeliBarang.getText()));
+                        product.setSellingPrice(Double.parseDouble(HargaJualBarang.getText()));
                         product.setStock(Integer.parseInt(StockBarang.getText()));
 
                         Response<Product> response = productRepository.update(product, currentUser.getId());
@@ -707,7 +708,8 @@ public class ManajemenBarang extends javax.swing.JPanel {
                         product.setName(NamaBarang.getText());
                         // product.setBarcode(BarcodeBarang.getText());
                         product.setCategoryId(categoryResponse.getData().get(0).getId());
-                        product.setPrice(Double.parseDouble(HargaBeliBarang.getText()));
+                        product.setPurchasePrice(Double.parseDouble(HargaBeliBarang.getText()));
+                        product.setSellingPrice(Double.parseDouble(HargaJualBarang.getText()));
                         product.setStock(Integer.parseInt(StockBarang.getText()));
 
                         Response<Product> response = productRepository.save(product, currentUser.getId());
@@ -793,7 +795,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
                 String selectedSort = (String) SortItem.getSelectedItem();
                 if (selectedSort != null) {
                         switch (selectedSort) {
-                                case "Harga" -> products.sort(Comparator.comparing(Product::getPrice));
+                                case "Harga" -> products.sort(Comparator.comparing(Product::getSellingPrice));
                                 case "Stock" -> products.sort(Comparator.comparing(Product::getStock));
                                 default -> products.sort(Comparator.comparing(Product::getName));
                         }
@@ -810,7 +812,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
         }
 
         private void populateProductTable(List<Product> products) {
-                String[] kolom = { "Id", "Nama Barang", "Barcode", "Kategori", "Harga", "Stock" };
+                String[] kolom = { "Id", "Nama Barang", "Barcode", "Kategori", "Harga Beli", "Harga Jual", "Stock" };
                 DefaultTableModel model = new DefaultTableModel(kolom, 0) {
                         @Override
                         public boolean isCellEditable(int row, int column) {
@@ -824,7 +826,8 @@ public class ManajemenBarang extends javax.swing.JPanel {
                                         p.getName(),
                                         p.getBarcode(),
                                         categoryMap.getOrDefault(p.getCategoryId(), "Kategori Tidak Dikenal"),
-                                        p.getPrice(),
+                                        p.getPurchasePrice(),
+                                        p.getSellingPrice(),
                                         p.getStock()
                         });
                 }

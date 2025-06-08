@@ -525,7 +525,7 @@ public class PanelManajemenBarang extends javax.swing.JPanel {
             product.setName("");
             product.setBarcode("");
             product.setCategoryId(null);
-            product.setPrice(null);
+                
             product.setStock(null);
 
             Response<Product> response = productRepository.save(product, currentUser.getId());
@@ -554,7 +554,6 @@ public class PanelManajemenBarang extends javax.swing.JPanel {
             product.setName("");
             product.setBarcode("");
             product.setCategoryId(null);
-            product.setPrice(null);
             product.setStock(null);
 
             Response<Product> response = productRepository.update(product, currentUser.getId());

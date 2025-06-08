@@ -378,13 +378,14 @@ public class OwnerManajemenBarang extends javax.swing.JPanel {
         String selectedSort = (String) SortItem.getSelectedItem();
         if (selectedSort != null && !selectedSort.isEmpty()) {
             filtered.sort(switch (selectedSort) {
-                case "Harga" -> Comparator.comparing(Product::getPrice);
+                case "Harga Beli" -> Comparator.comparing(Product::getPurchasePrice);
+                case "Harga Jual" -> Comparator.comparing(Product::getSellingPrice);
                 case "Stock" -> Comparator.comparing(Product::getStock);
                 default -> Comparator.comparing(Product::getName);
             });
         }
 
-        String[] kolom = { "Id", "Nama Barang", "Barcode", "Kategori", "Harga", "Stock" };
+        String[] kolom = { "Id", "Nama Barang", "Barcode", "Kategori", "Harga Beli", "Harga Jual", "Stock" };
         DefaultTableModel model = new DefaultTableModel(kolom, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -398,7 +399,8 @@ public class OwnerManajemenBarang extends javax.swing.JPanel {
                     p.getName(),
                     p.getBarcode(),
                     categoryMap.getOrDefault(p.getCategoryId(), "Kategori Tidak Dikenal"),
-                    p.getPrice(),
+                    p.getPurchasePrice(),
+                    p.getSellingPrice(),
                     p.getStock()
             });
         }

@@ -13,20 +13,23 @@ public class Product extends BaseEntity {
     private String name;
     private String barcode;
     private Integer categoryId;
-    private Double price;
+    private Double purchasePrice;
+    private Double sellingPrice;
     private Integer stock;
 
     public Product() {
         super();
     }
 
-    public Product(Integer id, String name, String barcode, Integer categoryId, Double price, Integer stock) {
+    public Product(Integer id, String name, String barcode, Integer categoryId, Double purchasePrice, Double sellingPrice,
+            Integer stock) {
         super();
         this.id = id;
         this.name = name;
         this.barcode = barcode;
         this.categoryId = categoryId;
-        this.price = price;
+        this.purchasePrice = purchasePrice;
+        this.sellingPrice = sellingPrice;
         this.stock = stock;
     }
 
@@ -55,12 +58,20 @@ public class Product extends BaseEntity {
         this.categoryId = categoryId;
     }
 
-    public Double getPrice() {
-        return price;
+    public Double getPurchasePrice() {
+        return purchasePrice;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setPurchasePrice(Double purchasePrice) {
+        this.purchasePrice = purchasePrice;
+    }
+
+    public Double getSellingPrice() {
+        return sellingPrice;
+    }
+
+    public void setSellingPrice(Double sellingPrice) {
+        this.sellingPrice = sellingPrice;
     }
 
     public Integer getStock() {
@@ -78,7 +89,8 @@ public class Product extends BaseEntity {
                 ", name='" + name + '\'' +
                 ", barcode='" + barcode + '\'' +
                 ", categoryId=" + categoryId +
-                ", price=" + price +
+                ", purchasePrice=" + purchasePrice +
+                ", sellingPrice=" + sellingPrice +
                 ", stock=" + stock +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
