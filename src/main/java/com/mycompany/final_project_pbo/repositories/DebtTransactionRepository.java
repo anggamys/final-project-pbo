@@ -14,9 +14,8 @@ import com.mycompany.final_project_pbo.utils.Response;
 
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
@@ -32,7 +31,7 @@ public class DebtTransactionRepository implements CrudRepository<DebtTransaction
         String query = "INSERT INTO debt_transactions (debtor_name, address, phone_number, loan_date, due_date, amount, status, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseUtil.getConnection()) {
-            var preparedStatement = conn.prepareStatement(query, java.sql.Statement.RETURN_GENERATED_KEYS);
+            var preparedStatement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
             preparedStatement.setString(1, entity.getDebtorName());
             preparedStatement.setString(2, entity.getAddress());
@@ -171,7 +170,27 @@ public class DebtTransactionRepository implements CrudRepository<DebtTransaction
         }
     }
 
-    private DebtTransaction extractTransaction(java.sql.ResultSet resultSet) throws Exception {
+    public Response<Boolean> deleteAll(Integer userId) {
+        String query = "DELETE FROM debt_transactions";
+
+        try (Connection conn = DatabaseUtil.getConnection()) {
+            var preparedStatement = conn.prepareStatement(query);
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                logActivityService.logAction(userId, "Deleted all debt transactions", MODULE_NAME, LogLevel.INFO);
+                return Response.success("All debt transactions deleted successfully", true);
+            } else {
+                return Response.failure("Failed to delete all debt transactions");
+            }
+        } catch (Exception e) {
+            logActivityService.logAction(userId, "Error occurred while deleting all debt transactions: " + e.getMessage(),
+                    MODULE_NAME, LogLevel.ERROR);
+            return Response.failure("Error occurred while deleting all debt transactions: " + e.getMessage());
+        }
+    }
+
+    private DebtTransaction extractTransaction(ResultSet resultSet) throws Exception {
         DebtTransaction transaction = new DebtTransaction();
         transaction.setId(resultSet.getInt("transaction_id"));
         transaction.setDebtorName(resultSet.getString("debtor_name"));

@@ -227,4 +227,23 @@ public class ProductRepository implements CrudRepository<Product> {
             return Response.failure("Error searching products by name: " + e.getMessage());
         }
     }
+
+    public Response<Boolean> deleteAll(Integer userId) {
+        String query = "DELETE FROM products";
+
+        try (Connection conn = DatabaseUtil.getConnection()) {
+            var preparedStatement = conn.prepareStatement(query);
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                logActivityService.logAction(userId, "Deleted all products", MODULE_NAME, LogLevel.INFO);
+                return Response.success("All products deleted successfully", true);
+            } else {
+                return Response.failure("Failed to delete products");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.failure("Error deleting all products: " + e.getMessage());
+        }
+    }
 }

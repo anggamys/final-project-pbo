@@ -183,4 +183,23 @@ public class UserRepository implements CrudRepository<User> {
             return Response.failure("Error finding user: " + e.getMessage());
         }
     }
+
+    public Response<Boolean> deleteAll(Integer userId) {
+        String query = "DELETE FROM users";
+
+        try (Connection conn = DatabaseUtil.getConnection()) {
+            var preparedStatement = conn.prepareStatement(query);
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                logActivityService.logAction(userId, "Deleted all users", MODULE_NAME, LogLevel.INFO);
+                return Response.success("All users deleted successfully", true);
+            } else {
+                logActivityService.logAction(userId, "Failed to delete all users", MODULE_NAME, LogLevel.ERROR);
+                return Response.failure("Failed to delete all users");
+            }
+        } catch (Exception e) {
+            logActivityService.logAction(userId, "Error deleting all users: " + e.getMessage(), MODULE_NAME, LogLevel.ERROR);
+            return Response.failure("Error deleting all users: " + e.getMessage());
+        }
+    }
 }

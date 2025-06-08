@@ -209,4 +209,31 @@ public class StockTransactionRepository implements CrudRepository<StockTransacti
         }
     }
 
+    public Response<Boolean> deleteAll(Integer userId) {
+        String query = "DELETE FROM stock_transactions";
+
+        try (Connection conn = DatabaseUtil.getConnection()) {
+            var preparedStatement = conn.prepareStatement(query);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                logActivityService.logAction(userId, "Deleted all StockTransactions",
+                        MODULE_NAME,
+                        LogLevel.INFO);
+                return Response.success("All transactions deleted successfully", true);
+            } else {
+                logActivityService.logAction(userId, "Failed to delete all StockTransactions",
+                        MODULE_NAME,
+                        LogLevel.ERROR);
+                return Response.failure("Failed to delete all transactions");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            logActivityService.logAction(userId, "Error deleting all StockTransactions: " + e.getMessage(),
+                    MODULE_NAME,
+                    LogLevel.ERROR);
+            return Response.failure("Error deleting all transactions: " + e.getMessage());
+        }
+    }
 }

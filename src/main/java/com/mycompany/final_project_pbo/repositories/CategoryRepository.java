@@ -187,4 +187,24 @@ public class CategoryRepository implements CrudRepository<Category> {
             return Response.failure("Error occurred while finding categories by name: " + e.getMessage());
         }
     }
+
+    public Response<Boolean> deleteAll(Integer userId) {
+        String query = "DELETE FROM categories";
+
+        try (Connection conn = DatabaseUtil.getConnection()) {
+            var preparedStatement = conn.prepareStatement(query);
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                logActivityService.logAction(userId, "Deleted all categories", MODULE_NAME, LogLevel.INFO);
+                return Response.success("All categories deleted successfully", true);
+            } else {
+                logActivityService.logAction(userId, "No categories to delete", MODULE_NAME, LogLevel.WARNING);
+                return Response.failure("No categories to delete");
+            }
+        } catch (Exception e) {
+            logActivityService.logAction(userId, "Error occurred while deleting all categories: " + e.getMessage(),
+                    MODULE_NAME, LogLevel.ERROR);
+            return Response.failure("Error occurred while deleting all categories: " + e.getMessage());
+        }
+    }
 }

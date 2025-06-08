@@ -10,16 +10,17 @@ import com.mycompany.final_project_pbo.models.Product;
 import com.mycompany.final_project_pbo.models.StockTransaction;
 import com.mycompany.final_project_pbo.models.TransactionType;
 import com.mycompany.final_project_pbo.models.User;
+import com.mycompany.final_project_pbo.models.LoanStatus;
 import com.mycompany.final_project_pbo.repositories.CategoryRepository;
 import com.mycompany.final_project_pbo.repositories.DebtTransactionRepository;
 import com.mycompany.final_project_pbo.repositories.ProductRepository;
 import com.mycompany.final_project_pbo.repositories.StockTransactionRepository;
 import com.mycompany.final_project_pbo.repositories.UserRepository;
 import com.mycompany.final_project_pbo.services.AuthenticationService;
+import com.mycompany.final_project_pbo.services.DebtTransactionService;
 import com.mycompany.final_project_pbo.services.StockTransactionService;
 import com.mycompany.final_project_pbo.ui.Login;
 import com.mycompany.final_project_pbo.utils.Response;
-import com.mycompany.final_project_pbo.models.LoanStatus;
 
 import java.util.ArrayList;
 
@@ -31,7 +32,7 @@ public class Final_project_pbo {
 
     public static void main(String[] args) {
         // launchProgram();
-        runTests();
+        // runTests();
         // seedDatabase();
     }
 
@@ -47,10 +48,12 @@ public class Final_project_pbo {
         // testCategoryEntity();
         // testProductEntity();
         // testDebtTransactionEntity();
-        testStockTransactionEntity();
+        // testStockTransactionEntity();
     }
 
     private static void seedDatabase() {
+        clearDatabase(); // Clear existing data before seeding
+
         User user = new User();
         User user2 = new User();
         User user3 = new User();
@@ -69,7 +72,7 @@ public class Final_project_pbo {
         UserRepository userRepository = new UserRepository();
         CategoryRepository categoryRepository = new CategoryRepository();
         ProductRepository productRepository = new ProductRepository();
-        DebtTransactionRepository debtTransactionRepository = new DebtTransactionRepository();
+        DebtTransactionService debtTransactionService = new DebtTransactionService();
 
         // Create a user
         user.setUsername("Owner");
@@ -192,7 +195,7 @@ public class Final_project_pbo {
         debtTransaction.setStatus(LoanStatus.BELUM_LUNAS);
         debtTransaction.setCreatedBy(userResponse.getData().getId());
 
-        Response<DebtTransaction> debtTransactionResponse = debtTransactionRepository.save(debtTransaction, null);
+        Response<DebtTransaction> debtTransactionResponse = debtTransactionService.save(debtTransaction, null);
         if (debtTransactionResponse.isSuccess()) {
             System.out.println("Debt transaction created: " + debtTransactionResponse.getData());
         } else {
@@ -208,7 +211,7 @@ public class Final_project_pbo {
         debtTransaction2.setStatus(LoanStatus.LUNAS);
         debtTransaction2.setCreatedBy(userResponse.getData().getId());
 
-        Response<DebtTransaction> debtTransaction2Response = debtTransactionRepository.save(debtTransaction2, null);
+        Response<DebtTransaction> debtTransaction2Response = debtTransactionService.save(debtTransaction2, null);
         if (debtTransaction2Response.isSuccess()) {
             System.out.println("Debt transaction created: " + debtTransaction2Response.getData());
         } else {
@@ -224,13 +227,30 @@ public class Final_project_pbo {
         debtTransaction3.setStatus(LoanStatus.TERLAMBAT);
         debtTransaction3.setCreatedBy(userResponse.getData().getId());
 
-        Response<DebtTransaction> debtTransaction3Response = debtTransactionRepository.save(debtTransaction3, null);
+        Response<DebtTransaction> debtTransaction3Response = debtTransactionService.save(debtTransaction3, null);
         if (debtTransaction3Response.isSuccess()) {
             System.out.println("Debt transaction created: " + debtTransaction3Response.getData());
         } else {
             System.out.println("Failed to create debt transaction: " + debtTransaction3Response.getMessage());
             return; // Exit if debt transaction creation fails
         }
+    }
+
+    private static void clearDatabase() {
+        UserRepository userRepository = new UserRepository();
+        CategoryRepository categoryRepository = new CategoryRepository();
+        ProductRepository productRepository = new ProductRepository();
+        DebtTransactionRepository debtTransactionRepository = new DebtTransactionRepository();
+        StockTransactionRepository stockTransactionRepository = new StockTransactionRepository();
+
+        // Clear all entities
+        stockTransactionRepository.deleteAll(null);
+        debtTransactionRepository.deleteAll(null);
+        productRepository.deleteAll(null);
+        categoryRepository.deleteAll(null);
+        userRepository.deleteAll(null);
+
+        System.out.println("Database cleared successfully.");
     }
 
     private static void testUserEntity() {
