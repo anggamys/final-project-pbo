@@ -31,7 +31,7 @@ import java.util.ArrayList;
 public class Final_project_pbo {
 
     public static void main(String[] args) {
-        // launchProgram();
+        launchProgram();
         // runTests();
         // seedDatabase();
     }
