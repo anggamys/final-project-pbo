@@ -19,18 +19,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.Comparator;
 import java.util.HashMap;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.KeyAdapter;
 
 /**
@@ -94,6 +88,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
         HargaJualBarang = new javax.swing.JTextField();
         ButtonScanBarang = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
+        HargaBeliBarang1 = new javax.swing.JTextField();
 
         setLayout(new java.awt.CardLayout());
 
@@ -110,34 +105,34 @@ public class ManajemenBarang extends javax.swing.JPanel {
 
         TabelManajemenBarang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "IDBarang", "Nama", "Kategori", "Harga", "Stock"
+                "IDBarang", "Nama", "Barcode", "Kategori", "HargaBeli", "HargaJual", "Stok"
             }
         ));
         jScrollPane1.setViewportView(TabelManajemenBarang);
@@ -328,7 +323,14 @@ public class ManajemenBarang extends javax.swing.JPanel {
         ButtonScanBarang.setText("Scan Barang");
 
         jLabel12.setFont(new java.awt.Font("Tw Cen MT", 0, 24)); // NOI18N
-        jLabel12.setText("jLabel12");
+        jLabel12.setText("Barcode:");
+
+        HargaBeliBarang1.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        HargaBeliBarang1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                HargaBeliBarang1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -369,12 +371,14 @@ public class ManajemenBarang extends javax.swing.JPanel {
                                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                     .addComponent(jLabel3)
                                                     .addComponent(jLabel5)
-                                                    .addComponent(jLabel6))
+                                                    .addComponent(jLabel6)
+                                                    .addComponent(jLabel12))
                                                 .addGap(175, 175, 175)
                                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                     .addComponent(HargaBeliBarang)
                                                     .addComponent(IDBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(KategoriBarang, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                                    .addComponent(KategoriBarang, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(HargaBeliBarang1)))
                                             .addGroup(jPanel1Layout.createSequentialGroup()
                                                 .addComponent(ButtonTambahBarang)
                                                 .addGap(10, 10, 10)
@@ -387,8 +391,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel4)
                                             .addComponent(jLabel11)
-                                            .addComponent(jLabel7)
-                                            .addComponent(jLabel12))))
+                                            .addComponent(jLabel7))))
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGap(264, 264, 264)
@@ -441,13 +444,16 @@ public class ManajemenBarang extends javax.swing.JPanel {
                             .addComponent(HargaBeliBarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel7)
                             .addComponent(StockBarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(25, 25, 25)
+                        .addGap(13, 13, 13)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(HargaBeliBarang1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel12))
+                        .addGap(67, 67, 67)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(ButtonTambahBarang)
                             .addComponent(ButtonEditBarang)
                             .addComponent(ButtonHapusBarang)
-                            .addComponent(clearForm)
-                            .addComponent(jLabel12))
+                            .addComponent(clearForm))
                         .addGap(25, 25, 25)
                         .addComponent(jLabel8)
                         .addGap(25, 25, 25)
@@ -462,6 +468,10 @@ public class ManajemenBarang extends javax.swing.JPanel {
 
         add(jPanel1, "card2");
     }// </editor-fold>//GEN-END:initComponents
+
+    private void HargaBeliBarang1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HargaBeliBarang1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_HargaBeliBarang1ActionPerformed
 
         private void clearFormMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_clearFormMouseClicked
                 // clearForm();
@@ -851,6 +861,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
     private javax.swing.JButton ButtonScanBarang;
     private javax.swing.JButton ButtonTambahBarang;
     private javax.swing.JTextField HargaBeliBarang;
+    private javax.swing.JTextField HargaBeliBarang1;
     private javax.swing.JTextField HargaJualBarang;
     private javax.swing.JTextField IDBarang;
     private javax.swing.JComboBox<String> KategoriBarang;

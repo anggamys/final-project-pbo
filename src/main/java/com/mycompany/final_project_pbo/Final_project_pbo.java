@@ -72,7 +72,9 @@ public class Final_project_pbo {
         UserRepository userRepository = new UserRepository();
         CategoryRepository categoryRepository = new CategoryRepository();
         ProductRepository productRepository = new ProductRepository();
+
         DebtTransactionService debtTransactionService = new DebtTransactionService();
+        StockTransactionService stockTransactionService = new StockTransactionService();
 
         // Create a user
         user.setUsername("Owner");
@@ -145,7 +147,7 @@ public class Final_project_pbo {
         product.setCategoryId(categoryResponse.getData().getId());
         product.setPurchasePrice(40000.0);
         product.setSellingPrice(50000.0);
-        product.setStock(50);
+        product.setStock(0);
 
         Response<Product> productResponse = productRepository.save(product, null);
         if (productResponse.isSuccess()) {
@@ -161,7 +163,7 @@ public class Final_project_pbo {
         product2.setCategoryId(category2Response.getData().getId());
         product2.setPurchasePrice(10000.0);
         product2.setSellingPrice(15000.0);
-        product2.setStock(100);
+        product2.setStock(0);
 
         Response<Product> product2Response = productRepository.save(product2, null);
         if (product2Response.isSuccess()) {
@@ -177,7 +179,7 @@ public class Final_project_pbo {
         product3.setCategoryId(categoryResponse.getData().getId());
         product3.setPurchasePrice(20000.0);
         product3.setSellingPrice(25000.0);
-        product3.setStock(30);
+        product3.setStock(0);
 
         Response<Product> product3Response = productRepository.save(product3, null);
         if (product3Response.isSuccess()) {
@@ -233,6 +235,51 @@ public class Final_project_pbo {
         } else {
             System.out.println("Failed to create debt transaction: " + debtTransaction3Response.getMessage());
             return; // Exit if debt transaction creation fails
+        }
+
+        // Create a stock transaction for the first product
+        stockTransaction.setQuantity(20);
+        stockTransaction.setTransactionType(TransactionType.IN);
+        stockTransaction.setDescription("Initial stock addition for Beras");
+        stockTransaction.setUserId(userResponse.getData().getId());
+
+        Response<StockTransaction> stockTransactionResponse = stockTransactionService
+                .createTransaction(stockTransaction, productResponse.getData().getBarcode(), null);
+        if (stockTransactionResponse.isSuccess()) {
+            System.out.println("Stock transaction created: " + stockTransactionResponse.getData());
+        } else {
+            System.out.println("Failed to create stock transaction: " + stockTransactionResponse.getMessage());
+            return;
+        }
+
+        // Create a stock transaction for the second product
+        stockTransaction2.setQuantity(15);
+        stockTransaction2.setTransactionType(TransactionType.OUT);
+        stockTransaction2.setDescription("Stock deduction for Beras");
+        stockTransaction2.setUserId(userResponse.getData().getId());
+
+        Response<StockTransaction> stockTransaction2Response = stockTransactionService
+                .createTransaction(stockTransaction2, productResponse.getData().getBarcode(), null);
+        if (stockTransaction2Response.isSuccess()) {
+            System.out.println("Stock transaction created: " + stockTransaction2Response.getData());
+        } else {
+            System.out.println("Failed to create stock transaction: " + stockTransaction2Response.getMessage());
+            return;
+        }
+
+        // Create a stock transaction for the third product
+        stockTransaction3.setQuantity(10);
+        stockTransaction3.setTransactionType(TransactionType.IN);
+        stockTransaction3.setDescription("Initial stock addition for Telur");
+        stockTransaction3.setUserId(userResponse.getData().getId());
+
+        Response<StockTransaction> stockTransaction3Response = stockTransactionService
+                .createTransaction(stockTransaction3, product3Response.getData().getBarcode(), null);
+        if (stockTransaction3Response.isSuccess()) {
+            System.out.println("Stock transaction created: " + stockTransaction3Response.getData());
+        } else {
+            System.out.println("Failed to create stock transaction: " + stockTransaction3Response.getMessage());
+            return;
         }
     }
 
@@ -591,7 +638,7 @@ public class Final_project_pbo {
         // Create a category
         category.setName("Example Category");
         category.setDescription("This is an example category for stock transactions.");
-        
+
         Response<Category> categoryResponse = categoryRepository.save(category, null);
         if (categoryResponse.isSuccess()) {
             System.out.println("Category created: " + categoryResponse.getData());
@@ -622,7 +669,8 @@ public class Final_project_pbo {
         stockTransaction.setDescription("Initial stock addition");
         stockTransaction.setUserId(userResponse.getData().getId());
 
-        Response<StockTransaction> stockTransactionResponse = stockTransactionService.createTransaction(stockTransaction, productResponse.getData().getBarcode(), null);
+        Response<StockTransaction> stockTransactionResponse = stockTransactionService
+                .createTransaction(stockTransaction, productResponse.getData().getBarcode(), null);
         if (stockTransactionResponse.isSuccess()) {
             System.out.println("Stock transaction created: " + stockTransactionResponse.getData());
         } else {
@@ -636,7 +684,8 @@ public class Final_project_pbo {
             StockTransaction foundTransaction = stockTransactionFindByIdResponse.getData();
             System.out.println("Stock transaction found by ID: " + foundTransaction);
         } else {
-            System.out.println("Failed to find stock transaction by ID: " + stockTransactionFindByIdResponse.getMessage());
+            System.out.println(
+                    "Failed to find stock transaction by ID: " + stockTransactionFindByIdResponse.getMessage());
         }
 
         // Retrieve all stock transactions
@@ -649,7 +698,8 @@ public class Final_project_pbo {
                 System.out.println(st);
             }
         } else {
-            System.out.println("Failed to retrieve all stock transactions: " + allStockTransactionsResponse.getMessage());
+            System.out
+                    .println("Failed to retrieve all stock transactions: " + allStockTransactionsResponse.getMessage());
         }
 
         // Delete the stock transaction
@@ -670,7 +720,8 @@ public class Final_project_pbo {
         }
 
         // Delete the category
-        Response<Boolean> categoryDeleteResponse = categoryRepository.deleteById(categoryResponse.getData().getId(), null);
+        Response<Boolean> categoryDeleteResponse = categoryRepository.deleteById(categoryResponse.getData().getId(),
+                null);
         if (categoryDeleteResponse.isSuccess()) {
             System.out.println("Category deleted successfully");
         } else {
