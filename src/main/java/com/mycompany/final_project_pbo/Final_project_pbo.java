@@ -33,7 +33,7 @@ public class Final_project_pbo {
     public static void main(String[] args) {
         launchProgram();
         // runTests();
-        // seedDatabase();
+//         seedDatabase();
     }
 
     private static void launchProgram() {
