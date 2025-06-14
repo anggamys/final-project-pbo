@@ -98,6 +98,7 @@
                                               <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                                               <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
                                               <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                   </Group>
@@ -182,6 +183,7 @@
                               <Component id="ButtonEditBarang" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="ButtonHapusBarang" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="clearForm" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel12" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                           <Component id="jLabel8" min="-2" max="-2" attributes="0"/>

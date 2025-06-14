@@ -14,6 +14,7 @@ import com.mycompany.final_project_pbo.utils.Response;
 
 import java.sql.Connection;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -234,6 +235,41 @@ public class StockTransactionRepository implements CrudRepository<StockTransacti
                     MODULE_NAME,
                     LogLevel.ERROR);
             return Response.failure("Error deleting all transactions: " + e.getMessage());
+        }
+    }
+
+    public Response<ArrayList<StockTransaction>> findByTrasactionDate(LocalDate date, Integer userId) {
+        String query = "SELECT * FROM stock_transactions WHERE DATE(transaction_date) = ?";
+
+        try (Connection conn = DatabaseUtil.getConnection()) {
+            var preparedStatement = conn.prepareStatement(query);
+            preparedStatement.setDate(1, java.sql.Date.valueOf(date));
+
+            var resultSet = preparedStatement.executeQuery();
+            ArrayList<StockTransaction> transactions = new ArrayList<>();
+            while (resultSet.next()) {
+                StockTransaction transaction = new StockTransaction();
+                transaction.setId(resultSet.getInt("transaction_id"));
+                transaction.setProductId(resultSet.getInt("product_id"));
+                transaction.setQuantity(resultSet.getInt("quantity"));
+                transaction.setTransactionType(TransactionType.valueOf(resultSet.getString("transaction_type")));
+                transaction.setDescription(resultSet.getString("reference_note"));
+                transaction.setUserId(resultSet.getInt("performed_by"));
+                transaction.setCreatedAt(resultSet.getTimestamp("transaction_date"));
+
+                transactions.add(transaction);
+            }
+
+            logActivityService.logAction(userId, "Found " + transactions.size() + " StockTransactions for date: " + date,
+                    MODULE_NAME,
+                    LogLevel.INFO);
+            return Response.success("Transactions found for date: " + date, transactions);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logActivityService.logAction(userId, "Error finding StockTransactions by date: " + e.getMessage(),
+                    MODULE_NAME,
+                    LogLevel.ERROR);
+            return Response.failure("Error finding transactions by date: " + e.getMessage());
         }
     }
 }

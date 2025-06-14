@@ -87,7 +87,7 @@
                               <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="jLabel8" pref="139" max="32767" attributes="0"/>
+                          <Component id="jLabel8" pref="138" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -110,9 +110,9 @@
                       <Component id="utangPiutangPage" min="-2" pref="29" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                       <Component id="scanBarangPage" min="-2" pref="29" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="695" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="693" max="-2" attributes="0"/>
                       <Component id="ButtonLogOut" min="-2" pref="29" max="-2" attributes="0"/>
-                      <EmptySpace pref="27" max="32767" attributes="0"/>
+                      <EmptySpace pref="20" max="32767" attributes="0"/>
                       <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
@@ -147,7 +147,7 @@
             <Component class="javax.swing.JLabel" name="jLabel8">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Segoe UI" size="12" style="1"/>
+                  <Font name="Tw Cen MT" size="14" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Toserba Berkah Abadi "/>
               </Properties>
@@ -155,7 +155,7 @@
             <Component class="javax.swing.JLabel" name="jLabel9">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Segoe UI" size="12" style="1"/>
+                  <Font name="Tw Cen MT" size="14" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Sistem POS"/>
               </Properties>
