@@ -5,25 +5,30 @@
 package com.mycompany.final_project_pbo.ui;
 
 import com.mycompany.final_project_pbo.models.Category;
-import com.mycompany.final_project_pbo.models.LogActivity;
+import com.mycompany.final_project_pbo.models.Dropdown;
 import com.mycompany.final_project_pbo.models.Product;
+import com.mycompany.final_project_pbo.models.StockTransaction;
 import com.mycompany.final_project_pbo.models.User;
 import com.mycompany.final_project_pbo.repositories.CategoryRepository;
 import com.mycompany.final_project_pbo.repositories.LogActivityRepository;
 import com.mycompany.final_project_pbo.repositories.ProductRepository;
+import com.mycompany.final_project_pbo.repositories.StockTransactionRepository;
 import com.mycompany.final_project_pbo.repositories.UserRepository;
 import com.mycompany.final_project_pbo.utils.Response;
 import com.mycompany.final_project_pbo.utils.SessionManager;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Comparator;
-import java.util.HashMap;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
 
@@ -39,6 +44,253 @@ public class ManajemenBarang extends javax.swing.JPanel {
         public ManajemenBarang() {
                 initComponents();
                 initializeComponents();
+        }
+
+        User currentUser = SessionManager.getInstance().getCurrentUser();
+        Product product = new Product();
+        UserRepository userRepository = new UserRepository();
+        ProductRepository productRepository = new ProductRepository();
+        CategoryRepository categoryRepository = new CategoryRepository();
+        LogActivityRepository logActivityRepository = new LogActivityRepository();
+        StockTransactionRepository stockTransactionRepository = new StockTransactionRepository();
+
+        private void initializeComponents() {
+                populateDropDowns();
+                populateTableRiwayatAktivitas();
+                initSortRiwayatAktivitas();
+                filteredAndSortedProducts("", "");
+
+                // Search filter for products
+                SearchBarang.addKeyListener(new KeyAdapter() {
+                        @Override
+                        public void keyReleased(KeyEvent e) {
+                                String searchText = SearchBarang.getText().toLowerCase();
+                                String sortBy = (String) SortItem.getSelectedItem();
+                                filteredAndSortedProducts(searchText, sortBy);
+                        }
+                });
+
+                // Sort filter for products
+                SortItem.addActionListener(evt -> {
+                        String searchText = SearchBarang.getText().toLowerCase();
+                        String sortBy = (String) SortItem.getSelectedItem();
+                        filteredAndSortedProducts(searchText, sortBy);
+                });
+        }
+
+        private void filteredAndSortedProducts(String searchText, String sortBy) {
+                Response<ArrayList<Product>> response = productRepository.findAll(currentUser.getId());
+                if (!response.isSuccess()) {
+                        JOptionPane.showMessageDialog(this, "Gagal memuat produk: " + response.getMessage(), "Error",
+                                        JOptionPane.ERROR_MESSAGE);
+                        return;
+                }
+
+                ArrayList<Product> products = response.getData();
+
+                // Filter
+                List<Product> filteredProducts = products.stream()
+                                .filter(p -> p.getName().toLowerCase().contains(searchText) ||
+                                                p.getBarcode().toLowerCase().contains(searchText))
+                                .toList();
+
+                // Sort
+                Comparator<Product> comparator = switch (sortBy) {
+                        case "IDBarang" -> Comparator.comparing(Product::getId);
+                        case "Nama" -> Comparator.comparing(Product::getName);
+                        case "Barcode" -> Comparator.comparing(Product::getBarcode);
+                        case "Kategori" -> Comparator.comparing(Product::getCategoryId);
+                        case "HargaBeli" -> Comparator.comparing(Product::getPurchasePrice);
+                        case "HargaJual" -> Comparator.comparing(Product::getSellingPrice);
+                        case "Stok" -> Comparator.comparing(Product::getStock);
+                        default -> null;
+                };
+
+                if (comparator != null) {
+                        filteredProducts = new ArrayList<>(filteredProducts);
+                        filteredProducts.sort(comparator);
+                }
+
+                populateTableProducts(new ArrayList<>(filteredProducts));
+        }
+
+        private void initSortRiwayatAktivitas() {
+                String[] sortOptions = { "", "Tanggal & Waktu", "Aktivitas", "Jenis Aktivitas", "Jumlah", "Barang",
+                                "Oleh" };
+                SortRiwayatAktivitas.setModel(new DefaultComboBoxModel<>(sortOptions));
+                SortRiwayatAktivitas.setSelectedIndex(0);
+
+                SortRiwayatAktivitas.addActionListener(evt -> {
+                        int columnIndex = SortRiwayatAktivitas.getSelectedIndex();
+                        if (columnIndex >= 0) {
+                                TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(
+                                                (DefaultTableModel) TabelRiwayatAktivitas.getModel());
+                                sorter.setSortKeys(List.of(new RowSorter.SortKey(columnIndex, SortOrder.ASCENDING)));
+                                TabelRiwayatAktivitas.setRowSorter(sorter);
+                        }
+                });
+        }
+
+        private void populateTableRiwayatAktivitas() {
+                String[] columnNames = { "Tanggal & Waktu", "Aktivitas", "Jenis Aktivitas", "Jumlah", "Barang",
+                                "Oleh" };
+                DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
+                        @Override
+                        public boolean isCellEditable(int row, int column) {
+                                return false;
+                        }
+                };
+
+                Response<ArrayList<StockTransaction>> response = stockTransactionRepository
+                                .findAll(currentUser.getId());
+                if (!response.isSuccess()) {
+                        JOptionPane.showMessageDialog(this, "Tidak ada riwayat aktivitas yang ditemukan.", "Info",
+                                        JOptionPane.INFORMATION_MESSAGE);
+                        return;
+                }
+
+                for (StockTransaction transaction : response.getData()) {
+                        String typeActivity = switch (transaction.getTransactionType()) {
+                                case IN -> "Barang Masuk";
+                                case OUT -> "Barang Keluar";
+                                default -> "Edit";
+                        };
+
+                        Response<Product> productResponse = productRepository.findById(transaction.getProductId(),
+                                        currentUser.getId());
+                        String productName = productResponse.isSuccess() && productResponse.getData() != null
+                                        ? productResponse.getData().getName()
+                                        : "Tidak Ditemukan";
+
+                        Response<User> userResponse = userRepository.findById(transaction.getUserId(),
+                                        currentUser.getId());
+                        String userName = userResponse.isSuccess() && userResponse.getData() != null
+                                        ? userResponse.getData().getUsername()
+                                        : "Tidak Ditemukan";
+
+                        model.addRow(new Object[] {
+                                        transaction.getCreatedAt(),
+                                        transaction.getDescription(),
+                                        typeActivity,
+                                        transaction.getQuantity(),
+                                        productName,
+                                        userName
+                        });
+                }
+
+                TabelRiwayatAktivitas.setModel(model);
+        }
+
+        private void populateTableProducts(ArrayList<Product> products) {
+                String[] columnNames = { "No", "Nama", "Barcode", "Kategori", "HargaBeli", "HargaJual", "Stok" };
+                DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
+                        @Override
+                        public boolean isCellEditable(int row, int column) {
+                                return false; // Make table non-editable
+                        }
+                };
+
+                // Populate rows
+                for (Product product : products) {
+                        String categoryName = "Tidak Diketahui";
+                        Response<Category> categoryResponse = categoryRepository.findById(product.getCategoryId(),
+                                        currentUser.getId());
+                        if (categoryResponse.isSuccess() && categoryResponse.getData() != null) {
+                                categoryName = categoryResponse.getData().getName();
+                        }
+
+                        model.addRow(new Object[] {
+                                        
+                                        product.getId(),
+                                        product.getName(),
+                                        product.getBarcode(),
+                                        categoryName,
+                                        product.getPurchasePrice(),
+                                        product.getSellingPrice(),
+                                        product.getStock()
+                        });
+                }
+
+                TabelManajemenBarang.setModel(model);
+
+                // Event listener for row selection
+                TabelManajemenBarang.getSelectionModel().addListSelectionListener(event -> {
+                        if (!event.getValueIsAdjusting() && TabelManajemenBarang.getSelectedRow() != -1) {
+                                int selectedRow = TabelManajemenBarang
+                                                .convertRowIndexToModel(TabelManajemenBarang.getSelectedRow());
+                                int productId = (int) model.getValueAt(selectedRow, 0);
+
+                                Response<Product> productResponse = productRepository.findById(productId,
+                                                currentUser.getId());
+                                if (productResponse.isSuccess() && productResponse.getData() != null) {
+                                        setSelectedProduct(productResponse.getData());
+                                } else {
+                                        JOptionPane.showMessageDialog(this, "Produk tidak ditemukan.", "Error",
+                                                        JOptionPane.ERROR_MESSAGE);
+                                        clearForm();
+                                }
+                        }
+                });
+        }
+
+        private void setSelectedProduct(Product product) {
+                IDBarang.setText(String.valueOf(product.getId()));
+                NamaBarang.setText(product.getName());
+                Barcode.setText(product.getBarcode());
+
+                String categoryName = "";
+                Response<Category> categoryResponse = categoryRepository.findById(product.getCategoryId(),
+                                currentUser.getId());
+                if (categoryResponse.isSuccess() && categoryResponse.getData() != null) {
+                        categoryName = categoryResponse.getData().getName();
+                }
+
+                // Find and select matching dropdown item
+                for (int i = 0; i < KategoriBarang.getItemCount(); i++) {
+                        Dropdown item = (Dropdown) KategoriBarang.getItemAt(i);
+                        if (item.getId() != null && item.getId().equals(product.getCategoryId())) {
+                                KategoriBarang.setSelectedIndex(i);
+                                break;
+                        }
+                }
+
+                HargaBeliBarang.setText(String.valueOf(product.getPurchasePrice()));
+                HargaJualBarang.setText(String.valueOf(product.getSellingPrice()));
+                StockBarang.setText(String.valueOf(product.getStock()));
+        }
+
+        private void populateDropDowns() {
+                // Populate KategoriBarang
+                KategoriBarang.removeAllItems();
+                KategoriBarang.addItem(new Dropdown(null, "")); // default blank item
+
+                Response<ArrayList<Category>> response = categoryRepository.findAll(currentUser.getId());
+                if (response.isSuccess()) {
+                        for (Category category : response.getData()) {
+                                KategoriBarang.addItem(new Dropdown(category.getId(), category.getName()));
+                        }
+                } else {
+                        JOptionPane.showMessageDialog(this, "Gagal memuat kategori: " + response.getMessage(), "Error",
+                                        JOptionPane.ERROR_MESSAGE);
+                }
+
+                // Populate SortItem dropdown
+                SortItem.removeAllItems();
+                SortItem.addItem(""); // default blank item
+                String[] sortOptions = { "IDBarang", "Nama", "Barcode", "Kategori", "HargaBeli", "HargaJual", "Stok" };
+                for (String option : sortOptions) {
+                        SortItem.addItem(option);
+                }
+        }
+
+        private void clearForm() {
+                IDBarang.setText("");
+                NamaBarang.setText("");
+                Barcode.setText("");
+                KategoriBarang.setSelectedIndex(0);
+                HargaBeliBarang.setText("");
+                HargaJualBarang.setText("");
+                StockBarang.setText("");
         }
 
         /**
@@ -676,13 +928,6 @@ public class ManajemenBarang extends javax.swing.JPanel {
                 // TODO add your handling code here:
         }// GEN-LAST:event_SortRiwayatAktivitasActionPerformed
 
-        User currentUser = SessionManager.getInstance().getCurrentUser();
-        Product product = new Product();
-        UserRepository userRepository = new UserRepository();
-        ProductRepository productRepository = new ProductRepository();
-        CategoryRepository categoryRepository = new CategoryRepository();
-        LogActivityRepository logActivityRepository = new LogActivityRepository();
-
         private void ButtonEditBarangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_ButtonEditBarangActionPerformed
                 try {
                         Response<ArrayList<Category>> categoryResponse = categoryRepository
@@ -714,7 +959,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
                         if (response.isSuccess()) {
                                 JOptionPane.showMessageDialog(this, "Produk berhasil diperbarui.");
                                 clearForm();
-                                populateTableProducts(filteredAndSortedProducts(null));
+                                filteredAndSortedProducts("", "");
                         } else {
                                 JOptionPane.showMessageDialog(this,
                                                 "Gagal memperbarui produk: " + response.getMessage(),
@@ -748,7 +993,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
                         if (response.isSuccess()) {
                                 JOptionPane.showMessageDialog(this, "Produk berhasil ditambahkan.");
                                 clearForm();
-                                populateTableProducts(filteredAndSortedProducts(null));
+                                filteredAndSortedProducts("", "");
                         } else {
                                 JOptionPane.showMessageDialog(this,
                                                 "Gagal menambahkan produk: " + response.getMessage(),
@@ -775,7 +1020,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
                                 if (response.isSuccess()) {
                                         JOptionPane.showMessageDialog(this, "Produk berhasil dihapus.");
                                         clearForm();
-                                        populateTableProducts(filteredAndSortedProducts(null));
+                                        filteredAndSortedProducts("", "");
                                 } else {
                                         JOptionPane.showMessageDialog(this,
                                                         "Gagal menghapus produk: " + response.getMessage(),
@@ -788,263 +1033,6 @@ public class ManajemenBarang extends javax.swing.JPanel {
                 }
         }// GEN-LAST:event_ButtonHapusBarangActionPerformed
 
-        private final Map<Integer, String> categoryMap = new HashMap<>();
-        private final Map<Integer, String> userMap = new HashMap<>();
-
-        private void initializeComponents() {
-                initializeProductTable();
-                initializeLogActivityTable();
-                populateCategoryComboBox();
-                populateSortOptions();
-
-                clearForm.addActionListener(e -> clearForm());
-
-                SearchBarang.addKeyListener(new KeyAdapter() {
-                        @Override
-                        public void keyReleased(KeyEvent e) {
-                                String searchTerm = SearchBarang.getText();
-                                List<Product> products = filteredAndSortedProducts(searchTerm);
-                                populateTableProducts(products);
-                        }
-                });
-
-                SortItem.addActionListener(e -> {
-                        String searchTerm = SearchBarang.getText();
-                        List<Product> products = filteredAndSortedProducts(searchTerm);
-                        populateTableProducts(products);
-                });
-        }
-
-        private void populateCategoryComboBox() {
-                try {
-                        Response<ArrayList<Category>> response = categoryRepository.findAll(currentUser.getId());
-                        if (response.isSuccess()) {
-                                KategoriBarang.removeAllItems();
-                                KategoriBarang.addItem("");
-                                for (Category category : response.getData()) {
-                                        KategoriBarang.addItem(category.getName());
-                                }
-                        } else {
-                                showError("Gagal memuat kategori: " + response.getMessage());
-                        }
-                } catch (Exception e) {
-                        showError("Terjadi kesalahan saat memuat kategori.");
-                }
-        }
-
-        private void populateSortOptions() {
-                SortItem.removeAllItems();
-                SortItem.addItem("");
-                SortItem.addItem("Nama");
-                SortItem.addItem("Kategori");
-                SortItem.addItem("Harga Beli");
-                SortItem.addItem("Harga Jual");
-                SortItem.addItem("Stok");
-
-                SortRiwayatAktivitas.removeAllItems();
-                SortRiwayatAktivitas.addItem("");
-                SortRiwayatAktivitas.addItem("Tanggal");
-                SortRiwayatAktivitas.addItem("Pengguna");
-                SortRiwayatAktivitas.addItem("Log Level");
-        }
-
-        private void initializeProductTable() {
-                String searchTerm = SearchBarang.getText();
-                List<Product> products = filteredAndSortedProducts(searchTerm);
-                populateTableProducts(products);
-        }
-
-        private void initializeLogActivityTable() {
-                List<LogActivity> logActivities = filteredLogActivities();
-                populateTableRiwayatAktivitas(logActivities);
-        }
-
-        private List<Product> filteredAndSortedProducts(String searchTerm) {
-                try {
-                        Response<ArrayList<Product>> response = (searchTerm == null || searchTerm.trim().isEmpty())
-                                        ? productRepository.findAll(currentUser.getId())
-                                        : productRepository.searchByName(searchTerm, currentUser.getId());
-
-                        if (!response.isSuccess()) {
-                                showError("Gagal memuat produk: " + response.getMessage());
-                                return Collections.emptyList();
-                        }
-
-                        List<Product> products = response.getData();
-
-                        // Sorting logic
-                        String sortOption = (String) SortItem.getSelectedItem();
-                        if (sortOption != null) {
-                                switch (sortOption) {
-                                        case "Nama":
-                                                products.sort(Comparator.comparing(Product::getName));
-                                                break;
-                                        case "Kategori":
-                                                products.sort(Comparator.comparing(Product::getCategoryId));
-                                                break;
-                                        case "Harga Beli":
-                                                products.sort(Comparator.comparing(Product::getPurchasePrice));
-                                                break;
-                                        case "Harga Jual":
-                                                products.sort(Comparator.comparing(Product::getSellingPrice));
-                                                break;
-                                        case "Stok":
-                                                products.sort(Comparator.comparing(Product::getStock));
-                                                break;
-                                }
-                        }
-
-                        // Update categoryMap
-                        Response<ArrayList<Category>> categoryResponse = categoryRepository
-                                        .findAll(currentUser.getId());
-                        if (categoryResponse.isSuccess()) {
-                                categoryMap.clear();
-                                for (Category category : categoryResponse.getData()) {
-                                        categoryMap.put(category.getId(), category.getName());
-                                }
-                        } else {
-                                showError("Gagal memuat kategori: " + categoryResponse.getMessage());
-                        }
-
-                        return products;
-                } catch (Exception e) {
-                        showError("Terjadi kesalahan saat memuat produk.");
-                        return Collections.emptyList();
-                }
-        }
-
-        private List<LogActivity> filteredLogActivities() {
-                try {
-                        Response<ArrayList<LogActivity>> response = logActivityRepository.findAll();
-                        if (!response.isSuccess()) {
-                                showError("Gagal memuat riwayat aktivitas: " + response.getMessage());
-                                return Collections.emptyList();
-                        }
-
-                        List<LogActivity> logActivities = response.getData();
-
-                        // Sorting logic
-                        String sortOption = (String) SortRiwayatAktivitas.getSelectedItem();
-                        if (sortOption != null && !sortOption.isEmpty()) {
-                                switch (sortOption) {
-                                        case "Tanggal":
-                                                logActivities.sort(Comparator.comparing(LogActivity::getCreatedAt));
-                                                break;
-                                        case "Pengguna":
-                                                logActivities.sort(Comparator.comparing(LogActivity::getUserId)
-                                                                .thenComparing(LogActivity::getCreatedAt));
-                                                break;
-                                        case "Log Level":
-                                                logActivities.sort(Comparator.comparing(LogActivity::getLogLevel)
-                                                                .thenComparing(LogActivity::getCreatedAt));
-                                                break;
-                                        default:
-                                                // No sorting applied
-                                                break;
-                                }
-                        }
-
-                        // Update userMap
-                        Response<ArrayList<User>> userResponse = userRepository.findAll(currentUser.getId());
-                        if (userResponse.isSuccess()) {
-                                for (User user : userResponse.getData()) {
-                                        userMap.put(user.getId(), user.getUsername());
-                                }
-                        } else {
-                                showError("Gagal memuat pengguna: " + userResponse.getMessage());
-                        }
-
-                        return logActivities;
-                } catch (Exception e) {
-                        // handle exception and return empty list
-                        return Collections.emptyList();
-                }
-        }
-
-        private void populateTableProducts(List<Product> products) {
-                String[] columnNames = { "ID", "Nama", "Barcode", "Kategori", "Harga Beli", "Harga Jual", "Stok" };
-                DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-
-                for (Product product : products) {
-                        Object[] row = {
-                                        product.getId(),
-                                        product.getName(),
-                                        product.getBarcode(),
-                                        categoryMap.getOrDefault(product.getCategoryId(), "Tidak Ditemukan"),
-                                        product.getPurchasePrice(),
-                                        product.getSellingPrice(),
-                                        product.getStock()
-                        };
-                        model.addRow(row);
-                }
-
-                TabelManajemenBarang.setModel(model);
-                TabelManajemenBarang.getSelectionModel().addListSelectionListener(e -> {
-                        if (!e.getValueIsAdjusting()) {
-                                selectedProduct();
-                        }
-                });
-
-                int[] widths = { 50, 150, 100, 100, 100, 50 };
-                for (int i = 0; i < widths.length; i++) {
-                        TabelManajemenBarang.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);
-                }
-        }
-
-        private void populateTableRiwayatAktivitas(List<LogActivity> logActivities) {
-                String[] columnNames = { "Tanggal", "Waktu", "Aktivitas", "User", "Log Level" };
-                DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-
-                // for (LogActivity logActivity : logActivities) {
-                //         Object[] row = {
-                //                         logActivity.getCreatedAt().toInstant().atZone(java.time.ZoneId.systemDefault())
-                //                                         .toLocalDate(),
-                //                         // Convert to LocalTime for better readability
-                //                 logActivity.getCreatedAt().toInstant().atZone(java.time.ZoneId.systemDefault())
-                //                                         .toLocalTime(),
-                //                         logActivity.getAction(),
-                //                         logActivity.getUserId(),
-                //                         logActivity.getLogLevel()
-                //         };
-                //         model.addRow(row);
-                // }
-
-                TabelRiwayatAktivitas.setModel(model);
-        }
-
-        private void selectedProduct() {
-                int selectedRow = TabelManajemenBarang.getSelectedRow();
-                if (selectedRow != -1) {
-                        IDBarang.setText(TabelManajemenBarang.getValueAt(selectedRow, 0).toString());
-                        NamaBarang.setText(TabelManajemenBarang.getValueAt(selectedRow, 1).toString());
-                        Barcode.setText(TabelManajemenBarang.getValueAt(selectedRow, 2).toString());
-                        KategoriBarang.setSelectedItem(TabelManajemenBarang.getValueAt(selectedRow, 3).toString());
-                        HargaBeliBarang.setText(TabelManajemenBarang.getValueAt(selectedRow, 4).toString());
-                        HargaJualBarang.setText(TabelManajemenBarang.getValueAt(selectedRow, 5).toString());
-                        StockBarang.setText(TabelManajemenBarang.getValueAt(selectedRow, 6).toString());
-                } else {
-                        clearForm();
-                }
-        }
-
-        private void showError(String message) {
-                JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
-        }
-
-        private void clearForm() {
-                IDBarang.setText("");
-                NamaBarang.setText("");
-                Barcode.setText("");
-                KategoriBarang.setSelectedIndex(0);
-                HargaBeliBarang.setText("");
-                HargaJualBarang.setText("");
-                StockBarang.setText("");
-                SearchBarang.setText("");
-                SortItem.setSelectedIndex(0);
-                SortRiwayatAktivitas.setSelectedIndex(0);
-                TabelManajemenBarang.clearSelection();
-        }
-
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JTextField Barcode;
         private javax.swing.JButton ButtonEditBarang;
@@ -1054,7 +1042,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
         private javax.swing.JTextField HargaBeliBarang;
         private javax.swing.JTextField HargaJualBarang;
         private javax.swing.JTextField IDBarang;
-        private javax.swing.JComboBox<String> KategoriBarang;
+        private javax.swing.JComboBox<Dropdown> KategoriBarang;
         private javax.swing.JTextField NamaBarang;
         private javax.swing.JTextField SearchBarang;
         private javax.swing.JComboBox<String> SortItem;

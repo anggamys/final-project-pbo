@@ -4,6 +4,9 @@
  */
 package com.mycompany.final_project_pbo.ui;
 
+import com.mycompany.final_project_pbo.models.User;
+import com.mycompany.final_project_pbo.utils.SessionManager;
+
 /**
  *
  * @author Achmad Fathoni
@@ -21,6 +24,8 @@ public class OwnerDashboard extends javax.swing.JFrame {
         PanelFitur.revalidate();
         PanelFitur.add(new OwnerManajemenBarang());
     }
+
+    User currentUser = SessionManager.getInstance().getCurrentUser();
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -353,6 +358,10 @@ public class OwnerDashboard extends javax.swing.JFrame {
 
     private void ManajementPegawaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ManajementPegawaiActionPerformed
         // TODO add your handling code here:
+        PanelFitur.removeAll();
+        PanelFitur.repaint();
+        PanelFitur.revalidate();
+        PanelFitur.add(new OwnerManajemenPegawai());
     }//GEN-LAST:event_ManajementPegawaiActionPerformed
 
     private void KategoriMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_KategoriMouseClicked
@@ -361,6 +370,10 @@ public class OwnerDashboard extends javax.swing.JFrame {
 
     private void KategoriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_KategoriActionPerformed
         // TODO add your handling code here:
+        PanelFitur.removeAll();
+        PanelFitur.repaint();
+        PanelFitur.revalidate();
+        PanelFitur.add(new OwnerKategori());
     }//GEN-LAST:event_KategoriActionPerformed
 
     private void ButtonLogoutOwnerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonLogoutOwnerMouseClicked
@@ -368,7 +381,14 @@ public class OwnerDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_ButtonLogoutOwnerMouseClicked
 
     private void ButtonLogoutOwnerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonLogoutOwnerActionPerformed
-        // TODO add your handling code here:
+        int confirm = javax.swing.JOptionPane.showConfirmDialog(this, "Apakah Anda yakin ingin keluar?", "Konfirmasi Keluar",
+                javax.swing.JOptionPane.YES_NO_OPTION);
+        if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+            SessionManager.getInstance().logout();
+            this.dispose();
+            Login login = new Login();
+            login.setVisible(true);
+        }
     }//GEN-LAST:event_ButtonLogoutOwnerActionPerformed
 
     private void userNamePropertyChange(java.beans.PropertyChangeEvent evt) {// GEN-FIRST:event_userNamePropertyChange
