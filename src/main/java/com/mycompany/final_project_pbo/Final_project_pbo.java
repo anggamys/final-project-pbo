@@ -31,9 +31,9 @@ import java.util.ArrayList;
 public class Final_project_pbo {
 
     public static void main(String[] args) {
-        launchProgram();
+        // launchProgram();
         // runTests();
-//         seedDatabase();
+        seedDatabase();
     }
 
     private static void launchProgram() {
@@ -77,7 +77,7 @@ public class Final_project_pbo {
         StockTransactionService stockTransactionService = new StockTransactionService();
 
         // Create a user
-        user.setUsername("Owner");
+        user.setUsername("owner");
         user.setPassword("owner123");
         user.setEmail("owner@example.com");
         user.setIsOwner(true);
@@ -91,7 +91,7 @@ public class Final_project_pbo {
         }
 
         // Create a user with a different role
-        user2.setUsername("Staff");
+        user2.setUsername("staff");
         user2.setPassword("staff123");
         user2.setEmail("staff@example.com");
         user2.setIsOwner(false);
