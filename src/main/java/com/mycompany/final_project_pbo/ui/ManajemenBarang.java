@@ -94,6 +94,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
         HargaJualBarang = new javax.swing.JTextField();
         ButtonScanBarang = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
+        InputNoBarcode = new javax.swing.JTextField();
 
         setLayout(new java.awt.CardLayout());
 
@@ -328,7 +329,9 @@ public class ManajemenBarang extends javax.swing.JPanel {
         ButtonScanBarang.setText("Scan Barang");
 
         jLabel12.setFont(new java.awt.Font("Tw Cen MT", 0, 24)); // NOI18N
-        jLabel12.setText("jLabel12");
+        jLabel12.setText("No Barcode:");
+
+        InputNoBarcode.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -395,11 +398,13 @@ public class ManajemenBarang extends javax.swing.JPanel {
                                         .addComponent(NamaBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(StockBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(StockBarang, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
+                                            .addComponent(InputNoBarcode)))))
                             .addComponent(HargaJualBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(121, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -447,7 +452,8 @@ public class ManajemenBarang extends javax.swing.JPanel {
                             .addComponent(ButtonEditBarang)
                             .addComponent(ButtonHapusBarang)
                             .addComponent(clearForm)
-                            .addComponent(jLabel12))
+                            .addComponent(jLabel12)
+                            .addComponent(InputNoBarcode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(25, 25, 25)
                         .addComponent(jLabel8)
                         .addGap(25, 25, 25)
@@ -853,6 +859,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
     private javax.swing.JTextField HargaBeliBarang;
     private javax.swing.JTextField HargaJualBarang;
     private javax.swing.JTextField IDBarang;
+    private javax.swing.JTextField InputNoBarcode;
     private javax.swing.JComboBox<String> KategoriBarang;
     private javax.swing.JTextField NamaBarang;
     private javax.swing.JTextField SearchBarang;
