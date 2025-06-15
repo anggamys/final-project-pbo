@@ -995,18 +995,19 @@ public class ManajemenBarang extends javax.swing.JPanel {
                 String[] columnNames = { "Tanggal", "Waktu", "Aktivitas", "User", "Log Level" };
                 DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
-                for (LogActivity logActivity : logActivities) {
-                        Object[] row = {
-                                        logActivity.getCreatedAt().toInstant().atZone(java.time.ZoneId.systemDefault())
-                                                        .toLocalDate(),
-                                        logActivity.getCreatedAt().toInstant().atZone(java.time.ZoneId.systemDefault())
-                                                        .toLocalTime(),
-                                        logActivity.getAction(),
-                                        logActivity.getUserId(),
-                                        logActivity.getLogLevel()
-                        };
-                        model.addRow(row);
-                }
+                // for (LogActivity logActivity : logActivities) {
+                //         Object[] row = {
+                //                         logActivity.getCreatedAt().toInstant().atZone(java.time.ZoneId.systemDefault())
+                //                                         .toLocalDate(),
+                //                         // Convert to LocalTime for better readability
+                //                 logActivity.getCreatedAt().toInstant().atZone(java.time.ZoneId.systemDefault())
+                //                                         .toLocalTime(),
+                //                         logActivity.getAction(),
+                //                         logActivity.getUserId(),
+                //                         logActivity.getLogLevel()
+                //         };
+                //         model.addRow(row);
+                // }
 
                 TabelRiwayatAktivitas.setModel(model);
         }

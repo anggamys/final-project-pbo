@@ -19,18 +19,74 @@ import com.mycompany.final_project_pbo.utils.Response;
  * @author c0delb08NewClass
  */
 public class FinanceService {
+
     private final ProductRepository productRepository = new ProductRepository();
     private final StockTransactionRepository stockTransactionRepository = new StockTransactionRepository();
 
-    public Response<ArrayList<FinancialReport>> getDailyFinancialReports() {
-        LocalDate today = LocalDate.now();
-        var transactionsResponse = stockTransactionRepository.findByTrasactionDate(today, null);
+    public Response<ArrayList<FinancialReport>> getAllFinancialReports() {
+        var transactionsResponse = stockTransactionRepository.findAll(null);
+        if (!transactionsResponse.isSuccess() || transactionsResponse.getData() == null) {
+            return Response.failure("Failed to retrieve transactions: " + transactionsResponse.getMessage());
+        }
+
+        ArrayList<FinancialReport> reports = new ArrayList<>();
+
+        for (StockTransaction transaction : transactionsResponse.getData()) {
+            var productResponse = productRepository.findById(transaction.getProductId(), null);
+            if (!productResponse.isSuccess() || productResponse.getData() == null) {
+                System.err.println("Warning: Failed to retrieve product for transaction ID " + transaction.getId());
+                continue;
+            }
+
+            var product = productResponse.getData();
+            int quantity = transaction.getQuantity();
+            if (transaction.getCreatedAt() == null) continue;
+
+            LocalDate transactionDate = transaction.getCreatedAt().toLocalDate();
+
+            FinancialReport report = reports.stream()
+                    .filter(r -> r.getDate().isEqual(transactionDate))
+                    .findFirst()
+                    .orElseGet(() -> {
+                        FinancialReport newReport = new FinancialReport();
+                        newReport.setDate(transactionDate);
+                        newReport.setTotalIncome(0.0);
+                        newReport.setTotalExpenses(0.0);
+                        newReport.setNetProfit(0.0);
+                        reports.add(newReport);
+                        return newReport;
+                    });
+
+            switch (transaction.getTransactionType()) {
+                case OUT -> {
+                    double income = quantity * product.getSellingPrice();
+                    report.setTotalIncome(report.getTotalIncome() + income);
+                }
+                case IN -> {
+                    double expense = quantity * product.getPurchasePrice();
+                    report.setTotalExpenses(report.getTotalExpenses() + expense);
+                }
+            }
+        }
+
+        // Finalize net profit calculation
+        for (FinancialReport report : reports) {
+            double income = report.getTotalIncome() != null ? report.getTotalIncome() : 0.0;
+            double expense = report.getTotalExpenses() != null ? report.getTotalExpenses() : 0.0;
+            report.setNetProfit(income - expense);
+            report.setTotalTransactions(income + expense);
+        }
+
+        return Response.success("All financial reports retrieved successfully", reports);
+    }
+
+    public Response<ArrayList<FinancialReport>> getDailyFinancialReports(LocalDate date) {
+        var transactionsResponse = stockTransactionRepository.findByTrasactionDate(date, null);
 
         if (!transactionsResponse.isSuccess() || transactionsResponse.getData() == null) {
             return Response.failure("Failed to retrieve transactions for today: " + transactionsResponse.getMessage());
         }
 
-        double totalTransactions = 0.0;
         double totalIncome = 0.0;
         double totalExpenses = 0.0;
 
@@ -38,36 +94,32 @@ public class FinanceService {
             var productResponse = productRepository.findById(transaction.getProductId(), null);
             if (!productResponse.isSuccess() || productResponse.getData() == null) {
                 System.err.println("Warning: Failed to retrieve product for transaction ID " + transaction.getId());
-                continue; // skip and continue instead of failing
+                continue;
             }
 
             var product = productResponse.getData();
             int quantity = transaction.getQuantity();
 
-            if (transaction.getTransactionType() == TransactionType.OUT) {
-                double income = quantity * product.getSellingPrice();
-                totalIncome += income;
-                totalTransactions += income;
-            } else if (transaction.getTransactionType() == TransactionType.IN) {
-                totalExpenses += quantity * product.getPurchasePrice();
+            switch (transaction.getTransactionType()) {
+                case OUT -> totalIncome += quantity * product.getSellingPrice();
+                case IN -> totalExpenses += quantity * product.getPurchasePrice();
             }
         }
 
-        FinancialReport financialReport = new FinancialReport();
-        financialReport.setDate(today);
-        financialReport.setTotalTransactions(totalTransactions);
-        financialReport.setTotalExpenses(totalExpenses);
-        financialReport.setTotalIncome(totalIncome);
-        financialReport.setNetProfit(totalIncome - totalExpenses);
+        FinancialReport report = new FinancialReport();
+        report.setDate(date);
+        report.setTotalIncome(totalIncome);
+        report.setTotalExpenses(totalExpenses);
+        report.setNetProfit(totalIncome - totalExpenses);
+        report.setTotalTransactions(totalIncome + totalExpenses);
 
         ArrayList<FinancialReport> reports = new ArrayList<>();
-        reports.add(financialReport);
+        reports.add(report);
 
-        return Response.success("Daily financial reports retrieved successfully", reports);
+        return Response.success("Daily financial report retrieved successfully", reports);
     }
 
     public Response<ArrayList<FinancialReport>> getMonthlyFinancialReports() {
-        // TODO: Implement similar logic, grouping by LocalDate month
         return Response.failure("Monthly financial reports not implemented yet.");
     }
 }

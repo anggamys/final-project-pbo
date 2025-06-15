@@ -4,15 +4,16 @@
  */
 package com.mycompany.final_project_pbo.models;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public abstract class BaseEntity {
     protected Integer id;
-    protected Date createdAt;
-    protected Date updatedAt;
+    protected LocalDateTime createdAt;
+    protected LocalDateTime updatedAt;
 
     public BaseEntity() {
-        Date now = new Date();
+        LocalDateTime now = LocalDateTime.now();
         this.createdAt = now;
         this.updatedAt = now;
     }
@@ -25,19 +26,19 @@ public abstract class BaseEntity {
         this.id = id;
     }
 
-    public Date getCreatedAt() {
-        return new Date(createdAt.getTime());
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = new Date(createdAt.getTime());
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
-        return new Date(updatedAt.getTime());
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = new Date(updatedAt.getTime());
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

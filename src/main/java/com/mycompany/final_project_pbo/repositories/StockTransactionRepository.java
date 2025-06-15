@@ -123,8 +123,9 @@ public class StockTransactionRepository implements CrudRepository<StockTransacti
                 transaction.setTransactionType(TransactionType.valueOf(resultSet.getString("transaction_type")));
                 transaction.setDescription(resultSet.getString("reference_note"));
                 transaction.setUserId(resultSet.getInt("performed_by"));
-                transaction.setCreatedAt(resultSet.getTimestamp("transaction_date"));
-
+                transaction.setCreatedAt(resultSet.getTimestamp("transaction_date").toLocalDateTime());
+                // transaction.setUpdatedAt(resultSet.getTimestamp("updated_at").toLocalDateTime());
+                
                 logActivityService.logAction(userId, "Found StockTransaction with ID: " + id,
                         MODULE_NAME,
                         LogLevel.INFO);
@@ -192,8 +193,8 @@ public class StockTransactionRepository implements CrudRepository<StockTransacti
                 transaction.setTransactionType(TransactionType.valueOf(resultSet.getString("transaction_type")));
                 transaction.setDescription(resultSet.getString("reference_note"));
                 transaction.setUserId(resultSet.getInt("performed_by"));
-                transaction.setCreatedAt(resultSet.getTimestamp("transaction_date"));
-
+                transaction.setCreatedAt(resultSet.getTimestamp("transaction_date").toLocalDateTime());
+                
                 transactions.add(transaction);
             }
 
@@ -255,8 +256,8 @@ public class StockTransactionRepository implements CrudRepository<StockTransacti
                 transaction.setTransactionType(TransactionType.valueOf(resultSet.getString("transaction_type")));
                 transaction.setDescription(resultSet.getString("reference_note"));
                 transaction.setUserId(resultSet.getInt("performed_by"));
-                transaction.setCreatedAt(resultSet.getTimestamp("transaction_date"));
-
+                transaction.setCreatedAt(resultSet.getTimestamp("transaction_date").toLocalDateTime());
+                
                 transactions.add(transaction);
             }
 

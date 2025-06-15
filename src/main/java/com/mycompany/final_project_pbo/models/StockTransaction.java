@@ -4,7 +4,7 @@
  */
 package com.mycompany.final_project_pbo.models;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -16,21 +16,21 @@ public class StockTransaction extends BaseEntity {
     private TransactionType transactionType;
     private String description;
     private Integer userId;
-    private Date createdAt;
 
     public StockTransaction() {
         super();
     }
 
     public StockTransaction(Integer productId, Integer quantity, TransactionType transactionType, String description,
-            Integer userId, Date createdAt) {
+            Integer userId) {
         super();
         this.productId = productId;
         this.quantity = quantity;
         this.transactionType = transactionType;
         this.description = description;
         this.userId = userId;
-        this.createdAt = createdAt;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     public Integer getProductId() {
@@ -73,18 +73,27 @@ public class StockTransaction extends BaseEntity {
         this.userId = userId;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     @Override
     public String toString() {
-        return "StockTransaction{id=" + id + ", productId=" + productId + ", quantity=" + quantity + ", transactionType="
+        return "StockTransaction{id=" + id + ", productId=" + productId + ", quantity=" + quantity
+                + ", transactionType="
                 + transactionType + ", description=" + description + ", userId=" + userId + ", createdAt=" + createdAt
-                + '}';
+                + ", updatedAt=" + updatedAt + '}';
     }
 }

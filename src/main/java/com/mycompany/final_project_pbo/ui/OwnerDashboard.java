@@ -395,6 +395,10 @@ public class OwnerDashboard extends javax.swing.JFrame {
 
     private void laporanKeuanganPageActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_laporanKeuanganPageActionPerformed
         // TODO add your handling code here:
+        PanelFitur.removeAll();
+        PanelFitur.repaint();
+        PanelFitur.revalidate();
+        PanelFitur.add(new Keuangan());
     }// GEN-LAST:event_laporanKeuanganPageActionPerformed
 
     private void utangPiutangPageMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_utangPiutangPageMouseClicked

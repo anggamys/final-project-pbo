@@ -42,7 +42,7 @@ public class FinancialReport {
     }
 
     public void setTotalTransactions(Double totalTransactions) {
-        this.totalTransactions = totalTransactions;
+        this.totalTransactions = totalTransactions != null ? totalTransactions : 0.0;
     }
 
     public Double getTotalIncome() {
@@ -50,7 +50,7 @@ public class FinancialReport {
     }
 
     public void setTotalIncome(Double totalIncome) {
-        this.totalIncome = totalIncome;
+        this.totalIncome = totalIncome != null ? totalIncome : 0.0;
     }
 
     public Double getTotalExpenses() {
@@ -58,7 +58,7 @@ public class FinancialReport {
     }
 
     public void setTotalExpenses(Double totalExpenses) {
-        this.totalExpenses = totalExpenses;
+        this.totalExpenses = totalExpenses != null ? totalExpenses : 0.0;
     }
 
     public Double getNetProfit() {
@@ -66,7 +66,7 @@ public class FinancialReport {
     }
 
     public void setNetProfit(Double netProfit) {
-        this.netProfit = netProfit;
+        this.netProfit = netProfit != null ? netProfit : 0.0;
     }
 
     @Override
