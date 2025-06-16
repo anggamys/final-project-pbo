@@ -36,8 +36,8 @@ public class DebtTransactionRepository implements CrudRepository<DebtTransaction
             preparedStatement.setString(1, entity.getDebtorName());
             preparedStatement.setString(2, entity.getAddress());
             preparedStatement.setString(3, entity.getPhoneNumber());
-            preparedStatement.setDate(4, new Date(entity.getLoanDate().getTime()));
-            preparedStatement.setDate(5, new Date(entity.getDueDate().getTime()));
+            preparedStatement.setDate(4, Date.valueOf(entity.getLoanDate()));
+            preparedStatement.setDate(5, Date.valueOf(entity.getDueDate()));
             preparedStatement.setDouble(6, entity.getAmount());
             preparedStatement.setString(7, entity.getStatus().name());
             preparedStatement.setInt(8, entity.getCreatedBy());
@@ -78,8 +78,8 @@ public class DebtTransactionRepository implements CrudRepository<DebtTransaction
             preparedStatement.setString(1, entity.getDebtorName());
             preparedStatement.setString(2, entity.getAddress());
             preparedStatement.setString(3, entity.getPhoneNumber());
-            preparedStatement.setDate(4, new Date(entity.getLoanDate().getTime()));
-            preparedStatement.setDate(5, new Date(entity.getDueDate().getTime()));
+            preparedStatement.setDate(4, Date.valueOf(entity.getLoanDate()));
+            preparedStatement.setDate(5, Date.valueOf(entity.getDueDate()));
             preparedStatement.setDouble(6, entity.getAmount());
             preparedStatement.setString(7, entity.getStatus().name());
             preparedStatement.setInt(8, entity.getCreatedBy());
@@ -196,8 +196,8 @@ public class DebtTransactionRepository implements CrudRepository<DebtTransaction
         transaction.setDebtorName(resultSet.getString("debtor_name"));
         transaction.setAddress(resultSet.getString("address"));
         transaction.setPhoneNumber(resultSet.getString("phone_number"));
-        transaction.setLoanDate(resultSet.getDate("loan_date"));
-        transaction.setDueDate(resultSet.getDate("due_date"));
+        transaction.setLoanDate(resultSet.getDate("loan_date").toLocalDate());
+        transaction.setDueDate(resultSet.getDate("due_date").toLocalDate());
         transaction.setAmount(resultSet.getDouble("amount"));
 
         String statusStr = resultSet.getString("status");

@@ -53,13 +53,15 @@ public class OwnerKategori extends javax.swing.JPanel {
         int selectedRow = jTable1.getSelectedRow();
         if (selectedRow == -1) {
             // Show error message if no row is selected
-            JOptionPane.showMessageDialog(this, "Please select a category to delete.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please select a category to delete.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         int id = (int) jTable1.getValueAt(selectedRow, 0);
 
-        Integer confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this category?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
+        Integer confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this category?",
+                "Confirm Delete", JOptionPane.YES_NO_OPTION);
         if (confirm != JOptionPane.YES_OPTION) {
             // User chose not to delete
             return;
@@ -71,7 +73,8 @@ public class OwnerKategori extends javax.swing.JPanel {
             populateTableCategory();
             clearInputFields();
         } else {
-            JOptionPane.showMessageDialog(this, "Error deleting category: " + response.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error deleting category: " + response.getMessage(), "Error",
+                    JOptionPane.ERROR_MESSAGE);
             System.err.println("Error deleting category: " + response.getMessage());
         }
     }
@@ -80,7 +83,8 @@ public class OwnerKategori extends javax.swing.JPanel {
         int selectedRow = jTable1.getSelectedRow();
         if (selectedRow == -1) {
             // Show error message if no row is selected
-            JOptionPane.showMessageDialog(this, "Please select a category to edit.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please select a category to edit.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -99,7 +103,8 @@ public class OwnerKategori extends javax.swing.JPanel {
         category.setName(name);
         category.setDescription(description);
 
-        Integer confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to update this category?", "Confirm Update", JOptionPane.YES_NO_OPTION);
+        Integer confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to update this category?",
+                "Confirm Update", JOptionPane.YES_NO_OPTION);
         if (confirm != JOptionPane.YES_OPTION) {
             // User chose not to update
             return;
@@ -111,7 +116,8 @@ public class OwnerKategori extends javax.swing.JPanel {
             populateTableCategory();
             clearInputFields();
         } else {
-            JOptionPane.showMessageDialog(this, "Error updating category: " + response.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error updating category: " + response.getMessage(), "Error",
+                    JOptionPane.ERROR_MESSAGE);
             System.err.println("Error updating category: " + response.getMessage());
         }
     }
@@ -135,7 +141,8 @@ public class OwnerKategori extends javax.swing.JPanel {
             populateTableCategory();
             clearInputFields();
         } else {
-            JOptionPane.showMessageDialog(this, "Error adding category: " + response.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error adding category: " + response.getMessage(), "Error",
+                    JOptionPane.ERROR_MESSAGE);
             System.err.println("Error adding category: " + response.getMessage());
         }
     }
@@ -156,8 +163,8 @@ public class OwnerKategori extends javax.swing.JPanel {
     }
 
     private void populateTableCategory() {
-        String[] columnNames = {"IDKategori", "Nama Kategori", "Description"};
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0){
+        String[] columnNames = { "IDKategori", "Nama Kategori", "Description" };
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false; // Prevent editing of table cells
@@ -168,7 +175,7 @@ public class OwnerKategori extends javax.swing.JPanel {
         if (response.isSuccess()) {
             ArrayList<Category> categories = response.getData();
             for (Category category : categories) {
-                Object[] row = {category.getId(), category.getName(), category.getDescription()};
+                Object[] row = { category.getId(), category.getName(), category.getDescription() };
                 model.addRow(row);
             }
         } else {
@@ -194,7 +201,8 @@ public class OwnerKategori extends javax.swing.JPanel {
      * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -215,200 +223,233 @@ public class OwnerKategori extends javax.swing.JPanel {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         Kategori.setBackground(new java.awt.Color(255, 255, 255));
-        Kategori.setFont(new java.awt.Font("Tw Cen MT", 1, 36)); // NOI18N
+        Kategori.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
         Kategori.setForeground(new java.awt.Color(93, 173, 226));
         Kategori.setText("Data Kategori Barang");
 
-        jLabel1.setFont(new java.awt.Font("Tw Cen MT", 0, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         jLabel1.setText("Kategori:");
 
-        KategoriBarang.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        KategoriBarang.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
+        KategoriBarang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                KategoriBarangActionPerformed(evt);
+            }
+        });
 
-        jLabel2.setFont(new java.awt.Font("Tw Cen MT", 0, 24)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         jLabel2.setText("Deskripsi Kategori Barang:");
 
-        KategoriBarang1.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        KategoriBarang1.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "IDKategori", "Nama Kategori", "Description", "Tanggal"
-            }
-        ));
+                new Object[][] {
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null }
+                },
+                new String[] {
+                        "IDKategori", "Nama Kategori", "Description", "Tanggal"
+                }));
         jScrollPane1.setViewportView(jTable1);
 
-        ButtonTambahkanKategori.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        ButtonTambahkanKategori.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         ButtonTambahkanKategori.setForeground(new java.awt.Color(93, 173, 226));
         ButtonTambahkanKategori.setText("Tambahkan");
 
-        ButtonEditKategori.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        ButtonEditKategori.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         ButtonEditKategori.setForeground(new java.awt.Color(93, 173, 226));
         ButtonEditKategori.setText("Edit Data");
 
-        ButtonHapusKategori.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        ButtonHapusKategori.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         ButtonHapusKategori.setForeground(new java.awt.Color(93, 173, 226));
         ButtonHapusKategori.setText("Hapus Data");
 
-        ButtonKosongkanKolomKategori.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        ButtonKosongkanKolomKategori.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         ButtonKosongkanKolomKategori.setForeground(new java.awt.Color(93, 173, 226));
         ButtonKosongkanKolomKategori.setText("Kosongkan Kolom");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Kategori)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                            .addComponent(ButtonTambahkanKategori, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGap(29, 29, 29)
-                            .addComponent(ButtonEditKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(29, 29, 29)
-                            .addComponent(ButtonHapusKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(ButtonKosongkanKolomKategori))
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel1)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(KategoriBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel2)
-                            .addGap(137, 137, 137)
-                            .addComponent(KategoriBarang1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 856, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(19, Short.MAX_VALUE))
-        );
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGap(15, 15, 15)
+                                                .addGroup(jPanel1Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(Kategori)
+                                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                                .addGroup(jPanel1Layout.createParallelGroup(
+                                                                        javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(jLabel1)
+                                                                        .addComponent(jLabel2))
+                                                                .addGap(45, 45, 45)
+                                                                .addGroup(jPanel1Layout.createParallelGroup(
+                                                                        javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(KategoriBarang1,
+                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                300,
+                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addComponent(KategoriBarang,
+                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                300,
+                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addContainerGap()
+                                                .addGroup(jPanel1Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                                .addGap(6, 6, 6)
+                                                                .addComponent(jScrollPane1,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 856,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                                .addComponent(ButtonTambahkanKategori)
+                                                                .addGap(29, 29, 29)
+                                                                .addComponent(ButtonEditKategori,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 157,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addGap(29, 29, 29)
+                                                                .addComponent(ButtonHapusKategori,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 157,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(
+                                                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(ButtonKosongkanKolomKategori)))))
+                                .addContainerGap(15, Short.MAX_VALUE)));
         jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(Kategori)
-                .addGap(15, 15, 15)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(KategoriBarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(15, 15, 15)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(KategoriBarang1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addGap(20, 20, 20)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ButtonTambahkanKategori)
-                    .addComponent(ButtonEditKategori)
-                    .addComponent(ButtonHapusKategori)
-                    .addComponent(ButtonKosongkanKolomKategori))
-                .addGap(30, 30, 30)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
-        );
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(15, 15, 15)
+                                .addComponent(Kategori)
+                                .addGap(15, 15, 15)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel1)
+                                        .addComponent(KategoriBarang, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(15, 15, 15)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(KategoriBarang1, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel2))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(ButtonTambahkanKategori)
+                                        .addComponent(ButtonEditKategori)
+                                        .addComponent(ButtonHapusKategori)
+                                        .addComponent(ButtonKosongkanKolomKategori))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 339,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(98, Short.MAX_VALUE)));
 
         add(jPanel1, "card2");
     }// </editor-fold>//GEN-END:initComponents
 
+    private void KategoriBarangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_KategoriBarangActionPerformed
+        // TODO add your handling code here:
+    }// GEN-LAST:event_KategoriBarangActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonEditKategori;

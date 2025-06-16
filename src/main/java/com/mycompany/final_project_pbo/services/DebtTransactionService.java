@@ -9,6 +9,7 @@ import java.time.ZoneId;
 import java.util.Date;
 
 import com.mycompany.final_project_pbo.models.DebtTransaction;
+import com.mycompany.final_project_pbo.models.LoanStatus;
 import com.mycompany.final_project_pbo.models.LogLevel;
 import com.mycompany.final_project_pbo.repositories.DebtTransactionRepository;
 import com.mycompany.final_project_pbo.utils.Response;
@@ -34,14 +35,11 @@ public class DebtTransactionService {
         LocalDate currentDate = LocalDate.now();
         LocalDate sevenDaysFromNow = currentDate.plusDays(7);
 
-        // Konversi LocalDate ke java.util.Date
-        ZoneId defaultZoneId = ZoneId.systemDefault();
-        Date loanDate = Date.from(currentDate.atStartOfDay(defaultZoneId).toInstant());
-        Date dueDate = Date.from(sevenDaysFromNow.atStartOfDay(defaultZoneId).toInstant());
-
         // Set nilai ke entity
-        entity.setLoanDate(loanDate);
-        entity.setDueDate(dueDate);
+        entity.setLoanDate(currentDate);
+        entity.setDueDate(sevenDaysFromNow);
+        entity.setStatus(LoanStatus.BELUM_LUNAS);
+        entity.setCreatedBy(userId);
 
         // Simpan transaksi ke repository
         Response<DebtTransaction> response = debtTransactionRepository.save(entity, userId);
