@@ -355,7 +355,6 @@ public class Dashboard extends javax.swing.JFrame {
     }// GEN-LAST:event_jButton9MouseClicked
 
     private void jButton7MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jButton7MouseClicked
-
         PanelFitur.removeAll();
         PanelFitur.add(new Hutang());
         PanelFitur.repaint();
@@ -363,7 +362,6 @@ public class Dashboard extends javax.swing.JFrame {
     }// GEN-LAST:event_jButton7MouseClicked
 
     private void jButton6MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jButton6MouseClicked
-
         PanelFitur.removeAll();
         PanelFitur.add(new Keuangan());
         PanelFitur.repaint();
@@ -371,7 +369,6 @@ public class Dashboard extends javax.swing.JFrame {
     }// GEN-LAST:event_jButton6MouseClicked
 
     private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jButton4MouseClicked
-
         PanelFitur.removeAll();
         PanelFitur.add(new ManajemenBarang());
         PanelFitur.repaint();
@@ -398,7 +395,10 @@ public class Dashboard extends javax.swing.JFrame {
     }// GEN-LAST:event_ButtonLogOutActionPerformed
 
     private void NotificationActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_NotificationActionPerformed
-        // TODO add your handling code here:
+        PanelFitur.removeAll();
+        PanelFitur.add(new Notifikasi());
+        PanelFitur.repaint();
+        PanelFitur.revalidate();
     }// GEN-LAST:event_NotificationActionPerformed
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel1MouseClicked
