@@ -4,14 +4,18 @@
  */
 package com.mycompany.final_project_pbo.ui;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 import com.mycompany.final_project_pbo.models.FinancialReport;
 import com.mycompany.final_project_pbo.services.FinanceService;
+import com.mycompany.final_project_pbo.utils.Response;
 
 /**
  *
@@ -30,91 +34,169 @@ public class Keuangan extends javax.swing.JPanel {
     private final FinanceService financeService = new FinanceService();
 
     private void initializeComponents() {
-        populateComboBox();
+        populateDropDowns();
         clearFields();
-        ButtonTampilkan.addActionListener(evt -> selectedFinancialReport());
-        JenisLaporan.addActionListener(evt -> {
-            String selectedReportType = (String) JenisLaporan.getSelectedItem();
-            if (selectedReportType != null) {
-                switch (selectedReportType) {
-                    case "Harian" -> TanggalLaporan.setText(LocalDate.now().toString());
-                    case "Mingguan" -> TanggalLaporan.setText("Pilih tanggal awal dan akhir");
-                    case "Bulanan" -> TanggalLaporan.setText("Pilih bulan dan tahun");
-                    default -> TanggalLaporan.setText("");
-                }
-            }
-        });
+        ButtonTampilkan.addActionListener(evt -> showReportsSelected());
     }
 
-    private void selectedFinancialReport() {
-        String selectedReportType = (String) JenisLaporan.getSelectedItem();
-        if (selectedReportType != null) {
-            switch (selectedReportType) {
-                case "Harian" -> {
-                    var dailyReports = financeService.getDailyFinancialReports();
-                    if (dailyReports.isSuccess() && dailyReports.getData() != null) {
-                        populateKeuanganTable(dailyReports.getData());
-
-                        TotalPengeluaran.setText(String.valueOf(dailyReports.getData().stream()
-                                .mapToDouble(FinancialReport::getTotalExpenses).sum()));
-                        TotalPenjualan.setText(String.valueOf(dailyReports.getData().stream()
-                                .mapToDouble(FinancialReport::getTotalIncome).sum()));
-                        LabaBersih.setText(String.valueOf(dailyReports.getData().stream()
-                                .mapToDouble(FinancialReport::getNetProfit).sum()));
-                        PriodeLaporan.setText(LocalDate.now().toString());
-                    } else if (dailyReports.getData() == null) {
-                        showErrorDialog("Tidak ada laporan harian yang tersedia.");
-                    } else {
-                        showErrorDialog("Gagal mengambil laporan harian: " + dailyReports.getMessage());
-                    }
-                }
-                case "Mingguan" -> {
-                    // TODO: Implement weekly report
-                }
-                case "Bulanan" -> {
-                    // TODO: Implement monthly report
-                }
-                default -> showErrorDialog("Jenis laporan tidak dikenali.");
-            }
-        }
-    }
-
-    private void populateKeuanganTable(ArrayList<FinancialReport> reports) {
-        String[] columnNames = { "Tanggal", "Total Transaksi", "Pendapatan", "Pengeluaran", "Laba" };
-        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
-
-        for (FinancialReport report : reports) {
-            Object[] row = new Object[] {
-                    report.getDate(),
-                    report.getTotalTransactions(),
-                    report.getTotalIncome(),
-                    report.getTotalExpenses(),
-                    report.getNetProfit()
-            };
-            tableModel.addRow(row);
-        }
-        TabelLaporaKeuangan.setModel(tableModel);
-    }
-
-    private void populateComboBox() {
+    private void populateDropDowns() {
+        // Clear combo boxes to prevent duplicate entries
+        BulanLaporan.removeAllItems();
+        yearList.removeAllItems();
         JenisLaporan.removeAllItems();
-        JenisLaporan.addItem("");
-        JenisLaporan.addItem("Harian");
-        JenisLaporan.addItem("Mingguan");
-        JenisLaporan.addItem("Bulanan");
+
+        // Add type options
+        String[] typeReports = { "", "Harian", "Bulanan", "Tahunan" };
+        for (String typeReport : typeReports) {
+            JenisLaporan.addItem(typeReport);
+        }
+
+        // Fetch available dates from reports
+        Response<ArrayList<FinancialReport>> response = financeService.getAllFinancialReports();
+        if (!response.isSuccess() || response.getData() == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Failed to retrieve financial reports: " + response.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        Set<String> uniqueMonths = new TreeSet<>();
+        Set<Integer> uniqueYears = new TreeSet<>();
+
+        for (FinancialReport report : response.getData()) {
+            LocalDate date = report.getDate();
+            if (date != null) {
+                uniqueMonths.add(String.format("%02d", date.getMonthValue()));
+                uniqueYears.add(date.getYear());
+            }
+        }
+
+        // Add default empty option once
+        BulanLaporan.addItem("");
+        for (String month : uniqueMonths) {
+            BulanLaporan.addItem(month);
+        }
+
+        yearList.addItem("");
+        for (Integer year : uniqueYears) {
+            yearList.addItem(String.valueOf(year));
+        }
     }
 
-    private void showErrorDialog(String message) {
-        JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+    private void showReportsSelected() {
+        String selectedType = (String) JenisLaporan.getSelectedItem();
+        String selectedDate = TanggalLaporan.getText().trim(); // Format: e.g., 11
+        String selectedMonth = (String) BulanLaporan.getSelectedItem(); // Format: e.g., "06"
+        String selectedYear = (String) yearList.getSelectedItem(); // Format: e.g., "2025"
+
+        LocalDate reportDate = null;
+
+        try {
+            if (!selectedDate.isEmpty() && !selectedMonth.isEmpty() && !selectedYear.isEmpty()) {
+                int day = Integer.parseInt(selectedDate);
+                int month = Integer.parseInt(selectedMonth);
+                int year = Integer.parseInt(selectedYear);
+                reportDate = LocalDate.of(year, month, day);
+            }
+        } catch (NumberFormatException | DateTimeException e) {
+            JOptionPane.showMessageDialog(this, "Tanggal tidak valid. Pastikan format tanggal benar (dd-MM-yyyy).",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        Response<ArrayList<FinancialReport>> response = financeService.getAllFinancialReports();
+        if (!response.isSuccess() || response.getData() == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Failed to retrieve financial reports: " + response.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        ArrayList<FinancialReport> filteredReports = new ArrayList<>();
+
+        for (FinancialReport report : response.getData()) {
+            LocalDate date = report.getDate();
+            if (date != null) {
+                boolean matchesType = selectedType == null || selectedType.isEmpty()
+                        || (selectedType.equals("Harian") && reportDate != null && date.equals(reportDate))
+                        || (selectedType.equals("Bulanan") && selectedMonth != null && !selectedMonth.isEmpty()
+                                && date.getMonthValue() == Integer.parseInt(selectedMonth)
+                                && selectedYear != null && date.getYear() == Integer.parseInt(selectedYear))
+                        || (selectedType.equals("Tahunan") && selectedYear != null
+                                && date.getYear() == Integer.parseInt(selectedYear));
+
+                if (matchesType) {
+                    filteredReports.add(report);
+                }
+            }
+        }
+
+        populateReports(filteredReports);
+
+        TotalPenjualan.setText(String.valueOf(
+                filteredReports.stream().mapToDouble(FinancialReport::getTotalIncome).sum()));
+        TotalPengeluaran.setText(String.valueOf(
+                filteredReports.stream().mapToDouble(FinancialReport::getTotalExpenses).sum()));
+        LabaBersih.setText(String.valueOf(
+                filteredReports.stream().mapToDouble(FinancialReport::getNetProfit).sum()));
+        PriodeLaporan.setText(selectedType + " " + selectedDate + "-" + selectedMonth + "-" + selectedYear);
+        TanggalLaporan.setText(selectedDate);
+        if (reportDate != null) {
+            TanggalLaporan.setText(reportDate.toString());
+        } else {
+            TanggalLaporan.setText("");
+        }
+    }
+
+    private void populateReports(ArrayList<FinancialReport> reports) {
+        String[] columns = { "Tanggal", "Total Transaksi", "Pendapatan", "Pengeluaran", "Laba" };
+        DefaultTableModel model = new DefaultTableModel(columns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        if (reports != null && !reports.isEmpty()) {
+            for (FinancialReport report : reports) {
+                LocalDate date = report.getDate();
+                if (date != null) {
+                    Object[] row = {
+                            date.toString(),
+                            safeDouble(report.getTotalTransactions()),
+                            safeDouble(report.getTotalIncome()),
+                            safeDouble(report.getTotalExpenses()),
+                            safeDouble(report.getNetProfit())
+                    };
+                    model.addRow(row);
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "No matching financial reports found.",
+                    "Informasi", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+        TabelLaporaKeuangan.setModel(model);
     }
 
     private void clearFields() {
-        // Clear all input fields
         TanggalLaporan.setText("");
         TotalPenjualan.setText("");
         TotalPengeluaran.setText("");
         LabaBersih.setText("");
         PriodeLaporan.setText("");
+
+        JenisLaporan.setSelectedIndex(0);
+        BulanLaporan.setSelectedIndex(0);
+        yearList.setSelectedIndex(0);
+    }
+
+    /**
+     * Helper method to safely return a Double value or 0.0 if null
+     */
+    private double safeDouble(Double value) {
+        return value != null ? value : 0.0;
     }
 
     /**
@@ -124,7 +206,8 @@ public class Keuangan extends javax.swing.JPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -147,7 +230,7 @@ public class Keuangan extends javax.swing.JPanel {
         TabelLaporaKeuangan = new javax.swing.JTable();
         jLabel9 = new javax.swing.JLabel();
         BulanLaporan = new javax.swing.JComboBox<>();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        yearList = new javax.swing.JComboBox<>();
 
         setPreferredSize(new java.awt.Dimension(890, 590));
         setLayout(new java.awt.CardLayout());
@@ -163,7 +246,6 @@ public class Keuangan extends javax.swing.JPanel {
         jLabel2.setText("Jenis Laporan : ");
 
         JenisLaporan.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
-        JenisLaporan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Harian", "Mingguan", "Bulanan" }));
         JenisLaporan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JenisLaporanActionPerformed(evt);
@@ -230,62 +312,61 @@ public class Keuangan extends javax.swing.JPanel {
         jLabel8.setText("Tabel Laporan Keuangan:");
 
         TabelLaporaKeuangan.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "Tanggal", "Total Transaksi", "Pendapatan", "Pengeluaran", "Laba"
-            }
-        ));
+                new Object[][] {
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null },
+                        { null, null, null, null, null }
+                },
+                new String[] {
+                        "Tanggal", "Total Transaksi", "Pendapatan", "Pengeluaran", "Laba"
+                }));
         TabelLaporaKeuangan.setPreferredSize(new java.awt.Dimension(200, 1000));
         jScrollPane1.setViewportView(TabelLaporaKeuangan);
 
@@ -296,108 +377,143 @@ public class Keuangan extends javax.swing.JPanel {
         jLabel9.setText("Menu Laporan Keuangan");
 
         BulanLaporan.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
-        BulanLaporan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", " " }));
 
-        jComboBox1.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "2023", "2024", "2025" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        yearList.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
+        yearList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                yearListActionPerformed(evt);
             }
         });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(ButtonTampilkan, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(315, 315, 315)
-                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel8)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel4))
-                        .addGap(73, 73, 73)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(TotalPengeluaran, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
-                            .addComponent(TotalPenjualan, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(LabaBersih, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(PriodeLaporan, javax.swing.GroupLayout.Alignment.LEADING)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addGap(35, 35, 35)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(JenisLaporan, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(TanggalLaporan, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(BulanLaporan, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(jScrollPane1))
-                .addContainerGap(19, Short.MAX_VALUE))
-        );
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(15, 15, 15)
+                                .addGroup(jPanel1Layout
+                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(ButtonTampilkan, javax.swing.GroupLayout.PREFERRED_SIZE, 259,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 314,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(315, 315, 315)
+                                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 227,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jLabel8)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGroup(jPanel1Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(jLabel5)
+                                                        .addComponent(jLabel6)
+                                                        .addComponent(jLabel7)
+                                                        .addComponent(jLabel4))
+                                                .addGap(73, 73, 73)
+                                                .addGroup(jPanel1Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                                                                false)
+                                                        .addComponent(TotalPengeluaran,
+                                                                javax.swing.GroupLayout.Alignment.LEADING,
+                                                                javax.swing.GroupLayout.DEFAULT_SIZE, 111,
+                                                                Short.MAX_VALUE)
+                                                        .addComponent(TotalPenjualan,
+                                                                javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(LabaBersih,
+                                                                javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(PriodeLaporan,
+                                                                javax.swing.GroupLayout.Alignment.LEADING)))
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGroup(jPanel1Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(jLabel2)
+                                                        .addComponent(jLabel3))
+                                                .addGap(35, 35, 35)
+                                                .addGroup(jPanel1Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(JenisLaporan,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 136,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                                .addComponent(TanggalLaporan,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 82,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(
+                                                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(BulanLaporan,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 80,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(
+                                                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(yearList,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addComponent(jScrollPane1))
+                                .addContainerGap(19, Short.MAX_VALUE)));
         jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel9))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(JenisLaporan, javax.swing.GroupLayout.PREFERRED_SIZE, 18, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel3)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(BulanLaporan, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(TanggalLaporan, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(2, 2, 2)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(ButtonTampilkan)
-                .addGap(15, 15, 15)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(TotalPenjualan, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(TotalPengeluaran, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(LabaBersih, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(PriodeLaporan, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
-                .addComponent(jLabel8)
-                .addGap(20, 20, 20)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(173, Short.MAX_VALUE))
-        );
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel1)
+                                        .addComponent(jLabel9))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel2)
+                                        .addComponent(JenisLaporan, javax.swing.GroupLayout.PREFERRED_SIZE, 18,
+                                                Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout
+                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(BulanLaporan, javax.swing.GroupLayout.PREFERRED_SIZE, 0,
+                                                Short.MAX_VALUE)
+                                        .addGroup(
+                                                javax.swing.GroupLayout.Alignment.LEADING,
+                                                jPanel1Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jLabel3)
+                                                        .addComponent(yearList, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(TanggalLaporan, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                        19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(2, 2, 2)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(ButtonTampilkan)
+                                .addGap(15, 15, 15)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel4)
+                                        .addComponent(TotalPenjualan, javax.swing.GroupLayout.PREFERRED_SIZE, 16,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel5)
+                                        .addComponent(TotalPengeluaran, javax.swing.GroupLayout.PREFERRED_SIZE, 16,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel6)
+                                        .addComponent(LabaBersih, javax.swing.GroupLayout.PREFERRED_SIZE, 16,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel7)
+                                        .addComponent(PriodeLaporan, javax.swing.GroupLayout.PREFERRED_SIZE, 16,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(30, 30, 30)
+                                .addComponent(jLabel8)
+                                .addGap(20, 20, 20)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 260,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(173, Short.MAX_VALUE)));
 
         add(jPanel1, "card2");
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void yearListActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_yearListActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }// GEN-LAST:event_yearListActionPerformed
 
     private void JenisLaporanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_JenisLaporanActionPerformed
         // TODO add your handling code here:
@@ -433,7 +549,6 @@ public class Keuangan extends javax.swing.JPanel {
     private javax.swing.JTextField TanggalLaporan;
     private javax.swing.JTextField TotalPengeluaran;
     private javax.swing.JTextField TotalPenjualan;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -445,5 +560,6 @@ public class Keuangan extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JComboBox<String> yearList;
     // End of variables declaration//GEN-END:variables
 }
