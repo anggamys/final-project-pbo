@@ -207,6 +207,7 @@ public class Keuangan extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -506,7 +507,7 @@ public class Keuangan extends javax.swing.JPanel {
                                 .addGap(20, 20, 20)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 260,
                                         javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(173, Short.MAX_VALUE)));
+                                .addContainerGap(14, Short.MAX_VALUE)));
 
         add(jPanel1, "card2");
     }// </editor-fold>//GEN-END:initComponents

@@ -200,7 +200,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
                         }
 
                         model.addRow(new Object[] {
-
+                                        
                                         product.getId(),
                                         product.getName(),
                                         product.getBarcode(),
@@ -306,7 +306,6 @@ public class ManajemenBarang extends javax.swing.JPanel {
         // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
-        // <editor-fold defaultstate="collapsed" desc="Generated
         // Code">//GEN-BEGIN:initComponents
         private void initComponents() {
 
@@ -358,11 +357,6 @@ public class ManajemenBarang extends javax.swing.JPanel {
                 jLabel2.setText("Urutkan Berdasarkan: ");
 
                 SortItem.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-                SortItem.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                SortItemActionPerformed(evt);
-                        }
-                });
 
                 TabelManajemenBarang.setModel(new javax.swing.table.DefaultTableModel(
                                 new Object[][] {
@@ -423,7 +417,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
                 Barcode.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
                 Barcode.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                BarcodeActionPerformed(evt);
+                                actionPerformed(evt);
                         }
                 });
 
@@ -437,7 +431,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
                         }
                 });
 
-                ButtonTambahBarang.setFont(new java.awt.Font("Tw Cen MT", 0, 13)); // NOI18N
+                ButtonTambahBarang.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
                 ButtonTambahBarang.setForeground(new java.awt.Color(93, 173, 226));
                 ButtonTambahBarang.setText("Tambah Barang");
                 ButtonTambahBarang.addActionListener(new java.awt.event.ActionListener() {
@@ -446,7 +440,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
                         }
                 });
 
-                ButtonEditBarang.setFont(new java.awt.Font("Tw Cen MT", 0, 13)); // NOI18N
+                ButtonEditBarang.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
                 ButtonEditBarang.setForeground(new java.awt.Color(93, 173, 226));
                 ButtonEditBarang.setText("Edit Barang");
                 ButtonEditBarang.addActionListener(new java.awt.event.ActionListener() {
@@ -455,7 +449,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
                         }
                 });
 
-                ButtonHapusBarang.setFont(new java.awt.Font("Tw Cen MT", 0, 13)); // NOI18N
+                ButtonHapusBarang.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
                 ButtonHapusBarang.setForeground(new java.awt.Color(93, 173, 226));
                 ButtonHapusBarang.setText("Hapus Barang");
                 ButtonHapusBarang.addActionListener(new java.awt.event.ActionListener() {
@@ -541,8 +535,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
                 jLabel10.setFont(new java.awt.Font("Tw Cen MT", 1, 16)); // NOI18N
                 jLabel10.setForeground(new java.awt.Color(93, 173, 226));
                 jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-                jLabel10.setIcon(new javax.swing.ImageIcon(
-                                getClass().getResource("/com/mycompany/Img/Laporan_Keuangan.png"))); // NOI18N
+                jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Laporan_Keuangan.png"))); // NOI18N
                 jLabel10.setText("Menu Barang");
 
                 SearchBarang.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
@@ -560,7 +553,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
 
                 KategoriBarang.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
 
-                clearForm.setFont(new java.awt.Font("Tw Cen MT", 0, 13)); // NOI18N
+                clearForm.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
                 clearForm.setForeground(new java.awt.Color(93, 173, 226));
                 clearForm.setText("Bersihkan Kolom");
                 clearForm.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -609,8 +602,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
                                                                                                 .addContainerGap()
                                                                                                 .addGroup(jPanel1Layout
                                                                                                                 .createParallelGroup(
-                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING,
-                                                                                                                                false)
+                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
                                                                                                                 .addComponent(jScrollPane2,
                                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                                                                 871,
@@ -644,10 +636,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
                                                                                                                                 .addGap(305, 305,
                                                                                                                                                 305)
                                                                                                                                 .addComponent(ButtonScanBarang)
-                                                                                                                                .addPreferredGap(
-                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                Short.MAX_VALUE)
+                                                                                                                                .addGap(18, 18, 18)
                                                                                                                                 .addComponent(SearchBarang,
                                                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                                                                                 131,
@@ -742,7 +731,8 @@ public class ManajemenBarang extends javax.swing.JPanel {
                                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                                                .addContainerGap(13, Short.MAX_VALUE)));
+                                                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                Short.MAX_VALUE)));
                 jPanel1Layout.setVerticalGroup(
                                 jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                 .addGroup(jPanel1Layout.createSequentialGroup()
@@ -750,23 +740,19 @@ public class ManajemenBarang extends javax.swing.JPanel {
                                                                                 javax.swing.GroupLayout.Alignment.BASELINE)
                                                                                 .addComponent(jLabel1)
                                                                                 .addComponent(jLabel10))
-                                                                .addGap(10, 10, 10)
+                                                                .addPreferredGap(
+                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                                 .addGroup(jPanel1Layout.createParallelGroup(
                                                                                 javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                .addComponent(ButtonScanBarang,
+                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                Short.MAX_VALUE)
+                                                                                .addComponent(SearchBarang,
+                                                                                                javax.swing.GroupLayout.Alignment.TRAILING)
                                                                                 .addGroup(jPanel1Layout
                                                                                                 .createParallelGroup(
                                                                                                                 javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                                                .addComponent(ButtonScanBarang,
-                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                32,
-                                                                                                                Short.MAX_VALUE)
-                                                                                                .addComponent(SearchBarang,
-                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                32,
-                                                                                                                Short.MAX_VALUE))
-                                                                                .addGroup(jPanel1Layout
-                                                                                                .createParallelGroup(
-                                                                                                                javax.swing.GroupLayout.Alignment.TRAILING)
                                                                                                 .addComponent(jLabel2)
                                                                                                 .addComponent(SortItem,
                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
@@ -810,7 +796,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                                                 16,
                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                .addGap(15, 15, 15)
+                                                                                                .addGap(10, 10, 10)
                                                                                                 .addGroup(jPanel1Layout
                                                                                                                 .createParallelGroup(
                                                                                                                                 javax.swing.GroupLayout.Alignment.BASELINE)
@@ -905,10 +891,6 @@ public class ManajemenBarang extends javax.swing.JPanel {
 
                 add(jPanel1, "card2");
         }// </editor-fold>//GEN-END:initComponents
-
-        private void SortItemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_SortItemActionPerformed
-                // TODO add your handling code here:
-        }// GEN-LAST:event_SortItemActionPerformed
 
         private void HargaBeliBarangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_HargaBeliBarangActionPerformed
                 // TODO add your handling code here:
