@@ -217,47 +217,47 @@ public class OwnerManajemenPegawai extends javax.swing.JPanel {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setFont(new java.awt.Font("Tw Cen MT", 1, 36)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(93, 173, 226));
         jLabel1.setText("Manajemen Data Pegawai");
 
-        jLabel2.setFont(new java.awt.Font("Tw Cen MT", 0, 24)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         jLabel2.setText("Username: ");
 
-        Username.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        Username.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
 
-        jLabel3.setFont(new java.awt.Font("Tw Cen MT", 0, 24)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         jLabel3.setText("Password:");
 
-        Password.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        Password.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
 
-        jLabel4.setFont(new java.awt.Font("Tw Cen MT", 0, 24)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         jLabel4.setText("Email:");
 
-        Email.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        Email.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
 
-        jLabel5.setFont(new java.awt.Font("Tw Cen MT", 0, 24)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         jLabel5.setText("Posisi:");
 
-        jComboBox1.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        jComboBox1.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
 
-        TambahkanPegawai.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        TambahkanPegawai.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         TambahkanPegawai.setForeground(new java.awt.Color(93, 173, 226));
         TambahkanPegawai.setText("Tambahkan");
 
-        EditPegawai.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        EditPegawai.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         EditPegawai.setForeground(new java.awt.Color(93, 173, 226));
         EditPegawai.setText("Edit Data");
 
-        HapusPegawai.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        HapusPegawai.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         HapusPegawai.setForeground(new java.awt.Color(93, 173, 226));
         HapusPegawai.setText("Hapus Data");
 
-        KosongkanKolomPegawai.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        KosongkanKolomPegawai.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         KosongkanKolomPegawai.setForeground(new java.awt.Color(93, 173, 226));
         KosongkanKolomPegawai.setText("Kosongkan Kolom");
 
-        jLabel6.setFont(new java.awt.Font("Tw Cen MT", 1, 30)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(93, 173, 226));
         jLabel6.setText("Data Pegawai");
 
@@ -404,7 +404,7 @@ public class OwnerManajemenPegawai extends javax.swing.JPanel {
                         .addComponent(HapusPegawai, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(KosongkanKolomPegawai))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1713, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 860, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -416,29 +416,29 @@ public class OwnerManajemenPegawai extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(Username, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(15, 15, 15)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addGap(15, 15, 15)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
-                .addGap(15, 15, 15)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(TambahkanPegawai)
                     .addComponent(EditPegawai)
                     .addComponent(HapusPegawai)
                     .addComponent(KosongkanKolomPegawai))
-                .addGap(25, 25, 25)
+                .addGap(31, 31, 31)
                 .addComponent(jLabel6)
-                .addGap(25, 25, 25)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 574, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         add(jPanel1, "card2");

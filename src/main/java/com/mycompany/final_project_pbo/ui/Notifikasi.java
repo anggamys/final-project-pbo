@@ -91,7 +91,7 @@ public class Notifikasi extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
 
-        setPreferredSize(new java.awt.Dimension(1760, 1828));
+        setPreferredSize(new java.awt.Dimension(890, 590));
 
         TableBarangdanStock.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][] {
