@@ -4,6 +4,15 @@
  */
 package com.mycompany.final_project_pbo.ui;
 
+import java.util.ArrayList;
+
+import javax.swing.table.DefaultTableModel;
+
+import com.mycompany.final_project_pbo.models.User;
+import com.mycompany.final_project_pbo.repositories.UserRepository;
+import com.mycompany.final_project_pbo.utils.Response;
+import com.mycompany.final_project_pbo.utils.SessionManager;
+
 /**
  *
  * @author muham
@@ -15,6 +24,165 @@ public class OwnerManajemenPegawai extends javax.swing.JPanel {
      */
     public OwnerManajemenPegawai() {
         initComponents();
+        initializeComponents();
+    }
+
+    private void initializeComponents() {
+        populateTableUser();
+        populateDropdown();
+        initListeners();
+
+        clearInputFields();
+    }
+
+    User currentUser = SessionManager.getInstance().getCurrentUser();
+    UserRepository userRepository = new UserRepository();
+
+    private void initListeners() {
+        TambahkanPegawai.addActionListener(e -> addUser());
+        EditPegawai.addActionListener(e -> editUser());
+        HapusPegawai.addActionListener(e -> deleteUser());
+        KosongkanKolomPegawai.addActionListener(e -> clearInputFields());
+    }
+
+    private void deleteUser() {
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow != -1) {
+            int userId = (Integer) jTable1.getValueAt(selectedRow, 0);
+            Integer confirmation = javax.swing.JOptionPane.showConfirmDialog(
+                    this,
+                    "Are you sure you want to delete this user?",
+                    "Confirm Deletion",
+                    javax.swing.JOptionPane.YES_NO_OPTION);
+            if (confirmation != javax.swing.JOptionPane.YES_OPTION) {
+                return; // User cancelled the deletion
+            }
+            Response<Boolean> response = userRepository.deleteById(userId, currentUser.getId());
+            if (response.isSuccess()) {
+                System.out.println("User deleted successfully");
+                populateTableUser();
+                clearInputFields();
+            } else {
+                System.out.println("Error deleting user: " + response.getMessage());
+            }
+        }
+    }
+
+    private void editUser() {
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow != -1) {
+            String username = Username.getText();
+            String password = Password.getText();
+            String email = Email.getText();
+            String position = jComboBox1.getSelectedItem().toString();
+
+            User user = new User();
+            user.setId((Integer) jTable1.getValueAt(selectedRow, 0));
+            user.setUsername(username);
+            user.setPassword(password);
+            user.setEmail(email);
+            user.setIsOwner(position.equals("Owner"));
+
+            Integer confirmation = javax.swing.JOptionPane.showConfirmDialog(
+                    this,
+                    "Are you sure you want to update this user?",
+                    "Confirm Update",
+                    javax.swing.JOptionPane.YES_NO_OPTION);
+
+            if (confirmation == javax.swing.JOptionPane.YES_OPTION) {
+                Response<User> response = userRepository.update(user, currentUser.getId());
+                if (response.isSuccess()) {
+                    System.out.println("User updated successfully: " + response.getData());
+                    populateTableUser();
+                    clearInputFields();
+                } else {
+                    System.out.println("Error updating user: " + response.getMessage());
+                }
+            }
+        }
+    }
+
+    private void addUser() {
+        String username = Username.getText();
+        String password = Password.getText();
+        String email = Email.getText();
+        String position = jComboBox1.getSelectedItem().toString();
+
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setEmail(email);
+        user.setIsOwner(position.equals("Owner"));
+
+        Response<User> response = userRepository.save(user, currentUser.getId());
+        if (response.isSuccess()) {
+            System.out.println("User added successfully: " + response.getData());
+            populateTableUser();
+            clearInputFields();
+        } else {
+            System.out.println("Error adding user: " + response.getMessage());
+        }
+    }
+
+    private void setTextField() {
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow != -1) {
+            Username.setText(jTable1.getValueAt(selectedRow, 1).toString());
+            Email.setText(jTable1.getValueAt(selectedRow, 2).toString());
+            jComboBox1.setSelectedItem(jTable1.getValueAt(selectedRow, 3).toString());
+        }
+    }
+
+    private void populateTableUser() {
+        String[] columnNames = { "IDUser", "Username", "Email", "Posisi" };
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Prevent editing of table cells
+            }
+        };
+
+        Response<ArrayList<User>> response = userRepository.findAll(currentUser.getId());
+        if (response.isSuccess()) {
+            ArrayList<User> users = response.getData();
+
+            for (User user : users) {
+                Object[] row = { user.getId(), user.getUsername(), user.getEmail(),
+                        user.getIsOwner() ? "Owner" : "Staff" };
+                model.addRow(row);
+            }
+        } else {
+            System.out.println("Error fetching users: " + response.getMessage());
+        }
+
+        jTable1.setModel(model);
+        jTable1.getColumnModel().getColumn(0).setPreferredWidth(50); // Set width for ID column
+        jTable1.getColumnModel().getColumn(1).setPreferredWidth(150); // Set width for Username column
+        jTable1.getColumnModel().getColumn(2).setPreferredWidth(200); // Set width for Email column
+        jTable1.getColumnModel().getColumn(3).setPreferredWidth(100); // Set width for Posisi column
+
+        // Event listener for row selection
+        jTable1.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                setTextField();
+            }
+        });
+    }
+
+    private void populateDropdown() {
+        // Populate the dropdown with positions
+        jComboBox1.removeAllItems(); // Clear existing items
+        jComboBox1.addItem("");
+        jComboBox1.addItem("Staff");
+        jComboBox1.addItem("Owner");
+    }
+
+    private void clearInputFields() {
+        // Clear the input fields
+        Username.setText("");
+        Password.setText("");
+        Email.setText("");
+        jComboBox1.setSelectedIndex(0); // Reset to first item
     }
 
     /**
@@ -23,6 +191,7 @@ public class OwnerManajemenPegawai extends javax.swing.JPanel {
      * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -71,7 +240,6 @@ public class OwnerManajemenPegawai extends javax.swing.JPanel {
         jLabel5.setText("Posisi:");
 
         jComboBox1.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Staff", "Owner" }));
 
         TambahkanPegawai.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
         TambahkanPegawai.setForeground(new java.awt.Color(93, 173, 226));
@@ -270,12 +438,11 @@ public class OwnerManajemenPegawai extends javax.swing.JPanel {
                 .addComponent(jLabel6)
                 .addGap(25, 25, 25)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 574, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         add(jPanel1, "card2");
     }// </editor-fold>//GEN-END:initComponents
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton EditPegawai;

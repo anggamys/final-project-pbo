@@ -4,6 +4,17 @@
  */
 package com.mycompany.final_project_pbo.ui;
 
+import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
+import com.mycompany.final_project_pbo.models.Category;
+import com.mycompany.final_project_pbo.models.User;
+import com.mycompany.final_project_pbo.repositories.CategoryRepository;
+import com.mycompany.final_project_pbo.utils.Response;
+import com.mycompany.final_project_pbo.utils.SessionManager;
+
 /**
  *
  * @author muham
@@ -15,6 +26,166 @@ public class OwnerKategori extends javax.swing.JPanel {
      */
     public OwnerKategori() {
         initComponents();
+        initializeComponents();
+    }
+
+    CategoryRepository categoryRepository = new CategoryRepository();
+
+    private void initializeComponents() {
+        populateTableCategory();
+        initListeners();
+
+        clearInputFields();
+    }
+
+    User currentUser = SessionManager.getInstance().getCurrentUser();
+
+    private void initListeners() {
+        ButtonTambahkanKategori.addActionListener(e -> addCategory());
+        ButtonEditKategori.addActionListener(e -> editCategory());
+        ButtonHapusKategori.addActionListener(e -> deleteCategory());
+        ButtonKosongkanKolomKategori.addActionListener(e -> clearInputFields());
+
+        jTable1.getSelectionModel().addListSelectionListener(e -> setTextField());
+    }
+
+    private void deleteCategory() {
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow == -1) {
+            // Show error message if no row is selected
+            JOptionPane.showMessageDialog(this, "Please select a category to delete.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int id = (int) jTable1.getValueAt(selectedRow, 0);
+
+        Integer confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this category?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
+        if (confirm != JOptionPane.YES_OPTION) {
+            // User chose not to delete
+            return;
+        }
+
+        Response<Boolean> response = categoryRepository.deleteById(id, currentUser.getId());
+
+        if (response.isSuccess()) {
+            populateTableCategory();
+            clearInputFields();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error deleting category: " + response.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            System.err.println("Error deleting category: " + response.getMessage());
+        }
+    }
+
+    private void editCategory() {
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow == -1) {
+            // Show error message if no row is selected
+            JOptionPane.showMessageDialog(this, "Please select a category to edit.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String name = KategoriBarang.getText();
+        String description = KategoriBarang1.getText();
+        int id = (int) jTable1.getValueAt(selectedRow, 0);
+
+        if (name.isEmpty() || description.isEmpty()) {
+            // Show error message for empty fields
+            System.err.println("Fields cannot be empty");
+            return;
+        }
+
+        Category category = new Category();
+        category.setId(id);
+        category.setName(name);
+        category.setDescription(description);
+
+        Integer confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to update this category?", "Confirm Update", JOptionPane.YES_NO_OPTION);
+        if (confirm != JOptionPane.YES_OPTION) {
+            // User chose not to update
+            return;
+        }
+
+        Response<Category> response = categoryRepository.update(category, currentUser.getId());
+
+        if (response.isSuccess()) {
+            populateTableCategory();
+            clearInputFields();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error updating category: " + response.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            System.err.println("Error updating category: " + response.getMessage());
+        }
+    }
+
+    private void addCategory() {
+        String name = KategoriBarang.getText();
+        String description = KategoriBarang1.getText();
+
+        if (name.isEmpty() || description.isEmpty()) {
+            // Show error message for empty fields
+            System.err.println("Fields cannot be empty");
+            return;
+        }
+
+        Category category = new Category();
+        category.setName(name);
+        category.setDescription(description);
+        Response<Category> response = categoryRepository.save(category, currentUser.getId());
+
+        if (response.isSuccess()) {
+            populateTableCategory();
+            clearInputFields();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error adding category: " + response.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            System.err.println("Error adding category: " + response.getMessage());
+        }
+    }
+
+    private void setTextField() {
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow != -1) {
+            KategoriBarang.setText(jTable1.getValueAt(selectedRow, 1).toString());
+            KategoriBarang1.setText(jTable1.getValueAt(selectedRow, 2).toString());
+        } else {
+            clearInputFields();
+        }
+    }
+
+    private void clearInputFields() {
+        KategoriBarang.setText("");
+        KategoriBarang1.setText("");
+    }
+
+    private void populateTableCategory() {
+        String[] columnNames = {"IDKategori", "Nama Kategori", "Description"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Prevent editing of table cells
+            }
+        };
+
+        Response<ArrayList<Category>> response = categoryRepository.findAll(currentUser.getId());
+        if (response.isSuccess()) {
+            ArrayList<Category> categories = response.getData();
+            for (Category category : categories) {
+                Object[] row = {category.getId(), category.getName(), category.getDescription()};
+                model.addRow(row);
+            }
+        } else {
+            // Handle error case, e.g., show a message dialog
+            System.err.println("Error fetching categories: " + response.getMessage());
+        }
+
+        jTable1.setModel(model);
+        jTable1.getColumnModel().getColumn(0).setPreferredWidth(50); // Set width for IDKategori column
+        jTable1.getColumnModel().getColumn(1).setPreferredWidth(200); // Set width for Nama Kategori column
+        jTable1.getColumnModel().getColumn(2).setPreferredWidth(300); // Set width for Description column
+
+        jTable1.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                setTextField();
+            }
+        });
     }
 
     /**
