@@ -198,9 +198,8 @@ public final class Hutang extends javax.swing.JPanel {
 
         jLabel2.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         jLabel2.setText("ID Peminjaman:");
-        jLabel2.setPreferredSize(new java.awt.Dimension(84, 16));
 
-        IDPeminjaman.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        IDPeminjaman.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
         IDPeminjaman.setEnabled(false);
         IDPeminjaman.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -210,9 +209,8 @@ public final class Hutang extends javax.swing.JPanel {
 
         jLabel3.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         jLabel3.setText("Nama Peminjam :");
-        jLabel3.setPreferredSize(new java.awt.Dimension(97, 16));
 
-        NamaPeminjam.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        NamaPeminjam.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
         NamaPeminjam.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 NamaPeminjamActionPerformed(evt);
@@ -221,13 +219,11 @@ public final class Hutang extends javax.swing.JPanel {
 
         jLabel4.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         jLabel4.setText("Status Peminjam :");
-        jLabel4.setPreferredSize(new java.awt.Dimension(97, 16));
 
         jLabel5.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         jLabel5.setText("Alamat Peminjam :");
-        jLabel5.setPreferredSize(new java.awt.Dimension(103, 16));
 
-        AlamatPeminjam.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        AlamatPeminjam.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
         AlamatPeminjam.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AlamatPeminjamActionPerformed(evt);
@@ -236,9 +232,8 @@ public final class Hutang extends javax.swing.JPanel {
 
         jLabel6.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         jLabel6.setText("No. Telp Peminjam :");
-        jLabel6.setPreferredSize(new java.awt.Dimension(110, 16));
 
-        NoTelpPeminjam.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        NoTelpPeminjam.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
         NoTelpPeminjam.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 NoTelpPeminjamActionPerformed(evt);
@@ -247,9 +242,8 @@ public final class Hutang extends javax.swing.JPanel {
 
         jLabel7.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         jLabel7.setText("Tanggal Peminjaman :");
-        jLabel7.setPreferredSize(new java.awt.Dimension(124, 16));
 
-        TanggalPeminjaman.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        TanggalPeminjaman.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
         TanggalPeminjaman.setEnabled(false);
         TanggalPeminjaman.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -259,9 +253,8 @@ public final class Hutang extends javax.swing.JPanel {
 
         jLabel8.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         jLabel8.setText("Tanggal Pelunasan Peminjaman : ");
-        jLabel8.setPreferredSize(new java.awt.Dimension(188, 16));
 
-        TanggalPelunasanPeminjaman.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        TanggalPelunasanPeminjaman.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
         TanggalPelunasanPeminjaman.setEnabled(false);
         TanggalPelunasanPeminjaman.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -271,9 +264,8 @@ public final class Hutang extends javax.swing.JPanel {
 
         jLabel9.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         jLabel9.setText("Jumlah Peminjaman : ");
-        jLabel9.setPreferredSize(new java.awt.Dimension(118, 16));
 
-        JumlahPeminjaman.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        JumlahPeminjaman.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
         JumlahPeminjaman.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JumlahPeminjamanActionPerformed(evt);
@@ -282,9 +274,8 @@ public final class Hutang extends javax.swing.JPanel {
 
         jLabel10.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         jLabel10.setText("Status Peminjaman : ");
-        jLabel10.setPreferredSize(new java.awt.Dimension(115, 16));
 
-        StatusPeminjaman.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        StatusPeminjaman.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
         StatusPeminjaman.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 StatusPeminjamanActionPerformed(evt);
@@ -315,7 +306,7 @@ public final class Hutang extends javax.swing.JPanel {
         jLabel11.setFont(new java.awt.Font("Tw Cen MT", 1, 16)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(93, 173, 226));
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Peminjaman.png"))); // NOI18N
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/Img/Peminjaman.png"))); // NOI18N
         jLabel11.setText("Menu Peminjaman");
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -331,7 +322,7 @@ public final class Hutang extends javax.swing.JPanel {
             .addGap(0, 234, Short.MAX_VALUE)
         );
 
-        LoanStatusOption.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        LoanStatusOption.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
         LoanStatusOption.setEnabled(false);
 
         EditPinjaman.setBackground(new java.awt.Color(244, 246, 246));
@@ -363,10 +354,9 @@ public final class Hutang extends javax.swing.JPanel {
                                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-                                        .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -404,7 +394,7 @@ public final class Hutang extends javax.swing.JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2)
                             .addComponent(IDPeminjaman, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
