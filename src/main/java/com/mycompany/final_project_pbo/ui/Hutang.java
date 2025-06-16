@@ -200,7 +200,7 @@ public final class Hutang extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         jLabel2.setText("ID Peminjaman:");
 
-        IDPeminjaman.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        IDPeminjaman.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
         IDPeminjaman.setEnabled(false);
         IDPeminjaman.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -211,7 +211,7 @@ public final class Hutang extends javax.swing.JPanel {
         jLabel3.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         jLabel3.setText("Nama Peminjam :");
 
-        NamaPeminjam.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        NamaPeminjam.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
         NamaPeminjam.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 NamaPeminjamActionPerformed(evt);
@@ -224,7 +224,7 @@ public final class Hutang extends javax.swing.JPanel {
         jLabel5.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         jLabel5.setText("Alamat Peminjam :");
 
-        AlamatPeminjam.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        AlamatPeminjam.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
         AlamatPeminjam.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AlamatPeminjamActionPerformed(evt);
@@ -234,7 +234,7 @@ public final class Hutang extends javax.swing.JPanel {
         jLabel6.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         jLabel6.setText("No. Telp Peminjam :");
 
-        NoTelpPeminjam.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        NoTelpPeminjam.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
         NoTelpPeminjam.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 NoTelpPeminjamActionPerformed(evt);
@@ -244,7 +244,7 @@ public final class Hutang extends javax.swing.JPanel {
         jLabel7.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         jLabel7.setText("Tanggal Peminjaman :");
 
-        TanggalPeminjaman.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        TanggalPeminjaman.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
         TanggalPeminjaman.setEnabled(false);
         TanggalPeminjaman.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -255,7 +255,7 @@ public final class Hutang extends javax.swing.JPanel {
         jLabel8.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         jLabel8.setText("Tanggal Pelunasan Peminjaman : ");
 
-        TanggalPelunasanPeminjaman.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        TanggalPelunasanPeminjaman.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
         TanggalPelunasanPeminjaman.setEnabled(false);
         TanggalPelunasanPeminjaman.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -266,7 +266,7 @@ public final class Hutang extends javax.swing.JPanel {
         jLabel9.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         jLabel9.setText("Jumlah Peminjaman : ");
 
-        JumlahPeminjaman.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        JumlahPeminjaman.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
         JumlahPeminjaman.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JumlahPeminjamanActionPerformed(evt);
@@ -276,7 +276,7 @@ public final class Hutang extends javax.swing.JPanel {
         jLabel10.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         jLabel10.setText("Status Peminjaman : ");
 
-        StatusPeminjaman.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        StatusPeminjaman.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
         StatusPeminjaman.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 StatusPeminjamanActionPerformed(evt);
@@ -307,7 +307,7 @@ public final class Hutang extends javax.swing.JPanel {
         jLabel11.setFont(new java.awt.Font("Tw Cen MT", 1, 16)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(93, 173, 226));
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Peminjaman.png"))); // NOI18N
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/Img/Peminjaman.png"))); // NOI18N
         jLabel11.setText("Menu Peminjaman");
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -321,7 +321,7 @@ public final class Hutang extends javax.swing.JPanel {
                 jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGap(0, 234, Short.MAX_VALUE));
 
-        LoanStatusOption.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        LoanStatusOption.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
         LoanStatusOption.setEnabled(false);
 
         EditPinjaman.setBackground(new java.awt.Color(244, 246, 246));
