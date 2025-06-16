@@ -4,6 +4,7 @@
  */
 package com.mycompany.final_project_pbo.models;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -14,8 +15,8 @@ public class DebtTransaction extends BaseEntity {
     private String debtorName;
     private String address;
     private String phoneNumber;
-    private Date loanDate;
-    private Date dueDate;
+    private LocalDate loanDate;
+    private LocalDate dueDate;
     private Double amount;
     private LoanStatus status;
     private Integer createdBy;
@@ -24,7 +25,7 @@ public class DebtTransaction extends BaseEntity {
         super();
     }
 
-    public DebtTransaction(String debtorName, String address, String phoneNumber, Date loanDate, Date dueDate,
+    public DebtTransaction(String debtorName, String address, String phoneNumber, LocalDate loanDate, LocalDate dueDate,
             Double amount, LoanStatus status, Integer createdBy) {
         this.debtorName = debtorName;
         this.address = address;
@@ -61,19 +62,19 @@ public class DebtTransaction extends BaseEntity {
         this.phoneNumber = phoneNumber;
     }
 
-    public Date getLoanDate() {
+    public LocalDate getLoanDate() {
         return loanDate;
     }
 
-    public void setLoanDate(Date loanDate) {
+    public void setLoanDate(LocalDate loanDate) {
         this.loanDate = loanDate;
     }
 
-    public Date getDueDate() {
+    public LocalDate getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(Date dueDate) {
+    public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
     }
 

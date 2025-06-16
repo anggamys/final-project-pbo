@@ -25,7 +25,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -901,7 +900,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
         }// GEN-LAST:event_ButtonScanBarangActionPerformed
 
         private void clearFormMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_clearFormMouseClicked
-                // clearForm();
+                clearForm();
         }// GEN-LAST:event_clearFormMouseClicked
 
         private void HargaJualBarangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_HargaJualBarangActionPerformed

@@ -12,6 +12,7 @@ import com.mycompany.final_project_pbo.services.DebtTransactionService;
 import com.mycompany.final_project_pbo.utils.Response;
 import com.mycompany.final_project_pbo.utils.SessionManager;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
@@ -30,8 +31,233 @@ public final class Hutang extends javax.swing.JPanel {
      */
     public Hutang() {
         initComponents();
-        showAllHutang();
-        showLoanStatus();
+        initializeComponents();
+        initializeEventListeners();
+    }
+
+    User currentUser = SessionManager.getInstance().getCurrentUser();
+    DebtTransactionRepository debtTransactionRepository = new DebtTransactionRepository();
+    DebtTransactionService debtTransactionService = new DebtTransactionService();
+
+    private void initializeComponents() {
+        populateTableHutang();
+        populateDropDowns();
+    }
+
+    private void initializeEventListeners() {
+        SimpanPinjaman.addActionListener(evt -> addNewDebtTransaction());
+        EditPinjaman.addActionListener(evt -> editDebtTransaction());
+        HapusPinjaman.addActionListener(evt -> deleteDebtTransaction());
+
+        utangTableSelectionChanged();
+
+        LoanStatusOption.addActionListener(evt -> {
+            if (utangTable.getSelectedRow() != -1) {
+                LoanStatusOption.setEnabled(true);
+            }
+        });
+    }
+
+    private void deleteDebtTransaction() {
+        int selectedRow = utangTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Silakan pilih data yang ingin dihapus.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String idStr = IDPeminjaman.getText();
+        if (idStr.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "ID Peminjaman tidak boleh kosong.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int id = Integer.parseInt(idStr);
+        Integer confirmation = JOptionPane.showConfirmDialog(this,
+                "Apakah Anda yakin ingin menghapus data Hutang Piutang ini?", "Konfirmasi",
+                JOptionPane.YES_NO_OPTION);
+        if (confirmation != JOptionPane.YES_OPTION) {
+            return; // User chose not to proceed
+        }
+
+        Response<Boolean> response = debtTransactionRepository.deleteById(id, currentUser.getId());
+        if (response.isSuccess()) {
+            JOptionPane.showMessageDialog(this, "Data Hutang Piutang berhasil dihapus.", "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+            populateTableHutang();
+            clearFields();
+        } else {
+            JOptionPane.showMessageDialog(this, response.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void editDebtTransaction() {
+        int selectedRow = utangTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Silakan pilih data yang ingin diubah.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String idStr = IDPeminjaman.getText();
+        if (idStr.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "ID Peminjaman tidak boleh kosong.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int id = Integer.parseInt(idStr);
+        DebtTransaction debtTransaction = new DebtTransaction();
+        debtTransaction.setId(id);
+        debtTransaction.setDebtorName(NamaPeminjam.getText());
+        debtTransaction.setAddress(AlamatPeminjam.getText());
+        debtTransaction.setPhoneNumber(NoTelpPeminjam.getText());
+        debtTransaction.setAmount(Double.parseDouble(JumlahPeminjaman.getText()));
+        debtTransaction.setStatus((LoanStatus) LoanStatusOption.getSelectedItem());
+        debtTransaction.setLoanDate(LocalDate.parse(TanggalPeminjaman.getText()));
+        debtTransaction.setDueDate(LocalDate.parse(TanggalPelunasanPeminjaman.getText()));
+        debtTransaction.setCreatedBy(currentUser.getId());
+
+        Integer confirmation = JOptionPane.showConfirmDialog(this,
+                "Apakah Anda yakin ingin mengubah data Hutang Piutang ini?", "Konfirmasi",
+                JOptionPane.YES_NO_OPTION);
+        if (confirmation != JOptionPane.YES_OPTION) {
+            return; // User chose not to proceed
+        }
+        
+        Response<DebtTransaction> response = debtTransactionService.update(debtTransaction, currentUser.getId());
+        if (response.isSuccess()) {
+            JOptionPane.showMessageDialog(this, "Data Hutang Piutang berhasil diubah.", "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+            populateTableHutang();
+            clearFields();
+        } else {
+            JOptionPane.showMessageDialog(this, response.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void addNewDebtTransaction() {
+        String debtorName = NamaPeminjam.getText();
+        String address = AlamatPeminjam.getText();
+        String phoneNumber = NoTelpPeminjam.getText();
+        String amountStr = JumlahPeminjaman.getText();
+
+        if (debtorName.isEmpty() || address.isEmpty() || phoneNumber.isEmpty() || amountStr.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Semua field harus diisi.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        double amount;
+        try {
+            amount = Double.parseDouble(amountStr);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Jumlah Peminjaman harus berupa angka.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        DebtTransaction debtTransaction = new DebtTransaction();
+        debtTransaction.setDebtorName(debtorName);
+        debtTransaction.setAddress(address);
+        debtTransaction.setPhoneNumber(phoneNumber);
+        debtTransaction.setAmount(amount);
+
+        Response<DebtTransaction> response = debtTransactionService.save(debtTransaction, currentUser.getId());
+        if (response.isSuccess()) {
+            JOptionPane.showMessageDialog(this, "Data Hutang Piutang berhasil disimpan.", "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+            populateTableHutang();
+            clearFields();
+        } else {
+            JOptionPane.showMessageDialog(this, response.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void populateTableHutang() {
+        String[] columnNames = { "ID", "Nama", "Alamat Peminjam", "No. Telp Peminjam", "Tanggal Peminjaman",
+                "Tanggal Pelunasan Peminjaman", "Jumlah Peminjaman", "Status Peminjaman" };
+
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        Response<ArrayList<DebtTransaction>> response = debtTransactionRepository.findAll(currentUser.getId());
+
+        if (response.isSuccess()) {
+            for (DebtTransaction debt : response.getData()) {
+                model.addRow(new Object[] {
+                        debt.getId(),
+                        debt.getDebtorName(),
+                        debt.getAddress(),
+                        debt.getPhoneNumber(),
+                        debt.getLoanDate(),
+                        debt.getDueDate(),
+                        debt.getAmount(),
+                        debt.getStatus() // Enum will show as string
+                });
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, response.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        utangTable.setModel(model);
+        utangTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        utangTableSelectionChanged();
+    }
+
+    private void utangTableSelectionChanged() {
+        ListSelectionModel selectionModel = utangTable.getSelectionModel();
+        selectionModel.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                int selectedRow = utangTable.getSelectedRow();
+                if (selectedRow != -1) {
+                    IDPeminjaman.setText(utangTable.getValueAt(selectedRow, 0).toString());
+                    NamaPeminjam.setText(utangTable.getValueAt(selectedRow, 1).toString());
+                    AlamatPeminjam.setText(utangTable.getValueAt(selectedRow, 2).toString());
+                    NoTelpPeminjam.setText(utangTable.getValueAt(selectedRow, 3).toString());
+                    TanggalPeminjaman.setText(utangTable.getValueAt(selectedRow, 4).toString());
+                    TanggalPelunasanPeminjaman.setText(utangTable.getValueAt(selectedRow, 5).toString());
+                    JumlahPeminjaman.setText(utangTable.getValueAt(selectedRow, 6).toString());
+
+                    Object statusObj = utangTable.getValueAt(selectedRow, 7);
+                    if (statusObj instanceof LoanStatus) {
+                        LoanStatusOption.setSelectedItem((LoanStatus) statusObj);
+                    } else if (statusObj != null) {
+                        // In case it's stored as String
+                        try {
+                            LoanStatusOption.setSelectedItem(LoanStatus.valueOf(statusObj.toString()));
+                        } catch (IllegalArgumentException ex) {
+                            LoanStatusOption.setSelectedIndex(0); // fallback
+                        }
+                    }
+
+                    LoanStatusOption.setEnabled(true);
+                }
+            }
+        });
+    }
+
+    private void populateDropDowns() {
+        LoanStatusOption.removeAllItems();
+        LoanStatusOption.addItem(null); // optional default value
+        for (LoanStatus status : LoanStatus.values()) {
+            LoanStatusOption.addItem(status);
+        }
+    }
+
+    private void clearFields() {
+        IDPeminjaman.setText("");
+        NamaPeminjam.setText("");
+        AlamatPeminjam.setText("");
+        NoTelpPeminjam.setText("");
+        TanggalPeminjaman.setText("");
+        TanggalPelunasanPeminjaman.setText("");
+        JumlahPeminjaman.setText("");
+        LoanStatusOption.setSelectedIndex(0);
     }
 
     /**
@@ -44,7 +270,8 @@ public final class Hutang extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
@@ -66,8 +293,6 @@ public final class Hutang extends javax.swing.JPanel {
         TanggalPelunasanPeminjaman = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         JumlahPeminjaman = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
-        StatusPeminjaman = new javax.swing.JTextField();
         SimpanPinjaman = new javax.swing.JButton();
         HapusPinjaman = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
@@ -87,112 +312,112 @@ public final class Hutang extends javax.swing.JPanel {
         jLabel1.setText("Data Hutang Piutang Pelanggan dan Pegawai");
 
         utangTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "ID ", "Nama ", "Status (Pegawai/Pelanggan)", "Alamat Peminjam", "No. Telp Peminjam", "Tanggal Peminjaman", "Tanggal Pelunasan Peminjaman", "Jumlah Peminjaman", "Status Peminjaman"
-            }
-        ));
+                new Object[][] {
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null, null, null }
+                },
+                new String[] {
+                        "ID ", "Nama ", "Status (Pegawai/Pelanggan)", "Alamat Peminjam", "No. Telp Peminjam",
+                        "Tanggal Peminjaman", "Tanggal Pelunasan Peminjaman", "Jumlah Peminjaman", "Status Peminjaman"
+                }));
         utangTable.setPreferredSize(new java.awt.Dimension(300, 870));
         jScrollPane1.setViewportView(utangTable);
 
@@ -280,17 +505,6 @@ public final class Hutang extends javax.swing.JPanel {
             }
         });
 
-        jLabel10.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
-        jLabel10.setText("Status Peminjaman : ");
-        jLabel10.setPreferredSize(new java.awt.Dimension(115, 16));
-
-        StatusPeminjaman.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
-        StatusPeminjaman.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                StatusPeminjamanActionPerformed(evt);
-            }
-        });
-
         SimpanPinjaman.setBackground(new java.awt.Color(244, 246, 246));
         SimpanPinjaman.setFont(new java.awt.Font("Tw Cen MT", 1, 10)); // NOI18N
         SimpanPinjaman.setForeground(new java.awt.Color(93, 173, 226));
@@ -323,13 +537,11 @@ public final class Hutang extends javax.swing.JPanel {
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 0, Short.MAX_VALUE));
         jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 234, Short.MAX_VALUE)
-        );
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 234, Short.MAX_VALUE));
 
         LoanStatusOption.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
         LoanStatusOption.setEnabled(false);
@@ -347,108 +559,199 @@ public final class Hutang extends javax.swing.JPanel {
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 870, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-                                        .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(JumlahPeminjaman)
-                                    .addComponent(TanggalPelunasanPeminjaman)
-                                    .addComponent(TanggalPeminjaman)
-                                    .addComponent(NoTelpPeminjam)
-                                    .addComponent(AlamatPeminjam)
-                                    .addComponent(LoanStatusOption, 0, 153, Short.MAX_VALUE)
-                                    .addComponent(NamaPeminjam)
-                                    .addComponent(IDPeminjaman)
-                                    .addComponent(StatusPeminjaman)))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(SimpanPinjaman, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(HapusPinjaman, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(EditPinjaman, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(15, 15, 15)
+                                .addGroup(jPanel2Layout
+                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 396,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 331,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 870,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addGroup(jPanel2Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                                .addGroup(jPanel2Layout.createParallelGroup(
+                                                                        javax.swing.GroupLayout.Alignment.LEADING,
+                                                                        false)
+                                                                        .addComponent(jLabel2,
+                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                Short.MAX_VALUE)
+                                                                        .addComponent(jLabel3,
+                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                Short.MAX_VALUE)
+                                                                        .addComponent(jLabel4,
+                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                Short.MAX_VALUE)
+                                                                        .addComponent(jLabel9,
+                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                194, Short.MAX_VALUE)
+                                                                        .addComponent(jLabel6,
+                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                229, Short.MAX_VALUE)
+                                                                        .addComponent(jLabel5,
+                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                Short.MAX_VALUE)
+                                                                        .addComponent(jLabel7,
+                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                138,
+                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addComponent(jLabel8,
+                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                Short.MAX_VALUE))
+                                                                .addPreferredGap(
+                                                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addGroup(jPanel2Layout.createParallelGroup(
+                                                                        javax.swing.GroupLayout.Alignment.LEADING,
+                                                                        false)
+                                                                        .addComponent(JumlahPeminjaman)
+                                                                        .addComponent(TanggalPelunasanPeminjaman)
+                                                                        .addComponent(TanggalPeminjaman)
+                                                                        .addComponent(NoTelpPeminjam)
+                                                                        .addComponent(AlamatPeminjam)
+                                                                        .addComponent(LoanStatusOption, 0, 153,
+                                                                                Short.MAX_VALUE)
+                                                                        .addComponent(NamaPeminjam)
+                                                                        .addComponent(IDPeminjaman)))
+                                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                                .addComponent(SimpanPinjaman,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 115,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(
+                                                                        javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                                .addComponent(HapusPinjaman,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 109,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(
+                                                                        javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                                .addComponent(EditPinjaman,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 115,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
         jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(9, 9, 9)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(IDPeminjaman, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(NamaPeminjam, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(9, 9, 9)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(LoanStatusOption, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(AlamatPeminjam, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(NoTelpPeminjam, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(TanggalPeminjaman, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(TanggalPelunasanPeminjaman, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(JumlahPeminjaman, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(StatusPeminjaman, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(SimpanPinjaman, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(HapusPinjaman, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(EditPinjaman, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(1, 1, 1)))
-                .addGap(0, 4, Short.MAX_VALUE))
-        );
+                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel1)
+                                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 21,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(9, 9, 9)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 300,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addGroup(jPanel2Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(IDPeminjaman,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 16,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(jPanel2Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING,
+                                                                false)
+                                                        .addComponent(NamaPeminjam,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 0,
+                                                                Short.MAX_VALUE)
+                                                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 20,
+                                                                Short.MAX_VALUE))
+                                                .addGap(9, 9, 9)
+                                                .addGroup(jPanel2Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING,
+                                                                false)
+                                                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 20,
+                                                                Short.MAX_VALUE)
+                                                        .addComponent(LoanStatusOption,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 0,
+                                                                Short.MAX_VALUE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addGroup(jPanel2Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING,
+                                                                false)
+                                                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 20,
+                                                                Short.MAX_VALUE)
+                                                        .addComponent(AlamatPeminjam,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 0,
+                                                                Short.MAX_VALUE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(jPanel2Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING,
+                                                                false)
+                                                        .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 20,
+                                                                Short.MAX_VALUE)
+                                                        .addComponent(NoTelpPeminjam,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 0,
+                                                                Short.MAX_VALUE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(jPanel2Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING,
+                                                                false)
+                                                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 20,
+                                                                Short.MAX_VALUE)
+                                                        .addComponent(TanggalPeminjaman,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 0,
+                                                                Short.MAX_VALUE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(jPanel2Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING,
+                                                                false)
+                                                        .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 20,
+                                                                Short.MAX_VALUE)
+                                                        .addComponent(TanggalPelunasanPeminjaman,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 0,
+                                                                Short.MAX_VALUE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(jPanel2Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING,
+                                                                false)
+                                                        .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 20,
+                                                                Short.MAX_VALUE)
+                                                        .addComponent(JumlahPeminjaman,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 0,
+                                                                Short.MAX_VALUE))
+                                                .addGap(38, 38, 38)
+                                                .addGroup(jPanel2Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING,
+                                                                false)
+                                                        .addComponent(SimpanPinjaman,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 20,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGroup(jPanel2Layout
+                                                                .createParallelGroup(
+                                                                        javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                .addComponent(HapusPinjaman,
+                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                        Short.MAX_VALUE)
+                                                                .addComponent(EditPinjaman,
+                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                        Short.MAX_VALUE))))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                                                jPanel2Layout.createSequentialGroup()
+                                                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGap(1, 1, 1)))
+                                .addGap(0, 0, Short.MAX_VALUE)));
 
         add(jPanel2, "card2");
     }// </editor-fold>//GEN-END:initComponents
@@ -485,192 +788,19 @@ public final class Hutang extends javax.swing.JPanel {
         // TODO add your handling code here:
     }// GEN-LAST:event_StatusPeminjamanActionPerformed
 
-    private final User user = SessionManager.getInstance().getCurrentUser();
-
     private void SimpanPinjamanActionPerformed(java.awt.event.ActionEvent evt) {
-        try {
-            DebtTransaction debtTransaction = new DebtTransaction();
-            debtTransaction.setDebtorName(NamaPeminjam.getText());
-            debtTransaction.setAddress(AlamatPeminjam.getText());
-            debtTransaction.setPhoneNumber(NoTelpPeminjam.getText());
-            debtTransaction.setAmount(Double.valueOf(JumlahPeminjaman.getText()));
-            debtTransaction.setStatus(LoanStatusOption.getSelectedItem() instanceof LoanStatus
-                    ? (LoanStatus) LoanStatusOption.getSelectedItem()
-                    : LoanStatus.BELUM_LUNAS);
-            debtTransaction.setCreatedBy(user.getId());
-
-            DebtTransactionService debtTransactionService = new DebtTransactionService();
-            Response<DebtTransaction> response = debtTransactionService.save(debtTransaction, user.getId());
-
-            if (response.isSuccess()) {
-                JOptionPane.showMessageDialog(null, "Data berhasil disimpan.");
-                clearForm();
-                showAllHutang();
-            } else {
-                JOptionPane.showMessageDialog(null, "Gagal menyimpan: " + response.getMessage());
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Jumlah Peminjaman harus berupa angka.");
-        }
-    }
-
-    private void EditPinjamanActionPerformed(java.awt.event.ActionEvent evt) {
-        try {
-            DebtTransaction debtTransaction = new DebtTransaction();
-            debtTransaction.setId(Integer.valueOf(IDPeminjaman.getText()));
-            debtTransaction.setDebtorName(NamaPeminjam.getText());
-            debtTransaction.setAddress(AlamatPeminjam.getText());
-            debtTransaction.setPhoneNumber(NoTelpPeminjam.getText());
-            debtTransaction.setAmount(Double.valueOf(JumlahPeminjaman.getText()));
-            debtTransaction.setStatus(LoanStatusOption.getSelectedItem() instanceof LoanStatus
-                    ? (LoanStatus) LoanStatusOption.getSelectedItem()
-                    : LoanStatus.BELUM_LUNAS);
-
-            // Update tetap pakai user ID untuk log
-            DebtTransactionService debtTransactionService = new DebtTransactionService();
-            Response<DebtTransaction> response = debtTransactionService.update(debtTransaction, user.getId());
-
-            if (response.isSuccess()) {
-                JOptionPane.showMessageDialog(null, "Data berhasil diperbarui.");
-                clearForm();
-                showAllHutang();
-            } else {
-                JOptionPane.showMessageDialog(null, "Gagal memperbarui: " + response.getMessage());
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Jumlah/ID Peminjaman harus berupa angka.");
-        }
+        // TODO add your handling code here:
+        // Implement your logic for saving a loan here
     }
 
     private void HapusPinjamanActionPerformed(java.awt.event.ActionEvent evt) {
-        try {
-            int id = Integer.parseInt(IDPeminjaman.getText());
-
-            int confirm = JOptionPane.showConfirmDialog(null, "Yakin ingin menghapus data?", "Konfirmasi",
-                    JOptionPane.YES_NO_OPTION);
-            if (confirm == JOptionPane.YES_OPTION) {
-                DebtTransactionRepository repo = new DebtTransactionRepository();
-                Response<Boolean> response = repo.deleteById(id, user.getId());
-
-                if (response.isSuccess()) {
-                    JOptionPane.showMessageDialog(null, "Data berhasil dihapus.");
-                    clearForm();
-                    showAllHutang();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Gagal menghapus: " + response.getMessage());
-                }
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "ID tidak valid.");
-        }
+        // TODO add your handling code here:
+        // Implement your logic for deleting a loan here
     }
 
-    public void showAllHutang() {
-        DebtTransactionRepository debtTransactionRepository = new DebtTransactionRepository();
-        Response<ArrayList<DebtTransaction>> allResponse = debtTransactionRepository.findAll(user.getId());
-
-        if (!allResponse.isSuccess() || allResponse.getData() == null) {
-            JOptionPane.showMessageDialog(null, "Tidak ada data hutang piutang yang ditemukan.", "Informasi",
-                    JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
-
-        String[] kolom = { "ID", "Nama Pihak", "Alamat", "No Telepon", "Tanggal Peminjaman", "Tanggal Pelunasan",
-                "Jumlah Peminjaman", "Status Peminjaman", "Created By" };
-        DefaultTableModel model = new DefaultTableModel(kolom, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-
-        for (DebtTransaction u : allResponse.getData()) {
-            Object[] row = {
-                    u.getId(),
-                    u.getDebtorName(),
-                    u.getAddress(),
-                    u.getPhoneNumber(),
-                    u.getLoanDate(),
-                    u.getDueDate(),
-                    u.getAmount(),
-                    u.getStatus(),
-                    u.getCreatedBy()
-            };
-            model.addRow(row);
-        }
-
-        utangTable.setModel(model);
-
-        // Cegah listener duplikat
-        ListSelectionModel selectionModel = utangTable.getSelectionModel();
-        selectionModel.removeListSelectionListener(tableSelectionListener);
-        selectionModel.addListSelectionListener(tableSelectionListener);
-    }
-
-    private void showLoanStatus() {
-        LoanStatus[] statuses = LoanStatus.values();
-        for (LoanStatus status : statuses) {
-            String statusName = status.name();
-            LoanStatusOption.addItem(statusName);
-        }
-    }
-
-    private final ListSelectionListener tableSelectionListener = new ListSelectionListener() {
-        @Override
-        public void valueChanged(ListSelectionEvent e) {
-            if (!e.getValueIsAdjusting()) {
-                int selectedRow = utangTable.getSelectedRow();
-                if (selectedRow != -1) {
-                    IDPeminjaman.setText(utangTable.getValueAt(selectedRow, 0).toString());
-                    NamaPeminjam.setText(utangTable.getValueAt(selectedRow, 1).toString());
-                    AlamatPeminjam.setText(utangTable.getValueAt(selectedRow, 2).toString());
-                    NoTelpPeminjam.setText(utangTable.getValueAt(selectedRow, 3).toString());
-                    TanggalPeminjaman.setText(utangTable.getValueAt(selectedRow, 4).toString());
-                    TanggalPelunasanPeminjaman.setText(utangTable.getValueAt(selectedRow, 5).toString());
-                    JumlahPeminjaman.setText(utangTable.getValueAt(selectedRow, 6).toString());
-
-                    // Update untuk LoanStatus (pastikan sudah dikonversi ke enum)
-                    Object statusValue = utangTable.getValueAt(selectedRow, 7);
-                    if (statusValue instanceof LoanStatus) {
-                        LoanStatusOption.setSelectedItem(statusValue);
-                    } else if (statusValue instanceof String) {
-                        // fallback jika dari tabel berupa String
-                        LoanStatusOption.setSelectedItem(LoanStatus.valueOf((String) statusValue));
-                    }
-
-                    // Disable pilihan status agar tidak bisa diedit
-                    LoanStatusOption.setEnabled(true);
-                } else {
-                    resetFormFields();
-                }
-            }
-        }
-
-        private void resetFormFields() {
-            IDPeminjaman.setText("");
-            NamaPeminjam.setText("");
-            AlamatPeminjam.setText("");
-            NoTelpPeminjam.setText("");
-            TanggalPeminjaman.setText("");
-            TanggalPelunasanPeminjaman.setText("");
-            JumlahPeminjaman.setText("");
-            StatusPeminjaman.setText("");
-
-            // Aktifkan kembali LoanStatusOption jika tidak sedang memilih
-            LoanStatusOption.setEnabled(false);
-            LoanStatusOption.setSelectedIndex(-1);
-        }
-    };
-
-    private void clearForm() {
-        IDPeminjaman.setText("");
-        NamaPeminjam.setText("");
-        AlamatPeminjam.setText("");
-        NoTelpPeminjam.setText("");
-        TanggalPeminjaman.setText("");
-        TanggalPelunasanPeminjaman.setText("");
-        JumlahPeminjaman.setText("");
-        StatusPeminjaman.setText("");
+    private void EditPinjamanActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+        // Implement your logic for editing a loan here
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -679,15 +809,13 @@ public final class Hutang extends javax.swing.JPanel {
     private javax.swing.JButton HapusPinjaman;
     private javax.swing.JTextField IDPeminjaman;
     private javax.swing.JTextField JumlahPeminjaman;
-    private javax.swing.JComboBox<String> LoanStatusOption;
+    private javax.swing.JComboBox<LoanStatus> LoanStatusOption;
     private javax.swing.JTextField NamaPeminjam;
     private javax.swing.JTextField NoTelpPeminjam;
     private javax.swing.JButton SimpanPinjaman;
-    private javax.swing.JTextField StatusPeminjaman;
     private javax.swing.JTextField TanggalPelunasanPeminjaman;
     private javax.swing.JTextField TanggalPeminjaman;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
