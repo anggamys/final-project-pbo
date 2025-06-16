@@ -71,7 +71,8 @@ public class OwnerManajemenBarang extends javax.swing.JPanel {
             @Override
             public void keyReleased(KeyEvent e) {
                 String searchText = SearchBarang.getText().trim();
-                TableRowSorter<DefaultTableModel> sorter = (TableRowSorter<DefaultTableModel>) TabelManajemenBarang1.getRowSorter();
+                TableRowSorter<DefaultTableModel> sorter = (TableRowSorter<DefaultTableModel>) TabelManajemenBarang1
+                        .getRowSorter();
 
                 if (sorter == null) {
                     sorter = new TableRowSorter<>((DefaultTableModel) TabelManajemenBarang1.getModel());
@@ -91,7 +92,8 @@ public class OwnerManajemenBarang extends javax.swing.JPanel {
         SortItem.addActionListener(evt -> {
             String selectedSort = (String) SortItem.getSelectedItem();
             if (selectedSort != null) {
-                TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>((DefaultTableModel) TabelManajemenBarang1.getModel());
+                TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(
+                        (DefaultTableModel) TabelManajemenBarang1.getModel());
                 int columnIndex = SortItem.getSelectedIndex();
                 sorter.setSortKeys(List.of(new RowSorter.SortKey(columnIndex, SortOrder.ASCENDING)));
                 TabelManajemenBarang1.setRowSorter(sorter);
@@ -107,7 +109,8 @@ public class OwnerManajemenBarang extends javax.swing.JPanel {
         SortRiwayatAktivitas.addActionListener(evt -> {
             String selectedSort = (String) SortRiwayatAktivitas.getSelectedItem();
             if (selectedSort != null) {
-                TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>((DefaultTableModel) TabelRiwayatAktivitas.getModel());
+                TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(
+                        (DefaultTableModel) TabelRiwayatAktivitas.getModel());
                 int columnIndex = SortRiwayatAktivitas.getSelectedIndex();
                 sorter.setSortKeys(List.of(new RowSorter.SortKey(columnIndex, SortOrder.ASCENDING)));
                 TabelRiwayatAktivitas.setRowSorter(sorter);
@@ -131,7 +134,8 @@ public class OwnerManajemenBarang extends javax.swing.JPanel {
         }
 
         for (Product product : response.getData()) {
-            Response<Category> categoryResponse = categoryRepository.findById(product.getCategoryId(), currentUser.getId());
+            Response<Category> categoryResponse = categoryRepository.findById(product.getCategoryId(),
+                    currentUser.getId());
             String categoryName = categoryResponse.isSuccess()
                     ? categoryResponse.getData().getName()
                     : "Tidak Ditemukan";
@@ -174,7 +178,8 @@ public class OwnerManajemenBarang extends javax.swing.JPanel {
                 default -> "Edit";
             };
 
-            Response<Product> productResponse = productRepository.findById(transaction.getProductId(), currentUser.getId());
+            Response<Product> productResponse = productRepository.findById(transaction.getProductId(),
+                    currentUser.getId());
             String productName = productResponse.isSuccess()
                     ? productResponse.getData().getName()
                     : "Tidak Ditemukan";
