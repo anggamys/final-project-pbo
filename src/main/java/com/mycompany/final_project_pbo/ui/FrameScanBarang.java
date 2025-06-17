@@ -5,7 +5,24 @@
 package com.mycompany.final_project_pbo.ui;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
+import java.awt.Dimension;
+import java.awt.image.BufferedImage;
+
+import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.WebcamPanel;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.LuminanceSource;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.Result;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
+import com.google.zxing.common.HybridBinarizer;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 /**
  *
@@ -14,9 +31,9 @@ import java.util.concurrent.ThreadFactory;
 public class FrameScanBarang extends javax.swing.JFrame implements Runnable, ThreadFactory {
     private WebcamPanel panel = null;
     private Webcam webcam = null;
-    private ExecutorService executor =Executors.newSingleThreadExecutor(This);
-    private volatile boolean running = true
-
+    private ExecutorService executor = Executors.newSingleThreadExecutor(this);
+    private volatile boolean running = true;
+    
     /**
      * Creates new form FrameScanBarang
      */
@@ -165,7 +182,7 @@ public class FrameScanBarang extends javax.swing.JFrame implements Runnable, Thr
 
         try {
             Result result = null;
-        BufferedImage image = null;
+            BufferedImage image = null;
 
         if (webcam.isOpen()) {
             if ((image = webcam.getImage()) == null) {
@@ -189,7 +206,7 @@ public class FrameScanBarang extends javax.swing.JFrame implements Runnable, Thr
             }.getType();
             resultMap = gson.fromJson(jsonString, type);
 
-            String finalPath = BDUtility.getPath("images\\" + resultMap.get("email") + ".jpg");
+            String finalPath = "images/" + resultMap.get("email") + ".jpg";
             CircularImageFrame(finalPath);
 
         }
@@ -223,7 +240,9 @@ public class FrameScanBarang extends javax.swing.JFrame implements Runnable, Thr
         panel.setPreferredSize(maxResolution);
         panel.setFPSDisplayed(true);
 
-        webCamPanel.add(panel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 689, 518));
+        // Remove AbsoluteConstraints and use BorderLayout instead
+        webCamPanel.setLayout(new java.awt.BorderLayout());
+        webCamPanel.add(panel, java.awt.BorderLayout.CENTER);
 
         executor.execute(this);
         executor.shutdown();
@@ -231,5 +250,11 @@ public class FrameScanBarang extends javax.swing.JFrame implements Runnable, Thr
         System.out.println("Issue with webcam.");
     }
 
+    }
+
+    // Dummy implementation for CircularImageFrame to fix the error
+    private void CircularImageFrame(String imagePath) {
+        // TODO: Implement this method as needed
+        System.out.println("CircularImageFrame called with: " + imagePath);
     }
 }

@@ -42,7 +42,7 @@ public class ScanBarang extends javax.swing.JPanel {
         jLabel6.setForeground(new java.awt.Color(93, 173, 226));
         jLabel6.setText("Scan Barang");
 
-        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel2.setLayout(new java.awt.BorderLayout());
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

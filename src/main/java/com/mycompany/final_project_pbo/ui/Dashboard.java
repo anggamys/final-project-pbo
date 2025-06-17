@@ -241,7 +241,7 @@ public class Dashboard extends javax.swing.JFrame {
         Notification.setBackground(new java.awt.Color(75, 139, 213));
         Notification.setFont(new java.awt.Font("Tw Cen MT", 1, 24)); // NOI18N
         Notification.setForeground(new java.awt.Color(255, 255, 255));
-        Notification.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/Img/Icon_Notification.png"))); // NOI18N
+        Notification.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Icon_Notification.png"))); // NOI18N
         Notification.setText("Notifikasi");
         Notification.setBorder(null);
         Notification.addActionListener(new java.awt.event.ActionListener() {
@@ -253,7 +253,7 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/Img/X.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/X.png"))); // NOI18N
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel1MouseClicked(evt);

@@ -334,7 +334,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
         jLabel10 = new javax.swing.JLabel();
         SearchBarang = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
-        KategoriBarang = new javax.swing.JComboBox<>();
+        KategoriBarang = new javax.swing.JComboBox<Dropdown>();
         clearForm = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
         StockBarang = new javax.swing.JTextField();
@@ -416,7 +416,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
         Barcode.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
         Barcode.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BarcodeActionPerformed(evt);
+                // BarcodeActionPerformed(evt);
             }
         });
 
@@ -534,7 +534,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
         jLabel10.setFont(new java.awt.Font("Tw Cen MT", 1, 16)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(93, 173, 226));
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/Img/Laporan_Keuangan.png"))); // NOI18N
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Laporan_Keuangan.png"))); // NOI18N
         jLabel10.setText("Menu Barang");
 
         SearchBarang.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
@@ -880,7 +880,7 @@ public class ManajemenBarang extends javax.swing.JPanel {
     private javax.swing.JTextField HargaBeliBarang;
     private javax.swing.JTextField HargaJualBarang;
     private javax.swing.JTextField IDBarang;
-    private javax.swing.JComboBox<String> KategoriBarang;
+    private javax.swing.JComboBox<Dropdown> KategoriBarang;
     private javax.swing.JTextField NamaBarang;
     private javax.swing.JTextField SearchBarang;
     private javax.swing.JComboBox<String> SortItem;
