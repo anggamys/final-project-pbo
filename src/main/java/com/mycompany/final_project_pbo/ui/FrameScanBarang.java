@@ -1,3 +1,4 @@
+package com.mycompany.final_project_pbo.ui;
 
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
@@ -6,61 +7,34 @@ import com.google.gson.reflect.TypeToken;
 import com.google.zxing.*;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
-import java.awt.Dimension;  // Pastikan menggunakan java.awt.Dimension
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import javax.imageio.ImageIO;
-import javax.swing.*;
+// import java.lang.reflect.Type; // Remove this import to avoid ambiguity
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
-import java.awt.Dimension;
-import java.awt.image.BufferedImage;
 
-import com.github.sarxos.webcam.Webcam;
-import com.github.sarxos.webcam.WebcamPanel;
-import com.google.zxing.BinaryBitmap;
-import com.google.zxing.LuminanceSource;
-import com.google.zxing.MultiFormatReader;
-import com.google.zxing.NotFoundException;
-import com.google.zxing.Result;
-import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
-import com.google.zxing.common.HybridBinarizer;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-/**
- *
- * @author zakyp
- */
 public class FrameScanBarang extends javax.swing.JFrame implements Runnable, ThreadFactory {
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-public class FrameScanBarang extends javax.swing.JFrame implements Runnable {
     private WebcamPanel panel = null;
     private Webcam webcam = null;
     private ExecutorService executor = Executors.newSingleThreadExecutor(this);
     private volatile boolean running = true;
-    
-    /**
-     * Creates new form FrameScanBarang
-     */
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
-    private volatile boolean running = true; // Untuk mengatur jalannya thread
-    private Map<String, String> resultMap = new HashMap<>(); // Untuk menyimpan hasil pemindaian barcode
 
-    // Konstruktor
+    private Map<String, String> resultMap = new HashMap<>();
+
     public FrameScanBarang() {
         initComponents();
         initWebcam();
     }
 
-    // Inisialisasi komponen GUI
     private void initComponents() {
         jPanel1 = new javax.swing.JPanel();
         webCamPanel = new javax.swing.JPanel();
@@ -77,28 +51,24 @@ public class FrameScanBarang extends javax.swing.JFrame implements Runnable {
         webCamPanel.setLayout(webCamPanelLayout);
         webCamPanelLayout.setHorizontalGroup(
             webCamPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 640, Short.MAX_VALUE)
+                .addGap(0, 640, Short.MAX_VALUE)
         );
         webCamPanelLayout.setVerticalGroup(
             webCamPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 376, Short.MAX_VALUE)
+                .addGap(0, 376, Short.MAX_VALUE)
         );
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
+            new Object[][] {
                 {null, null, null, null}
             },
-            new String [] {
+            new String[] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        Kategori.setBackground(new java.awt.Color(255, 255, 255));
-        Kategori.setFont(new java.awt.Font("Tw Cen MT", 1, 24)); 
+        Kategori.setFont(new java.awt.Font("Tw Cen MT", 1, 24));
         Kategori.setForeground(new java.awt.Color(93, 173, 226));
         Kategori.setText("Scan Barang");
 
@@ -106,239 +76,129 @@ public class FrameScanBarang extends javax.swing.JFrame implements Runnable {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(39, 39, 39)
-                        .addComponent(Kategori))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(210, 210, 210)
-                        .addComponent(webCamPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(298, 298, 298)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(453, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(39, 39, 39)
+                    .addComponent(Kategori))
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(210, 210, 210)
+                    .addComponent(webCamPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(298, 298, 298)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(Kategori)
-                .addGap(31, 31, 31)
-                .addComponent(webCamPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(148, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(20)
+                    .addComponent(Kategori)
+                    .addGap(31)
+                    .addComponent(webCamPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(18)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(148, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
-
+        getContentPane().add(jPanel1);
         pack();
     }
 
-    // Menjalankan aplikasi
-    public static void main(String args[]) {
-    java.awt.EventQueue.invokeLater(new Runnable() {
-        @Override
-        public void run() {
-            new FrameScanBarang().setVisible(true);  // Menampilkan FrameScanBarang
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrameScanBarang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrameScanBarang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrameScanBarang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrameScanBarang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FrameScanBarang().setVisible(true);
-            }
-        });
-    }
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel Kategori;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JPanel webCamPanel;
-    // End of variables declaration//GEN-END:variables
-    
-    Map<String, String> resultMap = new HashMap<String, String>();
-
-    @Override
-    public void run() {
-    do {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException ex) {
-            // Handle InterruptedException
-        }
-
-        try {
-            Result result = null;
-            BufferedImage image = null;
-
-        if (webcam.isOpen()) {
-            if ((image = webcam.getImage()) == null) {
-                continue;
-            }
-        }
-
-        LuminanceSource source = new BufferedImageLuminanceSource(image);
-        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-        
-        try {
-        result = new MultiFormatReader().decode(bitmap);
-        } catch (NotFoundException ex) {
-            // Handle exception
-        }
-
-        if (result != null) {
-            String jsonString = result.getText();
-            Gson gson = new Gson();
-            java.lang.reflect.Type type = new TypeToken<Map<String, String>>(){
-            }.getType();
-            resultMap = gson.fromJson(jsonString, type);
-
-            String finalPath = "images/" + resultMap.get("email") + ".jpg";
-            CircularImageFrame(finalPath);
-
-        }
-        
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    });
-}
-
-
-    // Inisialisasi webcam
     private void initWebcam() {
         webcam = Webcam.getDefault();
         if (webcam != null) {
             Dimension[] resolutions = webcam.getViewSizes();
             Dimension maxResolution = resolutions[resolutions.length - 1];
 
-            if (webcam.isOpen()) {
-                webcam.close();
-            }
-
-            webcam.setViewSize(maxResolution); // Set resolusi webcam
+            webcam.setViewSize(maxResolution);
             webcam.open();
 
             panel = new WebcamPanel(webcam);
             panel.setPreferredSize(maxResolution);
-            panel.setFPSDisplayed(true); // Menampilkan FPS
+            panel.setFPSDisplayed(true);
 
-        // Remove AbsoluteConstraints and use BorderLayout instead
-        webCamPanel.setLayout(new java.awt.BorderLayout());
-        webCamPanel.add(panel, java.awt.BorderLayout.CENTER);
-            webCamPanel.setLayout(new java.awt.BorderLayout());
-            webCamPanel.add(panel, java.awt.BorderLayout.CENTER);
+            webCamPanel.add(panel);
+            webCamPanel.revalidate();
 
-        executor.execute(this);
-        executor.shutdown();
-    } else {
-        System.out.println("Issue with webcam.");
-    }
-
-    }
-
-    // Dummy implementation for CircularImageFrame to fix the error
-    private void CircularImageFrame(String imagePath) {
-        // TODO: Implement this method as needed
-        System.out.println("CircularImageFrame called with: " + imagePath);
-    }
-}
-
-            executor.execute(this); // Menjalankan thread untuk pemrosesan
+            executor.execute(this);
         } else {
-            System.out.println("Webcam tidak ditemukan.");
+            JOptionPane.showMessageDialog(this, "Webcam not detected.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    // Menjalankan thread untuk pemrosesan barcode
     @Override
     public void run() {
         while (running) {
             try {
-                Thread.sleep(1000); // Sleep selama 1 detik
+                Thread.sleep(1000);
 
-                if (webcam.isOpen()) {
+                if (webcam != null && webcam.isOpen()) {
                     BufferedImage image = webcam.getImage();
-                    if (image != null) {
-                        LuminanceSource source = new BufferedImageLuminanceSource(image);
-                        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+                    if (image == null) continue;
 
-                        Result result = null;
-                        try {
-                            result = new MultiFormatReader().decode(bitmap);
-                        } catch (NotFoundException ex) {
-                            // Tidak ada barcode yang ditemukan
-                        }
+                    LuminanceSource source = new BufferedImageLuminanceSource(image);
+                    BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
 
+                    try {
+                        Result result = new MultiFormatReader().decode(bitmap);
                         if (result != null) {
-                            String jsonString = result.getText();
                             Gson gson = new Gson();
-                            java.lang.reflect.Type type = new TypeToken<Map<String, String>>() {}.getType();
-                            resultMap = gson.fromJson(jsonString, type);
+                            java.lang.reflect.Type type = new TypeToken<Map<String, String>>(){}.getType();
+                            resultMap = gson.fromJson(result.getText(), type);
 
-                            String finalPath = "images\\" + resultMap.get("email") + ".jpg";
-                            CircularImageFrame(finalPath); // Tampilkan gambar jika ditemukan
+                            String finalPath = "images/" + resultMap.get("email") + ".jpg";
+                            showCircularImageDialog(finalPath);
                         }
+                    } catch (NotFoundException ignore) {
                     }
                 }
+
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+                break;
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
     }
 
-    // Untuk membersihkan webcam saat aplikasi ditutup
-    @Override
-    public void dispose() {
-        super.dispose();
-        if (webcam != null && webcam.isOpen()) {
-            webcam.close();
-        }
-    }
-
-    // Menampilkan gambar dengan bingkai melingkar
-    private void CircularImageFrame(String imagePath) {
+    private void showCircularImageDialog(String imagePath) {
         try {
             BufferedImage img = ImageIO.read(new File(imagePath));
-            ImageIcon icon = new ImageIcon(img);
-            JLabel label = new JLabel(icon);
-            
-            // Menambahkan label gambar ke panel atau tempat lain dalam GUI
-            JOptionPane.showMessageDialog(this, label, "Image", JOptionPane.PLAIN_MESSAGE);
+            if (img != null) {
+                ImageIcon icon = new ImageIcon(img);
+                JOptionPane.showMessageDialog(this, "", "Scanned Image", JOptionPane.INFORMATION_MESSAGE, icon);
+            } else {
+                JOptionPane.showMessageDialog(this, "Image not found: " + imagePath, "Error", JOptionPane.ERROR_MESSAGE);
+            }
         } catch (IOException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Failed to load image: " + imagePath, "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    // Variabel GUI
+    @Override
+    public Thread newThread(Runnable r) {
+        return new Thread(r);
+    }
+
+    // Variables declaration
     private javax.swing.JLabel Kategori;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JPanel webCamPanel;
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            try {
+                for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                    if ("Nimbus".equals(info.getName())) {
+                        UIManager.setLookAndFeel(info.getClassName());
+                        break;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            new FrameScanBarang().setVisible(true);
+        });
+    }
 }
