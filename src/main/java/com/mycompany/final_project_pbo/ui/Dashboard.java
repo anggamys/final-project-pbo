@@ -347,7 +347,8 @@ public class Dashboard extends javax.swing.JFrame {
     }// GEN-LAST:event_utangPiutangPageActionPerformed
 
     private void scanBarangPageMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_scanBarangPageMouseClicked
-        // TODO add your handling code here:
+        FrameScanBarang frameScanBarang = new FrameScanBarang();
+        frameScanBarang.setVisible(true);
     }// GEN-LAST:event_scanBarangPageMouseClicked
 
     private void scanBarangPageActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_scanBarangPageActionPerformed
