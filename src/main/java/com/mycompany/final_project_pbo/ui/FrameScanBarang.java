@@ -34,6 +34,8 @@ import com.mycompany.final_project_pbo.services.StockTransactionService;
 import com.mycompany.final_project_pbo.utils.Response;
 import com.mycompany.final_project_pbo.utils.SessionManager;
 import com.mycompany.final_project_pbo.utils.TransactionManager;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  *
@@ -59,6 +61,16 @@ public class FrameScanBarang extends javax.swing.JFrame implements Runnable, Thr
         initComponents();
         initWebcam();
         initializeComponents();
+        
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        
+        this.addWindowListener(new WindowAdapter() {
+        @Override
+        public void windowClosing(WindowEvent e) {
+            // Mencegah jendela menutup
+            closeAndSwitchTo(new Dashboard());
+        }
+    });
     }
 
     private void initializeComponents() {
@@ -84,7 +96,7 @@ public class FrameScanBarang extends javax.swing.JFrame implements Runnable, Thr
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -96,15 +108,18 @@ public class FrameScanBarang extends javax.swing.JFrame implements Runnable, Thr
         setPreferredSize(new java.awt.Dimension(1080, 720));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setPreferredSize(new java.awt.Dimension(1080, 720));
 
         javax.swing.GroupLayout webCamPanelLayout = new javax.swing.GroupLayout(webCamPanel);
         webCamPanel.setLayout(webCamPanelLayout);
         webCamPanelLayout.setHorizontalGroup(
-                webCamPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 640, Short.MAX_VALUE));
+            webCamPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 640, Short.MAX_VALUE)
+        );
         webCamPanelLayout.setVerticalGroup(
-                webCamPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 376, Short.MAX_VALUE));
+            webCamPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 376, Short.MAX_VALUE)
+        );
 
         Kategori.setBackground(new java.awt.Color(255, 255, 255));
         Kategori.setFont(new java.awt.Font("Tw Cen MT", 1, 24)); // NOI18N
@@ -116,32 +131,31 @@ public class FrameScanBarang extends javax.swing.JFrame implements Runnable, Thr
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addGap(39, 39, 39)
-                                                .addComponent(Kategori))
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addGap(210, 210, 210)
-                                                .addComponent(webCamPanel, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addGap(405, 405, 405)
-                                                .addComponent(statusDetection)))
-                                .addContainerGap(453, Short.MAX_VALUE)));
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(39, 39, 39)
+                        .addComponent(Kategori))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(210, 210, 210)
+                        .addComponent(webCamPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(405, 405, 405)
+                        .addComponent(statusDetection)))
+                .addContainerGap(453, Short.MAX_VALUE))
+        );
         jPanel1Layout.setVerticalGroup(
-                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(20, 20, 20)
-                                .addComponent(Kategori)
-                                .addGap(31, 31, 31)
-                                .addComponent(webCamPanel, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(statusDetection)
-                                .addContainerGap(235, Short.MAX_VALUE)));
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(Kategori)
+                .addGap(31, 31, 31)
+                .addComponent(webCamPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(statusDetection)
+                .addContainerGap(232, Short.MAX_VALUE))
+        );
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
