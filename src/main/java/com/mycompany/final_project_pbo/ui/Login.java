@@ -49,20 +49,24 @@ public class Login extends javax.swing.JFrame {
 
         Right.setBackground(new java.awt.Color(253, 254, 254));
 
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/Img/Icon.png"))); // NOI18N
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Icon.png"))); // NOI18N
 
         jLabel7.setBackground(new java.awt.Color(93, 173, 226));
         jLabel7.setFont(new java.awt.Font("Tw Cen MT", 1, 19)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(93, 173, 226));
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("Selamat Datang Di Sistem POS TOSERBA Berkah Abadi ");
 
         jLabel8.setFont(new java.awt.Font("Tw Cen MT", 0, 16)); // NOI18N
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setText("Aplikasi ini digunakan untuk memudahkan proses transaksi  ");
 
-        jLabel10.setFont(new java.awt.Font("Tw Cen MT", 0, 17)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Tw Cen MT", 0, 16)); // NOI18N
+        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel10.setText("Penjualan, Manajemen Stock Barang, serta Laporan Keuangan");
 
         jLabel11.setFont(new java.awt.Font("Tw Cen MT", 0, 16)); // NOI18N
+        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel11.setText("harian di TOSERBA Berkah Abadi");
 
         jLabel12.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
@@ -72,6 +76,7 @@ public class Login extends javax.swing.JFrame {
         Right.setLayout(RightLayout);
         RightLayout.setHorizontalGroup(
             RightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE)
             .addGroup(RightLayout.createSequentialGroup()
                 .addGroup(RightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(RightLayout.createSequentialGroup()
@@ -79,22 +84,11 @@ public class Login extends javax.swing.JFrame {
                         .addComponent(jLabel6))
                     .addGroup(RightLayout.createSequentialGroup()
                         .addGap(69, 69, 69)
-                        .addComponent(jLabel12))
-                    .addGroup(RightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(RightLayout.createSequentialGroup()
-                            .addGap(8, 8, 8)
-                            .addComponent(jLabel10)
-                            .addGap(9, 9, 9))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, RightLayout.createSequentialGroup()
-                            .addGap(118, 118, 118)
-                            .addComponent(jLabel11)
-                            .addGap(112, 112, 112))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, RightLayout.createSequentialGroup()
-                            .addContainerGap(31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8)
-                            .addGap(32, 32, 32))
-                        .addComponent(jLabel7)))
+                        .addComponent(jLabel12)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         RightLayout.setVerticalGroup(
             RightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -109,13 +103,13 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(jLabel10)
                 .addGap(10, 10, 10)
                 .addComponent(jLabel11)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 367, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 168, Short.MAX_VALUE)
                 .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(38, 38, 38))
         );
 
         jPanel1.add(Right);
-        Right.setBounds(0, 0, 452, 600);
+        Right.setBounds(0, 0, 442, 600);
 
         Left.setBackground(new java.awt.Color(93, 173, 226));
         Left.setMinimumSize(new java.awt.Dimension(450, 600));
