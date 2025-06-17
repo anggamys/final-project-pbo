@@ -63,11 +63,12 @@ public class FrameScanBarang extends javax.swing.JFrame implements Runnable, Thr
         initializeComponents();
         
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        
-        this.addWindowListener(new WindowAdapter() {
+
+    // ADDED: Menambahkan listener untuk menangani tombol close
+    this.addWindowListener(new WindowAdapter() {
         @Override
         public void windowClosing(WindowEvent e) {
-            // Mencegah jendela menutup
+            // Mencegah jendela menutup dan beralih ke Dashboard
             closeAndSwitchTo(new Dashboard());
         }
     });
@@ -154,7 +155,7 @@ public class FrameScanBarang extends javax.swing.JFrame implements Runnable, Thr
                 .addComponent(webCamPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(statusDetection)
-                .addContainerGap(232, Short.MAX_VALUE))
+                .addContainerGap(235, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
