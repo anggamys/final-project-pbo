@@ -25,6 +25,74 @@ public class StockTransactionService {
 
     private static final String MODULE_NAME = "StockTransactionService";
 
+    public Response<Boolean> incrementStock(String barcode, int quantity, Integer userId) {
+        // Basic input validation
+        if (barcode == null || barcode.isBlank())
+            return Response.failure("Barcode is required");
+        if (quantity <= 0)
+            return Response.failure("Quantity must be greater than zero");
+
+        // Product lookup
+        Response<ArrayList<Product>> productResponse = productRepository.findByBarcode(barcode, userId);
+        if (!productResponse.isSuccess() || productResponse.getData().isEmpty()) {
+            return Response.failure("Product not found with barcode: " + barcode);
+        }
+
+        Product product = productResponse.getData().get(0);
+        int newStock = product.getStock() + quantity;
+
+        // Update stock
+        product.setStock(newStock);
+        Response<Product> updateResponse = productRepository.update(product, userId);
+        if (!updateResponse.isSuccess()) {
+            return Response.failure("Failed to update product stock for ID: " + product.getId());
+        }
+
+        // Logging
+        logActivityService.logAction(userId,
+                String.format("Incremented stock by %d units for product ID %d. New stock: %d",
+                        quantity, product.getId(), newStock),
+                MODULE_NAME, LogLevel.INFO);
+
+        return Response.success("Stock incremented successfully", true);
+    }
+
+    public Response<Boolean> decrementStock(String barcode, int quantity, Integer userId) {
+        // Basic input validation
+        if (barcode == null || barcode.isBlank())
+            return Response.failure("Barcode is required");
+        if (quantity <= 0)
+            return Response.failure("Quantity must be greater than zero");
+
+        // Product lookup
+        Response<ArrayList<Product>> productResponse = productRepository.findByBarcode(barcode, userId);
+        if (!productResponse.isSuccess() || productResponse.getData().isEmpty()) {
+            return Response.failure("Product not found with barcode: " + barcode);
+        }
+
+        Product product = productResponse.getData().get(0);
+        int newStock = product.getStock() - quantity;
+
+        if (newStock < 0) {
+            return Response.failure("Insufficient stock for product ID: " + product.getId());
+        }
+
+        // Update stock
+        product.setStock(newStock);
+        Response<Product> updateResponse = productRepository.update(product, userId);
+        if (!updateResponse.isSuccess()) {
+            return Response.failure("Failed to update product stock for ID: " + product.getId());
+        }
+
+        // Logging
+        logActivityService.logAction(userId,
+                String.format("Decremented stock by %d units for product ID %d. New stock: %d",
+                        quantity, product.getId(), newStock),
+                MODULE_NAME, LogLevel.INFO);
+
+        return Response.success("Stock decremented successfully", true);
+    }
+
     public Response<StockTransaction> createTransaction(StockTransaction transaction, String barcode, Integer userId) {
         // Basic input validation
         if (transaction == null)

@@ -30,6 +30,7 @@ import com.mycompany.final_project_pbo.models.Product;
 import com.mycompany.final_project_pbo.models.TransactionType;
 import com.mycompany.final_project_pbo.models.User;
 import com.mycompany.final_project_pbo.repositories.ProductRepository;
+import com.mycompany.final_project_pbo.services.StockTransactionService;
 import com.mycompany.final_project_pbo.utils.Response;
 import com.mycompany.final_project_pbo.utils.SessionManager;
 import com.mycompany.final_project_pbo.utils.TransactionManager;
@@ -45,6 +46,7 @@ public class FrameScanBarang extends javax.swing.JFrame implements Runnable, Thr
     private volatile boolean running = true;
 
     ProductRepository productRepository = new ProductRepository();
+    StockTransactionService stokService = new StockTransactionService();
     TransactionType currentTransactionType = TransactionManager.getInstance().getCurrentTransactionType();
 
     User currentUser = SessionManager.getInstance().getCurrentUser();
@@ -200,8 +202,8 @@ public class FrameScanBarang extends javax.swing.JFrame implements Runnable, Thr
     @Override
     public void run() {
         while (running) {
-            sleep(500); // Modular sleep
-
+            sleep(2000); 
+            
             if (!isWebcamReady())
                 continue;
 
@@ -254,12 +256,25 @@ public class FrameScanBarang extends javax.swing.JFrame implements Runnable, Thr
         TransactionType type = TransactionManager.getInstance().getCurrentTransactionType();
         String status;
         if (type == TransactionType.IN) {
+            Response<Boolean> incrementResponse = stokService.incrementStock(products.get(0).getBarcode(), 1, null);
+            if (!incrementResponse.isSuccess()) {
+                showErrorDialog("Gagal menambah stok: " + incrementResponse.getMessage());
+                return;
+            }
+
             status = "Barang masuk: " + products.get(0).getName();
         } else if (type == TransactionType.OUT) {
+            Response<Boolean> decrementResponse = stokService.decrementStock(products.get(0).getBarcode(), 1, null);
+            if (!decrementResponse.isSuccess()) {
+                showErrorDialog("Gagal mengurangi stok: " + decrementResponse.getMessage());
+                return;
+            }
+            
             status = "Barang keluar: " + products.get(0).getName();
         } else {
             status = "Tidak ada transaksi yang aktif.";
         }
+
         SwingUtilities.invokeLater(() -> statusDetection.setText(status));
 
         // Additional logic: update TransactionManager product, etc.
@@ -355,6 +370,8 @@ public class FrameScanBarang extends javax.swing.JFrame implements Runnable, Thr
     public void dispose() {
         cleanupResources();
         super.dispose();
+        Dashboard dashboard = new Dashboard();
+        dashboard.setVisible(true);
     }
 
     // --- Utility Methods ---
