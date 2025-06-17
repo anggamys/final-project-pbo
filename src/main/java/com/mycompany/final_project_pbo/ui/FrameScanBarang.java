@@ -4,23 +4,21 @@
  */
 package com.mycompany.final_project_pbo.ui;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import javax.swing.table.DefaultTableModel;
 
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
@@ -28,6 +26,13 @@ import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
+import com.mycompany.final_project_pbo.models.Product;
+import com.mycompany.final_project_pbo.models.TransactionType;
+import com.mycompany.final_project_pbo.models.User;
+import com.mycompany.final_project_pbo.repositories.ProductRepository;
+import com.mycompany.final_project_pbo.utils.Response;
+import com.mycompany.final_project_pbo.utils.SessionManager;
+import com.mycompany.final_project_pbo.utils.TransactionManager;
 
 /**
  *
@@ -39,12 +44,32 @@ public class FrameScanBarang extends javax.swing.JFrame implements Runnable, Thr
     private ExecutorService executor = Executors.newSingleThreadExecutor(this);
     private volatile boolean running = true;
 
+    ProductRepository productRepository = new ProductRepository();
+    TransactionType currentTransactionType = TransactionManager.getInstance().getCurrentTransactionType();
+
+    User currentUser = SessionManager.getInstance().getCurrentUser();
+    TransactionType transactionType = TransactionManager.getInstance().getCurrentTransactionType();
+
     /**
      * Creates new form FrameScanBarang
      */
     public FrameScanBarang() {
         initComponents();
         initWebcam();
+        initializeComponents();
+    }
+
+    private void initializeComponents() {
+        if (transactionType == TransactionType.IN) {
+            System.out.println("Current Transaction Type: IN");
+            Kategori.setText("Scan Barang Masuk");
+        } else if (transactionType == TransactionType.OUT) {
+            System.out.println("Current Transaction Type: OUT");
+            Kategori.setText("Scan Barang Keluar");
+        } else {
+            Kategori.setText("Scan Barang");
+
+        }
     }
 
     /**
@@ -56,14 +81,14 @@ public class FrameScanBarang extends javax.swing.JFrame implements Runnable, Thr
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
         webCamPanel = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
         Kategori = new javax.swing.JLabel();
+        statusDetection = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1080, 720));
@@ -79,22 +104,12 @@ public class FrameScanBarang extends javax.swing.JFrame implements Runnable, Thr
                 webCamPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGap(0, 376, Short.MAX_VALUE));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][] {
-                        { null, null, null, null },
-                        { null, null, null, null },
-                        { null, null, null, null },
-                        { null, null, null, null }
-                },
-                new String[] {
-                        "Title 1", "Title 2", "Title 3", "Title 4"
-                }));
-        jScrollPane1.setViewportView(jTable1);
-
         Kategori.setBackground(new java.awt.Color(255, 255, 255));
         Kategori.setFont(new java.awt.Font("Tw Cen MT", 1, 24)); // NOI18N
         Kategori.setForeground(new java.awt.Color(93, 173, 226));
         Kategori.setText("Scan Barang");
+
+        statusDetection.setText("Barang masuk atau keluar: Nama barang");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -111,9 +126,8 @@ public class FrameScanBarang extends javax.swing.JFrame implements Runnable, Thr
                                                         javax.swing.GroupLayout.DEFAULT_SIZE,
                                                         javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addGap(298, 298, 298)
-                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 475,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addGap(405, 405, 405)
+                                                .addComponent(statusDetection)))
                                 .addContainerGap(453, Short.MAX_VALUE)));
         jPanel1Layout.setVerticalGroup(
                 jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -124,9 +138,8 @@ public class FrameScanBarang extends javax.swing.JFrame implements Runnable, Thr
                                 .addComponent(webCamPanel, javax.swing.GroupLayout.PREFERRED_SIZE,
                                         javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 106,
-                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(148, Short.MAX_VALUE)));
+                                .addComponent(statusDetection)
+                                .addContainerGap(235, Short.MAX_VALUE)));
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
@@ -179,165 +192,211 @@ public class FrameScanBarang extends javax.swing.JFrame implements Runnable, Thr
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Kategori;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel statusDetection;
     private javax.swing.JPanel webCamPanel;
     // End of variables declaration//GEN-END:variables
 
+    // --- Modular Main Scanner Thread Logic ---
     @Override
     public void run() {
         while (running) {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
-                break;
-            }
+            sleep(500); // Modular sleep
 
-            try {
-                if (webcam == null || !webcam.isOpen())
-                    continue;
+            if (!isWebcamReady())
+                continue;
 
-                BufferedImage image = webcam.getImage();
-                if (image == null)
-                    continue;
+            BufferedImage image = getWebcamImage();
+            if (image == null)
+                continue;
 
-                LuminanceSource source = new BufferedImageLuminanceSource(image);
-                BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-
-                Result result;
-                try {
-                    result = new MultiFormatReader().decode(bitmap);
-                } catch (NotFoundException nf) {
-                    continue; // Tidak ada barcode ditemukan, lanjut scanning
-                }
-
-                if (result != null) {
-                    String barcode = result.getText();
-                    System.out.println("Barcode detected: " + barcode);
-
-                    // --- Tampilkan ke JTable (atau proses ke database produk) ---
-                    SwingUtilities.invokeLater(() -> {
-                        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-                        int rowNum = model.getRowCount() + 1;
-                        model.addRow(new Object[] { rowNum, barcode });
-                    });
-
-                    // Bisa tambahkan logic: otomatis cari produk di database berdasarkan barcode
-                    // Misal: Product produk = productRepository.findByBarcode(barcode);
-
-                    // Jika ingin stop setelah berhasil scan satu produk:
-                    // running = false;
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
+            String barcode = decodeBarcodeFromImage(image);
+            if (barcode != null) {
+                processBarcode(barcode);
             }
         }
     }
 
-    @Override
-    public Thread newThread(Runnable r) {
-        Thread t = new Thread(r, "BarcodeScannerThread");
-        t.setDaemon(true); // Safe to exit on app close
-        return t;
+    // --- Barcode Processing ---
+    private void processBarcode(String barcode) {
+        System.out.println("Barcode detected: " + barcode);
+        Response<ArrayList<Product>> response = productRepository.findByBarcode(barcode, null);
+        if (!response.isSuccess()) {
+            showErrorDialog("Error: " + response.getMessage());
+            return;
+        }
+
+        ArrayList<Product> products = response.getData();
+        if (products == null || products.isEmpty()) {
+            int option = JOptionPane.showOptionDialog(this,
+                    "Barang tidak ditemukan, apakah ingin menyimpan barcode ini?\n" + barcode,
+                    "Peringatan",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE,
+                    null, null, null);
+
+            if (option == JOptionPane.YES_OPTION) {
+                // Buat produk baru dummy hanya berisi barcode
+                Product newProduct = new Product();
+                newProduct.setBarcode(barcode);
+                newProduct.setName(""); // Kosong, user nanti mengisi
+                TransactionManager.getInstance()
+                    .setTransaction(TransactionManager.getInstance().getCurrentTransactionType(), newProduct);
+
+                // Setelah selesai, buka kembali frame yang diinginkan dan pastikan frame ini di-close
+                SwingUtilities.invokeLater(() -> {
+                    closeAndSwitchTo(new Dashboard());
+                });
+            }
+            // Jika NO, maka tidak melakukan apa-apa, scanner tetap lanjut
+            return;
+        }
+
+        TransactionType type = TransactionManager.getInstance().getCurrentTransactionType();
+        String status;
+        if (type == TransactionType.IN) {
+            status = "Barang masuk: " + products.get(0).getName();
+        } else if (type == TransactionType.OUT) {
+            status = "Barang keluar: " + products.get(0).getName();
+        } else {
+            status = "Tidak ada transaksi yang aktif.";
+        }
+        SwingUtilities.invokeLater(() -> statusDetection.setText(status));
+
+        // Additional logic: update TransactionManager product, etc.
+        TransactionManager.getInstance().setTransaction(type, products.get(0));
     }
 
+    // --- Webcam Initialization (Modular) ---
     private void initWebcam() {
-        // List all available webcams
-        java.util.List<Webcam> webcams = Webcam.getWebcams();
-
+        List<Webcam> webcams = Webcam.getWebcams();
         if (webcams.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No webcams found!", "Error", JOptionPane.ERROR_MESSAGE);
+            showErrorDialog("No webcams found!");
+            executor.shutdown();
+            return;
+        }
+        printWebcamList(webcams);
+
+        webcam = selectOrFallbackWebcam(webcams, 2);
+        if (webcam == null || !webcam.isOpen()) {
+            showErrorDialog("Failed to open any webcam!");
             executor.shutdown();
             return;
         }
 
-        // Print webcam list for debugging
-        for (int i = 0; i < webcams.size(); i++) {
-            System.out.println("[" + i + "] " + webcams.get(i).getName());
-        }
+        setupWebcamPanel(webcam);
+        executor.execute(this); // Start scanner thread
+    }
 
-        Webcam chosenWebcam = null;
-        int cameraIndex = 2; // your target, change as needed
-
-        // Try to open the requested camera, or fallback to the first working one
-        if (cameraIndex < webcams.size()) {
-            chosenWebcam = webcams.get(cameraIndex);
-            try {
-                Dimension[] resolutions = chosenWebcam.getViewSizes();
-                Dimension maxResolution = resolutions[resolutions.length - 1];
-                chosenWebcam.setViewSize(maxResolution);
-                chosenWebcam.open(true); // try async
-            } catch (Exception ex) {
-                System.out.println("Failed to open camera at index " + cameraIndex + ": " + ex.getMessage());
-                chosenWebcam = null;
-            }
-        }
-        if (chosenWebcam == null || !chosenWebcam.isOpen()) {
-            // fallback: try any working camera
+    // --- Helper: Choose Webcam or fallback ---
+    private Webcam selectOrFallbackWebcam(List<Webcam> webcams, int cameraIndex) {
+        Webcam chosen = tryOpenWebcam(webcams, cameraIndex);
+        if (chosen == null || !chosen.isOpen()) {
             for (int i = 0; i < webcams.size(); i++) {
-                Webcam test = webcams.get(i);
-                try {
-                    Dimension[] resolutions = test.getViewSizes();
-                    Dimension maxResolution = resolutions[resolutions.length - 1];
-                    test.setViewSize(maxResolution);
-                    test.open(true);
-                    if (test.isOpen()) {
-                        chosenWebcam = test;
-                        System.out.println("Fallback to camera " + i + " " + test.getName());
-                        break;
-                    }
-                } catch (Exception ex) {
-                    System.out.println("Camera " + i + " failed: " + ex.getMessage());
+                chosen = tryOpenWebcam(webcams, i);
+                if (chosen != null && chosen.isOpen()) {
+                    System.out.println("Fallback to camera " + i + " " + webcams.get(i).getName());
+                    break;
                 }
             }
         }
-
-        if (chosenWebcam == null || !chosenWebcam.isOpen()) {
-            JOptionPane.showMessageDialog(this, "Failed to open any webcam!", "Error", JOptionPane.ERROR_MESSAGE);
-            executor.shutdown();
-            return;
-        }
-
-        this.webcam = chosenWebcam;
-
-        panel = new WebcamPanel(this.webcam);
-        panel.setPreferredSize(this.webcam.getViewSize());
-        panel.setFPSDisplayed(true);
-
-        webCamPanel.setLayout(new java.awt.BorderLayout());
-        webCamPanel.add(panel, java.awt.BorderLayout.CENTER);
-
-        executor.execute(this);
-        // Don't call executor.shutdown() here; let the scanner thread run
+        return chosen;
     }
 
-    // Dummy implementation for CircularImageFrame to resolve the error
-    private void CircularImageFrame(String imagePath) {
-        // Example: Show a dialog or update the GUI with the image
-        System.out.println("CircularImageFrame called with: " + imagePath);
+    private Webcam tryOpenWebcam(List<Webcam> webcams, int index) {
+        if (index >= webcams.size())
+            return null;
+        Webcam cam = webcams.get(index);
+        try {
+            Dimension[] resolutions = cam.getViewSizes();
+            Dimension maxResolution = resolutions[resolutions.length - 1];
+            cam.setViewSize(maxResolution);
+            cam.open(true);
+            return cam;
+        } catch (Exception ex) {
+            System.out.println("Camera " + index + " failed: " + ex.getMessage());
+            return null;
+        }
+    }
+
+    // --- Helper: GUI and Cleanup ---
+    private void showErrorDialog(String message) {
+        JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void setupWebcamPanel(Webcam webcam) {
+        panel = new WebcamPanel(webcam);
+        panel.setPreferredSize(webcam.getViewSize());
+        panel.setFPSDisplayed(true);
+        webCamPanel.setLayout(new BorderLayout());
+        webCamPanel.add(panel, BorderLayout.CENTER);
+    }
+
+    // --- Modular Cleanup Function ---
+    private void cleanupResources() {
+        running = false;
+        if (executor != null && !executor.isShutdown())
+            executor.shutdownNow();
+        if (webcam != null) {
+            if (webcam.isOpen())
+                webcam.close();
+            webcam = null;
+        }
+    }
+
+    private void closeAndSwitchTo(JFrame targetFrame) {
+        cleanupResources();
+        this.dispose();
+        if (targetFrame != null) {
+            targetFrame.setVisible(true);
+        }
     }
 
     @Override
     public void dispose() {
-        running = false; // Signal the scanner thread to stop
-        // Shutdown the executor *before* closing the webcam, to avoid race conditions
-        executor.shutdownNow(); // Attempt to interrupt the thread
-
-        if (webcam != null) {
-            if (webcam.isOpen()) {
-                webcam.close();
-            }
-            webcam = null; // Optional: help GC
-        }
+        cleanupResources();
         super.dispose();
-
-        // Open the ManajemenBarang frame after disposing this one (optional, as per
-        // your flow)
-        javax.swing.SwingUtilities.invokeLater(() -> {
-            ManajemenBarang frame = new ManajemenBarang();
-            frame.setVisible(true);
-        });
     }
 
+    // --- Utility Methods ---
+    private void sleep(int ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    private boolean isWebcamReady() {
+        return webcam != null && webcam.isOpen();
+    }
+
+    private BufferedImage getWebcamImage() {
+        return webcam.getImage();
+    }
+
+    private String decodeBarcodeFromImage(BufferedImage image) {
+        try {
+            LuminanceSource source = new BufferedImageLuminanceSource(image);
+            BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+            Result result = new MultiFormatReader().decode(bitmap);
+            return result.getText();
+        } catch (NotFoundException ex) {
+            // No barcode found
+            return null;
+        }
+    }
+
+    private void printWebcamList(List<Webcam> webcams) {
+        for (int i = 0; i < webcams.size(); i++) {
+            System.out.println("[" + i + "] " + webcams.get(i).getName());
+        }
+    }
+
+    // Required by ThreadFactory
+    @Override
+    public Thread newThread(Runnable r) {
+        Thread t = new Thread(r, "BarcodeScannerThread");
+        t.setDaemon(true);
+        return t;
+    }
 }

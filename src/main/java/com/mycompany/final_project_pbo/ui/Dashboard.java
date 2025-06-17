@@ -138,7 +138,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         scanBarangPage.setFont(new java.awt.Font("Tw Cen MT", 0, 14)); // NOI18N
         scanBarangPage.setForeground(new java.awt.Color(75, 139, 213));
-        scanBarangPage.setText("Scan Barang");
+        scanBarangPage.setText("Barang keluar");
         scanBarangPage.setToolTipText("");
         scanBarangPage.setBorder(null);
         scanBarangPage.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -186,7 +186,7 @@ public class Dashboard extends javax.swing.JFrame {
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jLabel9)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE))
+                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 138, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
