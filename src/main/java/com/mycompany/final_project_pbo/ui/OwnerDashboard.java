@@ -12,7 +12,7 @@ import com.mycompany.final_project_pbo.utils.SessionManager;
  * @author Achmad Fathoni
  */
 public class OwnerDashboard extends javax.swing.JFrame {
-
+    int xx, xy;
     /**
      * Creates new form OwnerDashboard
      */
@@ -61,6 +61,19 @@ public class OwnerDashboard extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1080, 720));
+        addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                formMouseDragged(evt);
+            }
+        });
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                formMousePressed(evt);
+            }
+        });
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setPreferredSize(new java.awt.Dimension(150, 1080));
@@ -390,6 +403,21 @@ public class OwnerDashboard extends javax.swing.JFrame {
             login.setVisible(true);
         }
     }//GEN-LAST:event_ButtonLogoutOwnerActionPerformed
+
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formMouseClicked
+
+    private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
+        int x = evt.getX();
+        int y = evt.getY();
+    }//GEN-LAST:event_formMousePressed
+
+    private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
+        int x = evt.getXOnScreen();
+        int y = evt.getYOnScreen();
+        this.setLocation(x - xx, y - xy);
+    }//GEN-LAST:event_formMouseDragged
 
     private void userNamePropertyChange(java.beans.PropertyChangeEvent evt) {// GEN-FIRST:event_userNamePropertyChange
         // TODO add your handling code here:
