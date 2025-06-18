@@ -7,10 +7,12 @@ package com.mycompany.final_project_pbo.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import com.mycompany.final_project_pbo.models.LogActivity;
 import com.mycompany.final_project_pbo.models.Notification;
+import com.mycompany.final_project_pbo.models.NotificationType;
 import com.mycompany.final_project_pbo.models.User;
 import com.mycompany.final_project_pbo.repositories.LogActivityRepository;
 import com.mycompany.final_project_pbo.repositories.NotificationRepository;
@@ -33,13 +35,52 @@ public class Notifikasi extends javax.swing.JPanel {
 
         private void initializeComponents() {
                 populateTableBarangdanStock();
-                // populateTableKeuangan();
+                populateTableKeuangan();
                 populateTableActivitasSistem();
         }
 
         User currentUser = SessionManager.getInstance().getCurrentUser();
         LogActivityRepository logActivityRepository = new LogActivityRepository();
         NotificationRepository notificationRepository = new NotificationRepository();
+
+        private void populateNotificationTable(DefaultTableModel model, NotificationType type, JTable table,
+                        String noDataMsg) {
+                // Ambil notifikasi dari repository
+                Response<ArrayList<Notification>> response = notificationRepository.findAll(null);
+                System.out.println("Response: " + response);
+
+                if (response.isSuccess() && response.getData() != null && !response.getData().isEmpty()) {
+                        int no = 1;
+                        for (Notification notification : response.getData()) {
+                                if (notification.getType() == null || !notification.getType().equals(type)) {
+                                        continue; // Skip notifications that are not of the desired type
+                                }
+                                // Proteksi jika message null
+                                String message = notification.getMessage() != null ? notification.getMessage()
+                                                : "(Pesan kosong)";
+                                model.addRow(new Object[] { no++, message });
+                        }
+                        // Jika tidak ada notifikasi dengan tipe yang diinginkan
+                        if (model.getRowCount() == 0) {
+                                model.addRow(new Object[] { "1", noDataMsg });
+                        }
+                } else {
+                        model.addRow(new Object[] { "1", noDataMsg });
+                }
+                table.setModel(model);
+        }
+
+        private void populateTableKeuangan() {
+                String[] columnNames = { "No", "Keuangan" };
+                DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
+                        @Override
+                        public boolean isCellEditable(int row, int column) {
+                                return false;
+                        }
+                };
+                populateNotificationTable(model, NotificationType.DEBT, TableKeuangan,
+                                "Tidak ada notifikasi keuangan saat ini.");
+        }
 
         private void populateTableBarangdanStock() {
                 String[] columnNames = { "No", "Barang & Stock" };
@@ -49,24 +90,8 @@ public class Notifikasi extends javax.swing.JPanel {
                                 return false;
                         }
                 };
-
-                // Ambil notifikasi dari repository
-                Response<ArrayList<Notification>> response = notificationRepository.findAll(null);
-                System.out.println("Response: " + response);
-
-                if (response.isSuccess() && response.getData() != null && !response.getData().isEmpty()) {
-                        int no = 1;
-                        for (Notification notification : response.getData()) {
-                                // Proteksi jika message null
-                                String message = notification.getMessage() != null ? notification.getMessage()
-                                                : "(Pesan kosong)";
-                                model.addRow(new Object[] { no++, message });
-                        }
-                } else {
-                        model.addRow(new Object[] { "1", "Tidak ada notifikasi saat ini." });
-                }
-
-                TableBarangdanStock.setModel(model);
+                populateNotificationTable(model, NotificationType.PRODUCT, TableBarangdanStock,
+                                "Tidak ada notifikasi stok saat ini.");
         }
 
         private void populateTableActivitasSistem() {
