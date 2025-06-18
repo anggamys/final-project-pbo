@@ -254,7 +254,7 @@ public class Dashboard extends javax.swing.JFrame {
         Notification.setBackground(new java.awt.Color(75, 139, 213));
         Notification.setFont(new java.awt.Font("Tw Cen MT", 1, 24)); // NOI18N
         Notification.setForeground(new java.awt.Color(255, 255, 255));
-        Notification.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Icon_Notification.png"))); // NOI18N
+        Notification.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Icon_Notification.png"))); // NOI18N
         Notification.setText("Notifikasi");
         Notification.setBorder(null);
         Notification.addActionListener(new java.awt.event.ActionListener() {
@@ -329,8 +329,8 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_formMousePressed
 
     private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
-        int x = evt.get.XOnScreen();
-        int Y = evt.get.YOnScreen();
+        int x = evt.getXOnScreen();
+        int y = evt.getYOnScreen();
         this.setLocation(x - xx, y - xy);
     }//GEN-LAST:event_formMouseDragged
 

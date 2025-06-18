@@ -26,29 +26,29 @@ public class StockTransactionService {
     private static final String MODULE_NAME = "StockTransactionService";
 
     public Response<Boolean> incrementStock(String barcode, int quantity, Integer userId) {
-        // Basic input validation
         if (barcode == null || barcode.isBlank())
             return Response.failure("Barcode is required");
         if (quantity <= 0)
             return Response.failure("Quantity must be greater than zero");
 
-        // Product lookup
         Response<ArrayList<Product>> productResponse = productRepository.findByBarcode(barcode, userId);
-        if (!productResponse.isSuccess() || productResponse.getData().isEmpty()) {
+        if (!productResponse.isSuccess() || productResponse.getData().isEmpty())
             return Response.failure("Product not found with barcode: " + barcode);
-        }
 
         Product product = productResponse.getData().get(0);
         int newStock = product.getStock() + quantity;
 
-        // Update stock
         product.setStock(newStock);
         Response<Product> updateResponse = productRepository.update(product, userId);
-        if (!updateResponse.isSuccess()) {
+        if (!updateResponse.isSuccess())
             return Response.failure("Failed to update product stock for ID: " + product.getId());
-        }
 
-        // Logging
+        Response<StockTransaction> transactionResponse = stockTransactionRepository.save(
+                new StockTransaction(product.getId(), quantity, TransactionType.IN, "Stock incremented", userId),
+                userId);
+        if (!transactionResponse.isSuccess())
+            return Response.failure("Failed to log stock increment transaction for product ID: " + product.getId());
+
         logActivityService.logAction(userId,
                 String.format("Incremented stock by %d units for product ID %d. New stock: %d",
                         quantity, product.getId(), newStock),
@@ -58,33 +58,32 @@ public class StockTransactionService {
     }
 
     public Response<Boolean> decrementStock(String barcode, int quantity, Integer userId) {
-        // Basic input validation
         if (barcode == null || barcode.isBlank())
             return Response.failure("Barcode is required");
         if (quantity <= 0)
             return Response.failure("Quantity must be greater than zero");
 
-        // Product lookup
         Response<ArrayList<Product>> productResponse = productRepository.findByBarcode(barcode, userId);
-        if (!productResponse.isSuccess() || productResponse.getData().isEmpty()) {
+        if (!productResponse.isSuccess() || productResponse.getData().isEmpty())
             return Response.failure("Product not found with barcode: " + barcode);
-        }
 
         Product product = productResponse.getData().get(0);
         int newStock = product.getStock() - quantity;
 
-        if (newStock < 0) {
+        if (newStock < 0)
             return Response.failure("Insufficient stock for product ID: " + product.getId());
-        }
 
-        // Update stock
         product.setStock(newStock);
         Response<Product> updateResponse = productRepository.update(product, userId);
-        if (!updateResponse.isSuccess()) {
+        if (!updateResponse.isSuccess())
             return Response.failure("Failed to update product stock for ID: " + product.getId());
-        }
 
-        // Logging
+        Response<StockTransaction> transactionResponse = stockTransactionRepository.save(
+                new StockTransaction(product.getId(), quantity, TransactionType.OUT, "Stock decremented", userId),
+                userId);
+        if (!transactionResponse.isSuccess())
+            return Response.failure("Failed to log stock decrement transaction for product ID: " + product.getId());
+
         logActivityService.logAction(userId,
                 String.format("Decremented stock by %d units for product ID %d. New stock: %d",
                         quantity, product.getId(), newStock),
@@ -94,7 +93,6 @@ public class StockTransactionService {
     }
 
     public Response<StockTransaction> createTransaction(StockTransaction transaction, String barcode, Integer userId) {
-        // Basic input validation
         if (transaction == null)
             return Response.failure("Transaction cannot be null");
         if (barcode == null || barcode.isBlank())
@@ -104,35 +102,28 @@ public class StockTransactionService {
         if (transaction.getTransactionType() == null)
             return Response.failure("Transaction type is required");
 
-        // Product lookup
         Response<ArrayList<Product>> productResponse = productRepository.findByBarcode(barcode, userId);
-        if (!productResponse.isSuccess() || productResponse.getData().isEmpty()) {
+        if (!productResponse.isSuccess() || productResponse.getData().isEmpty())
             return Response.failure("Product not found with barcode: " + barcode);
-        }
 
         Product product = productResponse.getData().get(0);
         int newStock = calculateNewStock(product.getStock(), transaction.getQuantity(),
                 transaction.getTransactionType());
 
-        if (newStock < 0) {
+        if (newStock < 0)
             return Response.failure("Insufficient stock for product ID: " + product.getId());
-        }
 
-        // Update stock
         product.setStock(newStock);
         transaction.setProductId(product.getId());
         Response<Product> updateResponse = productRepository.update(product, userId);
-        if (!updateResponse.isSuccess()) {
+        if (!updateResponse.isSuccess())
             return Response.failure("Failed to update product stock for ID: " + product.getId());
-        }
 
-        // Logging
         logActivityService.logAction(userId,
                 String.format("Stock %s: %d units for product ID %d. New stock: %d",
                         transaction.getTransactionType(), transaction.getQuantity(), product.getId(), newStock),
                 MODULE_NAME, LogLevel.INFO);
 
-        // Save transaction
         return stockTransactionRepository.save(transaction, userId);
     }
 
@@ -140,7 +131,8 @@ public class StockTransactionService {
         return switch (type) {
             case IN -> currentStock + quantity;
             case OUT -> currentStock - quantity;
-            default -> currentStock; // fallback (should never happen)
+            default -> currentStock;
         };
     }
+
 }

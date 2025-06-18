@@ -6,11 +6,14 @@ package com.mycompany.final_project_pbo.ui;
 
 import com.mycompany.final_project_pbo.models.Category;
 import com.mycompany.final_project_pbo.models.Dropdown;
+import com.mycompany.final_project_pbo.models.Notification;
+import com.mycompany.final_project_pbo.models.NotificationType;
 import com.mycompany.final_project_pbo.models.Product;
 import com.mycompany.final_project_pbo.models.StockTransaction;
 import com.mycompany.final_project_pbo.models.TransactionType;
 import com.mycompany.final_project_pbo.models.User;
 import com.mycompany.final_project_pbo.repositories.CategoryRepository;
+import com.mycompany.final_project_pbo.repositories.NotificationRepository;
 import com.mycompany.final_project_pbo.repositories.ProductRepository;
 import com.mycompany.final_project_pbo.repositories.StockTransactionRepository;
 import com.mycompany.final_project_pbo.repositories.UserRepository;
@@ -55,28 +58,29 @@ public class ManajemenBarang extends javax.swing.JPanel {
         ProductRepository productRepository = new ProductRepository();
         CategoryRepository categoryRepository = new CategoryRepository();
         StockTransactionRepository stockTransactionRepository = new StockTransactionRepository();
+        NotificationRepository notificationRepository = new NotificationRepository();
 
         private void initializeEventsListener() {
                 ButtonScanBarang.addActionListener(evt -> openScanBarang());
         }
 
         private void openScanBarang() {
-        // Set tipe transaksi
-        TransactionManager.getInstance().setTransaction(TransactionType.IN, null);
+                // Set tipe transaksi
+                TransactionManager.getInstance().setTransaction(TransactionType.IN, null);
 
-        // Pastikan Dashboard (parent) di-close jika ada
-        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        if (parentFrame != null && parentFrame instanceof Dashboard) {
-                parentFrame.dispose();
-        }
+                // Pastikan Dashboard (parent) di-close jika ada
+                JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+                if (parentFrame != null && parentFrame instanceof Dashboard) {
+                        parentFrame.dispose();
+                }
 
-        // Close frame ini (ManajemenBarang)
-        this.setVisible(false);
+                // Close frame ini (ManajemenBarang)
+                this.setVisible(false);
 
-        // Buka FrameScanBarang
-        SwingUtilities.invokeLater(() -> {
-                new FrameScanBarang().setVisible(true);
-        });
+                // Buka FrameScanBarang
+                SwingUtilities.invokeLater(() -> {
+                        new FrameScanBarang().setVisible(true);
+                });
         }
 
         private void initializeComponents() {
@@ -87,7 +91,8 @@ public class ManajemenBarang extends javax.swing.JPanel {
 
                 // Ambil current product dari TransactionManager
                 Product selectedProduct = TransactionManager.getInstance().getCurrentProduct();
-                if (selectedProduct != null && selectedProduct.getBarcode() != null && !selectedProduct.getBarcode().isEmpty()) {
+                if (selectedProduct != null && selectedProduct.getBarcode() != null
+                                && !selectedProduct.getBarcode().isEmpty()) {
                         setSelectedProduct(selectedProduct); // Tampilkan data di seluruh field, walau hanya barcode
                         System.out.println("Current Product: " + selectedProduct.getBarcode());
                         // Hapus clearTransaction di sini, cukup dilakukan saat klik Simpan saja
@@ -226,6 +231,8 @@ public class ManajemenBarang extends javax.swing.JPanel {
                         }
                 };
 
+                showLowStockNotification(products);
+
                 // Populate rows
                 for (Product product : products) {
                         String categoryName = "Tidak Diketahui";
@@ -269,38 +276,97 @@ public class ManajemenBarang extends javax.swing.JPanel {
                 });
         }
 
-        private void setSelectedProduct(Product product) {
-        // ID Barang
-        IDBarang.setText(product.getId() != null && product.getId() != 0 ? String.valueOf(product.getId()) : "");
-        // Nama Barang
-        NamaBarang.setText(product.getName() != null ? product.getName() : "");
-        // Barcode (selalu diisi)
-        Barcode.setText(product.getBarcode() != null ? product.getBarcode() : "");
-        // Kategori
-        boolean foundCategory = false;
-        if (product.getCategoryId() != null) {
-                Response<Category> categoryResponse = categoryRepository.findById(product.getCategoryId(), currentUser.getId());
-                if (categoryResponse.isSuccess() && categoryResponse.getData() != null) {
-                String categoryName = categoryResponse.getData().getName();
-                for (int i = 0; i < KategoriBarang.getItemCount(); i++) {
-                        Dropdown item = (Dropdown) KategoriBarang.getItemAt(i);
-                        if (item.getId() != null && item.getId().equals(product.getCategoryId())) {
-                        KategoriBarang.setSelectedIndex(i);
-                        foundCategory = true;
-                        break;
+        private void showLowStockNotification(ArrayList<Product> products) {
+                StringBuilder warningMessages = new StringBuilder();
+                boolean foundLowStock = false;
+
+                // Ambil notifikasi yang sudah ada dari DB (bisa null)
+                ArrayList<Notification> existingNotifications = null;
+                Response<ArrayList<Notification>> notifResponse = notificationRepository.findAll(currentUser.getId());
+                if (notifResponse.isSuccess()) {
+                        existingNotifications = notifResponse.getData();
+                }
+                if (existingNotifications == null)
+                        existingNotifications = new ArrayList<>();
+
+                for (Product product : products) {
+                        Integer stock = product.getStock();
+                        if (stock != null && stock <= 5) {
+                                foundLowStock = true;
+
+                                // Buat pesan notifikasi sesuai stok
+                                String notifMsg = (stock == 0)
+                                                ? "Stok produk '" + product.getName() + "' kosong!"
+                                                : "Stok produk '" + product.getName() + "' hampir habis (" + stock
+                                                                + ").";
+
+                                // Cek apakah notifikasi serupa sudah ada
+                                boolean alreadyNotified = existingNotifications.stream()
+                                                .anyMatch(n -> n.getType() == NotificationType.PRODUCT &&
+                                                                n.getMessage() != null &&
+                                                                n.getMessage().contains(product.getName()));
+
+                                if (!alreadyNotified) {
+                                        Notification notification = new Notification();
+                                        notification.setType(NotificationType.PRODUCT);
+                                        notification.setMessage(notifMsg);
+                                        notificationRepository.save(notification, currentUser.getId());
+                                }
+
+                                // Tambahkan ke pesan peringatan
+                                warningMessages.append(notifMsg).append("\n");
                         }
                 }
+
+                if (foundLowStock) {
+                        JOptionPane.showMessageDialog(
+                                        this,
+                                        warningMessages.toString(),
+                                        "Peringatan Stok",
+                                        JOptionPane.WARNING_MESSAGE);
                 }
         }
-        if (!foundCategory) {
-                KategoriBarang.setSelectedIndex(0); // Kosong jika kategori tidak ditemukan
-        }
-        // Harga Beli
-        HargaBeliBarang.setText(product.getPurchasePrice() != null && product.getPurchasePrice() > 0 ? String.valueOf(product.getPurchasePrice()) : "");
-        // Harga Jual
-        HargaJualBarang.setText(product.getSellingPrice() != null && product.getSellingPrice() > 0 ? String.valueOf(product.getSellingPrice()) : "");
-        // Stok
-        StockBarang.setText(product.getStock() != null && product.getStock() > 0 ? String.valueOf(product.getStock()) : "");
+
+        private void setSelectedProduct(Product product) {
+                // ID Barang
+                IDBarang.setText(
+                                product.getId() != null && product.getId() != 0 ? String.valueOf(product.getId()) : "");
+                // Nama Barang
+                NamaBarang.setText(product.getName() != null ? product.getName() : "");
+                // Barcode (selalu diisi)
+                Barcode.setText(product.getBarcode() != null ? product.getBarcode() : "");
+                // Kategori
+                boolean foundCategory = false;
+                if (product.getCategoryId() != null) {
+                        Response<Category> categoryResponse = categoryRepository.findById(product.getCategoryId(),
+                                        currentUser.getId());
+                        if (categoryResponse.isSuccess() && categoryResponse.getData() != null) {
+                                String categoryName = categoryResponse.getData().getName();
+                                for (int i = 0; i < KategoriBarang.getItemCount(); i++) {
+                                        Dropdown item = (Dropdown) KategoriBarang.getItemAt(i);
+                                        if (item.getId() != null && item.getId().equals(product.getCategoryId())) {
+                                                KategoriBarang.setSelectedIndex(i);
+                                                foundCategory = true;
+                                                break;
+                                        }
+                                }
+                        }
+                }
+                if (!foundCategory) {
+                        KategoriBarang.setSelectedIndex(0); // Kosong jika kategori tidak ditemukan
+                }
+                // Harga Beli
+                HargaBeliBarang.setText(product.getPurchasePrice() != null && product.getPurchasePrice() > 0
+                                ? String.valueOf(product.getPurchasePrice())
+                                : "");
+                // Harga Jual
+                HargaJualBarang.setText(product.getSellingPrice() != null && product.getSellingPrice() > 0
+                                ? String.valueOf(product.getSellingPrice())
+                                : "");
+                // Stok
+                StockBarang.setText(product.getStock() != null && product.getStock() > 0
+                                ? String.valueOf(product.getStock())
+                                : "");
         }
 
         private void populateDropDowns() {
@@ -1013,6 +1079,10 @@ public class ManajemenBarang extends javax.swing.JPanel {
                                 JOptionPane.showMessageDialog(this, "Produk berhasil diperbarui.");
                                 clearForm();
                                 filteredAndSortedProducts("", "");
+                                Notification notification = new Notification();
+                                notification.setType(NotificationType.PRODUCT);
+                                notification.setMessage("Produk '" + product.getName() + "' telah diperbarui.");
+                                notificationRepository.save(notification, currentUser.getId());
                         } else {
                                 JOptionPane.showMessageDialog(this,
                                                 "Gagal memperbarui produk: " + response.getMessage(),
@@ -1048,6 +1118,10 @@ public class ManajemenBarang extends javax.swing.JPanel {
                                 clearForm();
                                 filteredAndSortedProducts("", "");
                                 TransactionManager.getInstance().clearTransaction();
+                                Notification notification = new Notification();
+                                notification.setType(NotificationType.PRODUCT);
+                                notification.setMessage("Produk '" + product.getName() + "' telah ditambahkan.");
+                                notificationRepository.save(notification, currentUser.getId());
                         } else {
                                 JOptionPane.showMessageDialog(this,
                                                 "Gagal menambahkan produk: " + response.getMessage(),
@@ -1075,6 +1149,10 @@ public class ManajemenBarang extends javax.swing.JPanel {
                                         JOptionPane.showMessageDialog(this, "Produk berhasil dihapus.");
                                         clearForm();
                                         filteredAndSortedProducts("", "");
+                                        Notification notification = new Notification();
+                                        notification.setType(NotificationType.PRODUCT);
+                                        notification.setMessage("Produk dengan ID " + id + " telah dihapus.");
+                                        notificationRepository.save(notification, currentUser.getId());
                                 } else {
                                         JOptionPane.showMessageDialog(this,
                                                         "Gagal menghapus produk: " + response.getMessage(),
