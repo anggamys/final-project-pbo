@@ -34,6 +34,7 @@ import com.mycompany.final_project_pbo.services.StockTransactionService;
 import com.mycompany.final_project_pbo.utils.Response;
 import com.mycompany.final_project_pbo.utils.SessionManager;
 import com.mycompany.final_project_pbo.utils.TransactionManager;
+import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -376,11 +377,13 @@ public class FrameScanBarang extends javax.swing.JFrame implements Runnable, Thr
     private void closeAndSwitchTo(JFrame targetFrame) {
         cleanupResources();
         this.dispose();
-        if (targetFrame != null) {
-            targetFrame.setVisible(true);
+        
+        if (targetFrame != null && !isWindowOpen(Dashboard.class)) {
+        targetFrame.setVisible(true);
         }
     }
 
+    
     @Override
     public void dispose() {
         cleanupResources();
@@ -430,5 +433,9 @@ public class FrameScanBarang extends javax.swing.JFrame implements Runnable, Thr
         Thread t = new Thread(r, "BarcodeScannerThread");
         t.setDaemon(true);
         return t;
+    }
+
+    private boolean isWindowOpen(Class<Dashboard> aClass) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
