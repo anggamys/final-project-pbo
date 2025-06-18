@@ -109,6 +109,7 @@ public class FrameScanBarang extends javax.swing.JFrame implements Runnable, Thr
         setPreferredSize(new java.awt.Dimension(1080, 720));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setPreferredSize(new java.awt.Dimension(1080, 720));
 
         javax.swing.GroupLayout webCamPanelLayout = new javax.swing.GroupLayout(webCamPanel);
         webCamPanel.setLayout(webCamPanelLayout);
