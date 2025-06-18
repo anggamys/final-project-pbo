@@ -17,7 +17,7 @@ import com.mycompany.final_project_pbo.utils.TransactionManager;
  * @author Achmad Fathoni
  */
 public class Dashboard extends javax.swing.JFrame {
-    int xx, xy;
+
     /**
      * Creates new form Dashboard
      * 
@@ -324,14 +324,11 @@ public class Dashboard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
-        xx = evt.getX();
-        xy = evt.getY();
+
     }//GEN-LAST:event_formMousePressed
 
     private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
-        int x = evt.getXOnScreen();
-        int y = evt.getYOnScreen();
-        this.setLocation(x - xx, y - xy);
+
     }//GEN-LAST:event_formMouseDragged
 
     private void manajemenBarangPageMouseClicked(MouseEvent evt) {// GEN-FIRST:event_manajemenBarangPageMouseClicked

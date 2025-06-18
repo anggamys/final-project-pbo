@@ -245,7 +245,7 @@ public final class Hutang extends javax.swing.JPanel {
         LoanStatusOption.removeAllItems();
         LoanStatusOption.addItem(null); // optional default value
         for (LoanStatus status : LoanStatus.values()) {
-            LoanStatusOption.addItem(status);
+            LoanStatusOption.addItem(status.name());
         }
     }
 
