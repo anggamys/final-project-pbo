@@ -272,7 +272,7 @@ public class FrameScanBarang extends javax.swing.JFrame implements Runnable, Thr
         TransactionType type = TransactionManager.getInstance().getCurrentTransactionType();
         String status;
         if (type == TransactionType.IN) {
-            Response<Boolean> incrementResponse = stokService.incrementStock(products.get(0).getBarcode(), 1, null);
+            Response<Boolean> incrementResponse = stokService.incrementStock(products.get(0).getBarcode(), 1, currentUser.getId());
             if (!incrementResponse.isSuccess()) {
                 showErrorDialog("Gagal menambah stok: " + incrementResponse.getMessage());
                 return;
@@ -280,7 +280,7 @@ public class FrameScanBarang extends javax.swing.JFrame implements Runnable, Thr
 
             status = "Barang masuk: " + products.get(0).getName();
         } else if (type == TransactionType.OUT) {
-            Response<Boolean> decrementResponse = stokService.decrementStock(products.get(0).getBarcode(), 1, null);
+            Response<Boolean> decrementResponse = stokService.decrementStock(products.get(0).getBarcode(), 1, currentUser.getId());
             if (!decrementResponse.isSuccess()) {
                 showErrorDialog("Gagal mengurangi stok: " + decrementResponse.getMessage());
                 return;
